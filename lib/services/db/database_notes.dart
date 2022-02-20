@@ -1,0 +1,103 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:notes/services/db/notes_model.dart';
+import 'package:scientisst_db/scientisst_db.dart';
+import 'package:unicons/unicons.dart';
+
+import '../../android/data/data.dart';
+
+class NotesDatabase {
+  Future<List<DocumentSnapshot>> getNotes() async {
+    var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
+    notesSnapshot = _notes;
+    return notesSnapshot;
+  }
+
+  addNote(Note note) async {
+    if (kDebugMode) {
+      print(note.title);
+    }
+    await ScientISSTdb.instance.collection("notes").add({
+      "title": note.title,
+      "body": note.body,
+      "creationTime": note.creationTime,
+    }).whenComplete(() {
+      HapticFeedback.heavyImpact();
+      Get.offAllNamed('/mainScreen');
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          UniconsLine.check_circle,
+          color: c.primary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Note Added Successfully!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    });
+  }
+
+  updateNote(Note note, String noteId) async {
+    if (kDebugMode) {
+      print(note.title);
+    }
+    await ScientISSTdb.instance.collection("notes").document(noteId).update({
+      "title": note.title,
+      "body": note.body,
+      "creationTime": note.creationTime,
+    }).whenComplete(() {
+      HapticFeedback.heavyImpact();
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          UniconsLine.check_circle,
+          color: c.primary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Note Updated Successfully!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    });
+  }
+
+  deleteNote(String noteId) async {
+    await ScientISSTdb.instance
+        .collection("notes")
+        .document(noteId)
+        .delete()
+        .whenComplete(() {
+      HapticFeedback.heavyImpact();
+      Get.offAllNamed('/mainScreen');
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          UniconsLine.trash,
+          color: c.error,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Note Deleted Successfully!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    });
+  }
+}
