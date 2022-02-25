@@ -14,6 +14,7 @@ Map<int, Color> color = {
 };
 
 MaterialColor black = MaterialColor(0xFF1F1D2C, color);
+MaterialColor pitchblack = MaterialColor(0xFF000000, color);
 MaterialColor darkGrey = MaterialColor(0xFF474755, color);
 MaterialColor grey = MaterialColor(0xFFB4B4B4, color);
 MaterialColor lightGrey = MaterialColor(0xFFEEEEEE, color);

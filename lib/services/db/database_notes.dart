@@ -15,6 +15,31 @@ class NotesDatabase {
     return notesSnapshot;
   }
 
+  setAutoSave(bool autoSave) async {
+    await ScientISSTdb.instance.collection("userPref").document("save").set(
+      {
+        "autoSave": autoSave,
+      },
+    );
+  }
+
+  checkAutoSave() async {
+    if (kDebugMode) {
+      print("AUTOSAVE CHECK");
+    }
+    var userPref = await ScientISSTdb.instance
+        .collection("userPref")
+        .document("save")
+        .get();
+
+    bool _returnSave = userPref.data["autoSave"];
+    if (kDebugMode) {
+      print("AUTOSAVE: " + _returnSave.toString());
+    }
+
+    return _returnSave;
+  }
+
   addNote(Note note) async {
     if (kDebugMode) {
       print(note.title);
@@ -45,7 +70,7 @@ class NotesDatabase {
     });
   }
 
-  updateNote(Note note, String noteId) async {
+  updateNote(Note note, String noteId, bool goBack) async {
     if (kDebugMode) {
       print(note.title);
     }
@@ -55,6 +80,9 @@ class NotesDatabase {
       "creationTime": note.creationTime,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
+      if (goBack) {
+        Get.offAllNamed('/mainScreen');
+      }
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,

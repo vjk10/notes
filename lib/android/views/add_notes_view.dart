@@ -20,6 +20,11 @@ class _AddNoteViewState extends State<AddNoteView> {
   late String title, body;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }
@@ -28,8 +33,18 @@ class _AddNoteViewState extends State<AddNoteView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.offAllNamed('/mainScreen');
-        return true;
+        bool _autosave = await NotesDatabase().checkAutoSave();
+        if (_autosave) {
+          note = Note(
+            body: bodyController.text.toString(),
+            creationTime: DateTime.now(),
+            title: titleController.text.toString(),
+          );
+          NotesDatabase().addNote(note);
+        } else {
+          Get.offAllNamed('/mainScreen');
+        }
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(

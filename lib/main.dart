@@ -1,9 +1,14 @@
+
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/screens/main_screen.dart';
+import 'package:notes/android/screens/onboarding/onboarding_one.dart';
+import 'package:notes/android/screens/onboarding/onboarding_three.dart';
+import 'package:notes/android/screens/onboarding/onboarding_two.dart';
+import 'package:notes/android/screens/settings_screen.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
 import 'package:notes/windows/screens/theme/windows_theme.dart';
@@ -45,6 +50,10 @@ class MyApp extends StatelessWidget {
         routes: {
           '/splash': (context) => const SplashScreen(),
           '/mainScreen': (context) => const MainScreen(),
+          '/onboarding1': (context) => const OnBoarding1(),
+          '/onboarding2': (context) => const OnBoarding2(),
+          '/onboarding3': (context) => const OnBoarding3(),
+          '/settings': (contex) => const SettingsScreen(),
         },
         title: 'Notes',
         home: const SplashScreen(),

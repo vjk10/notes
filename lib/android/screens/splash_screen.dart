@@ -1,8 +1,11 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/theme/colors.dart';
+import 'package:scientisst_db/scientisst_db.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,10 +15,32 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late DocumentSnapshot _onboardingSnapshot;
+
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
-      Get.offNamedUntil('/mainScreen', (route) => false);
+    Future.delayed(const Duration(seconds: 2), () async {
+      AdaptiveTheme.of(context).setSystem();
+      try {
+        _onboardingSnapshot = await ScientISSTdb.instance
+            .collection("userPref")
+            .document("onboarding")
+            .get();
+        if (kDebugMode) {
+          print("ONBOARDING COMPLETED: " +
+              _onboardingSnapshot.data["completed"].toString());
+        }
+        if (_onboardingSnapshot.data["completed"] == true) {
+          Get.offNamedUntil('/mainScreen', (route) => false);
+        } else {
+          Get.offNamedUntil('/onboarding1', (route) => false);
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print(e.toString());
+        }
+        Get.offNamedUntil('/onboarding1', (route) => false);
+      }
     });
     super.initState();
   }

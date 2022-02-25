@@ -7,7 +7,6 @@ import 'package:notes/android/views/all_notes_view.dart';
 import 'package:notes/android/views/folder_view.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
-import 'package:notes/theme/colors.dart';
 import 'package:unicons/unicons.dart';
 
 class MainScreen extends StatefulWidget {
@@ -49,8 +48,8 @@ class _MainScreenState extends State<MainScreen>
       isScrollable: true,
       enableFeedback: true,
       controller: _tabController,
-      labelColor: yellow,
-      unselectedLabelColor: grey,
+      labelColor: c.tertiary,
+      unselectedLabelColor: c.tertiaryContainer,
       labelPadding: EdgeInsets.only(
         left: Get.width / 6,
         right: Get.width / 6,
@@ -60,13 +59,13 @@ class _MainScreenState extends State<MainScreen>
       ),
       indicatorSize: TabBarIndicatorSize.label,
       indicatorWeight: 4,
-      indicatorColor: yellow,
+      indicatorColor: c.tertiary,
       indicator: ContainerTabIndicator(
           height: 5,
           padding: const EdgeInsets.only(
             top: 15,
           ),
-          color: yellow,
+          color: c.tertiary,
           radius: BorderRadius.circular(
             10,
           )),
@@ -77,11 +76,16 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const NotesLogo(),
+        title: const NotesLogo(
+          width: 18,
+          height: 18,
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed('/settings');
+            },
             icon: Icon(
               UniconsLine.setting,
               color: c.onBackground,

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
@@ -11,7 +10,6 @@ import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
 
 class NotePage extends StatefulWidget {
-  // final int noteId;
   final String noteId;
   const NotePage({
     required this.noteId,
@@ -41,7 +39,6 @@ class _NotePageState extends State<NotePage> {
     setState(() {
       isLoading = true;
     });
-    // note = await NotesDatabase.instance.readNote(widget.noteId) as Note;
     noteSnapshot = await ScientISSTdb.instance
         .collection("notes")
         .document(widget.noteId)
@@ -64,17 +61,53 @@ class _NotePageState extends State<NotePage> {
           )
         : WillPopScope(
             onWillPop: () async {
-              Get.offAllNamed('/mainScreen');
-              return true;
+              bool _autosave = await NotesDatabase().checkAutoSave();
+              if (_autosave) {
+                if (noteSnapshot.data["title"].toString() !=
+                        titleController.text ||
+                    noteSnapshot.data["body"].toString() !=
+                        bodyController.text) {
+                  note = Note(
+                    body: bodyController.text.toString(),
+                    creationTime: DateTime.now(),
+                    title: titleController.text.toString(),
+                  );
+                  NotesDatabase().updateNote(note, widget.noteId, true);
+                } else {
+                  Get.offAllNamed('/mainScreen');
+                }
+              } else {
+                Get.offAllNamed('/mainScreen');
+              }
+              return false;
             },
             child: Scaffold(
               appBar: AppBar(
-                title: const NotesLogo(),
+                title: const NotesLogo(
+                  width: 18,
+                  height: 18,
+                ),
                 toolbarHeight: 80,
                 leading: IconButton(
-                  onPressed: () {
-                    Get.offAllNamed('/mainScreen');
-                    Get.back();
+                  onPressed: () async {
+                    bool _autosave = await NotesDatabase().checkAutoSave();
+                    if (_autosave) {
+                      if (noteSnapshot.data["title"].toString() !=
+                              titleController.text ||
+                          noteSnapshot.data["body"].toString() !=
+                              bodyController.text) {
+                        note = Note(
+                          body: bodyController.text.toString(),
+                          creationTime: DateTime.now(),
+                          title: titleController.text.toString(),
+                        );
+                        NotesDatabase().updateNote(note, widget.noteId, true);
+                      } else {
+                        Get.offAllNamed('/mainScreen');
+                      }
+                    } else {
+                      Get.offAllNamed('/mainScreen');
+                    }
                   },
                   icon: Icon(
                     UniconsLine.arrow_left,
@@ -85,23 +118,19 @@ class _NotePageState extends State<NotePage> {
                 actions: [
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: TextButton.icon(
+                    child: IconButton(
                       onPressed: () async {
                         note = Note(
                           body: bodyController.text.toString(),
                           creationTime: DateTime.now(),
                           title: titleController.text.toString(),
                         );
-                        NotesDatabase().updateNote(note, noteSnapshot.id);
+                        NotesDatabase()
+                            .updateNote(note, noteSnapshot.id, false);
                       },
                       icon: Icon(
                         UniconsLine.save,
-                        color: c.onBackground,
-                        size: 24,
-                      ),
-                      label: Text(
-                        "Save",
-                        style: t.textTheme.button?.copyWith(fontSize: 18),
+                        color: c.primary,
                       ),
                     ),
                   ),
@@ -114,7 +143,7 @@ class _NotePageState extends State<NotePage> {
                     },
                     icon: Icon(
                       UniconsLine.trash,
-                      color: c.onBackground,
+                      color: c.error,
                     ),
                   ),
                 ],
