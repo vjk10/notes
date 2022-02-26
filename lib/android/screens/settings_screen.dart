@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -21,7 +23,8 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen>
+    with SingleTickerProviderStateMixin {
   String userName = "Username";
   String cacheMemorySize = "0";
   String appMemorySize = "0";
@@ -31,11 +34,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late Directory appDir;
   bool _autoSave = true;
   final bool _accountLinked = false;
+  String selectedTheme = "";
 
   late DocumentSnapshot userSnapshot;
 
+  final ValueNotifier<ThemeMode> _themeNotifier =
+      ValueNotifier(ThemeMode.system);
+
   @override
   void initState() {
+    setState(() {
+      // selectedTheme = toBeginningOfSentenceCase(
+      //         _themeNotifier.value.toString().substring(10).split('.').first)
+      //     .toString();
+      selectedTheme = _themeNotifier.value.toString();
+    });
     getSaveStatus();
     getUserStatus();
     getCacheMemory();
@@ -95,6 +108,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
     });
     return {'fileNum': fileNum, 'size': totalSize};
+  }
+
+  @override
+  void didChangeDependencies() {
+    t = Theme.of(context);
+    c = t.colorScheme;
+    super.didChangeDependencies();
   }
 
   @override
@@ -180,6 +200,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 child: autoSaveTile(),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(
+              //     vertical: 10,
+              //   ),
+              //   child: themeDataTile(),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10.0,
@@ -265,7 +291,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Center(
           child: ListTile(
-            onTap: () {},
             leading: Icon(
               UniconsLine.palette,
               color: c.tertiary,
@@ -275,6 +300,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
               "Choose Theme",
               style: t.textTheme.button?.copyWith(
                 fontSize: 14,
+              ),
+            ),
+            // trailing: Text(
+            //   toBeginningOfSentenceCase(_themeNotifier.value
+            //           .toString()
+            //           .substring(10)
+            //           .split('.')
+            //           .first)
+            //       .toString(),
+            // ),
+            trailing: DropdownButtonHideUnderline(
+              child: DropdownButton2<ThemeMode>(
+                onChanged: (value) {
+                  setState(() {
+                    selectedTheme = value as String;
+                    _themeNotifier.value = value!;
+                  });
+                },
+                buttonWidth: 100,
+                // buttonHeight: 50,
+                hint: Text(
+                  toBeginningOfSentenceCase(_themeNotifier.value
+                          .toString()
+                          .substring(10)
+                          .split('.')
+                          .first)
+                      .toString(),
+                  style: t.textTheme.bodyText1,
+                ),
+                value: _themeNotifier.value,
+                items: [
+                  DropdownMenuItem(
+                    value: ThemeMode.system,
+                    child: Text(
+                      "System",
+                      style: t.textTheme.button?.copyWith(
+                        color: c.onTertiary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.light,
+                    child: Text(
+                      "Light",
+                      style: t.textTheme.button?.copyWith(
+                        color: c.onTertiary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text(
+                      "Dark",
+                      style: t.textTheme.button?.copyWith(
+                        color: c.onTertiary,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

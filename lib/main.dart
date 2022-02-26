@@ -16,11 +16,14 @@ import 'android/screens/splash_screen.dart';
 import 'android/theme/android_theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.system);
 
   // This widget is the root of your application.
   @override
