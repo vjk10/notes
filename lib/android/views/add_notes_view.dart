@@ -35,12 +35,17 @@ class _AddNoteViewState extends State<AddNoteView> {
       onWillPop: () async {
         bool _autosave = await NotesDatabase().checkAutoSave();
         if (_autosave) {
-          note = Note(
-            body: bodyController.text.toString(),
-            creationTime: DateTime.now(),
-            title: titleController.text.toString(),
-          );
-          NotesDatabase().addNote(note);
+          if (titleController.text.isNotEmpty ||
+              bodyController.text.isNotEmpty) {
+            note = Note(
+              body: bodyController.text.toString(),
+              creationTime: DateTime.now(),
+              title: titleController.text.toString(),
+            );
+            NotesDatabase().addNote(note);
+          } else {
+            Get.offAllNamed('/mainScreen');
+          }
         } else {
           Get.offAllNamed('/mainScreen');
         }
@@ -48,12 +53,25 @@ class _AddNoteViewState extends State<AddNoteView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: c.background,
           toolbarHeight: 80,
           leading: IconButton(
-              onPressed: () {
-                Get.offAllNamed('/mainScreen');
-                Get.back();
+              onPressed: () async {
+                bool _autosave = await NotesDatabase().checkAutoSave();
+                if (_autosave) {
+                  if (titleController.text.isNotEmpty ||
+                      bodyController.text.isNotEmpty) {
+                    note = Note(
+                      body: bodyController.text.toString(),
+                      creationTime: DateTime.now(),
+                      title: titleController.text.toString(),
+                    );
+                    NotesDatabase().addNote(note);
+                  } else {
+                    Get.offAllNamed('/mainScreen');
+                  }
+                } else {
+                  Get.offAllNamed('/mainScreen');
+                }
               },
               icon: Icon(
                 UniconsLine.arrow_left,
@@ -93,12 +111,33 @@ class _AddNoteViewState extends State<AddNoteView> {
               padding: const EdgeInsets.all(10.0),
               child: TextButton.icon(
                 onPressed: () async {
-                  note = Note(
-                    body: bodyController.text.toString(),
-                    creationTime: DateTime.now(),
-                    title: titleController.text.toString(),
-                  );
-                  NotesDatabase().addNote(note);
+                  if (titleController.text.isNotEmpty ||
+                      bodyController.text.isNotEmpty) {
+                    note = Note(
+                      body: bodyController.text.toString(),
+                      creationTime: DateTime.now(),
+                      title: titleController.text.toString(),
+                    );
+                    NotesDatabase().addNote(note);
+                  } else {
+                    Get.showSnackbar(GetSnackBar(
+                      shouldIconPulse: false,
+                      backgroundColor: Get.theme.colorScheme.surface,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
+                      borderRadius: 10,
+                      icon: Icon(
+                        UniconsLine.exclamation_octagon,
+                        color: c.tertiary,
+                      ),
+                      duration: const Duration(seconds: 2),
+                      messageText: Text(
+                        "Empty Note!",
+                        style: Get.textTheme.caption
+                            ?.copyWith(color: Get.theme.colorScheme.onSurface),
+                      ),
+                    ));
+                  }
                 },
                 icon: Icon(
                   UniconsLine.save,

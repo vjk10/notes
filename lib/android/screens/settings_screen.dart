@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/theme/android_theme.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:path_provider/path_provider.dart';
@@ -119,8 +119,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(
                 height: 50,
               ),
-              const Center(
-                child: NotesLogo(),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const NotesLogo(),
+                    if (!_accountLinked)
+                      const SizedBox(
+                        height: 30,
+                      ),
+                    Visibility(
+                      visible: false,
+                      // visible: !_accountLinked,
+                      child: SignInButton(
+                        Buttons.Google,
+                        onPressed: () {},
+                        padding: const EdgeInsets.all(8),
+                        text: "  Sign in to backup notes",
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusDirectional.circular(25),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 50,
@@ -142,12 +165,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 child: userNameTile(),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(
-              //     vertical: 10,
-              //   ),
-              //   child: cloudBackupTile(),
-              // ),
+              Visibility(
+                visible: _accountLinked,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                  ),
+                  child: cloudBackupTile(),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 10,
@@ -207,7 +233,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(
               "Autosave",
               style: t.textTheme.button?.copyWith(
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
             trailing: Switch.adaptive(
@@ -239,13 +265,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Center(
           child: ListTile(
-            onTap: () {
-              AdaptiveTheme.of(context).setTheme(
-                light: androidThemeDark,
-                dark: androidThemeDark,
-                notify: true,
-              );
-            },
+            onTap: () {},
             leading: Icon(
               UniconsLine.palette,
               color: c.tertiary,
@@ -254,7 +274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(
               "Choose Theme",
               style: t.textTheme.button?.copyWith(
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
           ),
@@ -276,20 +296,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Center(
           child: ListTile(
             leading: Icon(
-              _accountLinked ? UniconsLine.cloud : UniconsLine.cloud_block,
+              UniconsLine.cloud,
               color: c.tertiary,
               size: 24,
             ),
             title: Text(
-              _accountLinked ? "Cloud Backup" : "No Account Linked",
+              "Cloud Backup",
               style: t.textTheme.button?.copyWith(
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
             trailing: TextButton(
               onPressed: () {},
               child: Text(
-                _accountLinked ? "Back Up" : "Link",
+                "Back Up",
                 style: t.textTheme.button?.copyWith(
                   fontSize: 14,
                 ),
@@ -321,7 +341,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(
               userName,
               style: t.textTheme.button?.copyWith(
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
           ),
@@ -350,7 +370,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(
               "Used Storage",
               style: t.textTheme.button?.copyWith(
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
             trailing: Text(
@@ -383,11 +403,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: Text(
               "Clear All Notes",
               style: t.textTheme.button?.copyWith(
-                fontSize: 18,
+                fontSize: 14,
               ),
             ),
             trailing: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                NotesDatabase().clearAllNotes();
+              },
               child: Text(
                 "Clear",
                 style: t.textTheme.button?.copyWith(

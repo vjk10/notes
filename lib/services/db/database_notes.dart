@@ -128,4 +128,25 @@ class NotesDatabase {
       ));
     });
   }
+
+  clearAllNotes() async {
+    await ScientISSTdb.instance.collection("notes").delete().whenComplete(() {
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          UniconsLine.trash,
+          color: c.error,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Notes Deleted Successfully!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    });
+  }
 }

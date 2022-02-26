@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:container_tab_indicator/container_tab_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:notes/android/views/all_notes_view.dart';
 import 'package:notes/android/views/folder_view.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,6 +21,17 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
+  String userName = "Username";
+  String cacheMemorySize = "0";
+  String appMemorySize = "0";
+  String userProfile = "";
+  bool appMemoryFound = false;
+  bool cacheFound = false;
+  late Directory tempDir;
+  late Directory appDir;
+
+  late DocumentSnapshot userSnapshot;
+
   @override
   void didChangeDependencies() {
     t = Theme.of(context);

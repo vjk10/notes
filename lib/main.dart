@@ -1,4 +1,3 @@
-
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: kDebugMode,
         theme: androidThemeLight,
         darkTheme: androidThemeDark,
-        themeMode: fluent_ui.ThemeMode.system,
+        themeMode: ThemeMode.system,
         routes: {
           '/splash': (context) => const SplashScreen(),
           '/mainScreen': (context) => const MainScreen(),

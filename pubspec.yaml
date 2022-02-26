@@ -27,8 +27,8 @@ dependencies:
   focused_menu: ^1.0.5
   filesize: ^2.0.1
   flutter_switch: ^0.3.2
-  adaptive_theme: ^2.3.0
   share_plus: ^3.1.0
+  flutter_signin_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:
