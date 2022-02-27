@@ -227,7 +227,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               usedStorageTile(),
               clearNotesTile(),
-              clearNotesTile(),
+              appDetailsTile(),
             ],
           ),
         ),
@@ -554,8 +554,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                 fontSize: 14,
               ),
             ),
-            trailing: TextButton(
-              onPressed: () {
+            trailing: GestureDetector(
+              onTap: () {
                 NotesDatabase().clearAllNotes();
               },
               child: Text(
@@ -613,9 +613,18 @@ class _SettingsScreenState extends State<SettingsScreen>
                         ),
                       ),
                       child: LicensePage(
-                        applicationIcon: const NotesLogo(),
-                        applicationLegalese: "Data from waqi.info",
-                        applicationName: appName,
+                        applicationIcon: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            NotesLogo(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                        applicationLegalese: "Simple notes taking app",
+                        applicationName: " ",
                         applicationVersion:
                             "v" + version + " (build v" + buildNumber + ")",
                       ),

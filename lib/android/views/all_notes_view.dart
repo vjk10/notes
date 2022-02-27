@@ -64,39 +64,40 @@ class _AllNotesViewState extends State<AllNotesView> {
         ),
       ),
       body: FutureBuilder(
-          future: widget.notesFuture,
-          builder: (context, AsyncSnapshot<List<DocumentSnapshot>> notesData) {
-            switch (notesData.connectionState) {
-              case ConnectionState.waiting:
-                {
-                  return const Center(
-                    child: NotesLoadingAndroid(),
-                  );
+        future: widget.notesFuture,
+        builder: (context, AsyncSnapshot<List<DocumentSnapshot>> notesData) {
+          switch (notesData.connectionState) {
+            case ConnectionState.waiting:
+              {
+                return const Center(
+                  child: NotesLoadingAndroid(),
+                );
+              }
+            case ConnectionState.done:
+              {
+                switch (notesData.data!.length) {
+                  case 0:
+                    {
+                      return const NoNotesFound();
+                    }
+                  default:
+                    {
+                      return notesGrid(notesData);
+                    }
                 }
-              case ConnectionState.done:
-                {
-                  switch (notesData.data!.length) {
-                    case 0:
-                      {
-                        return const NoNotesFound();
-                      }
-                    default:
-                      {
-                        return notesGrid(notesData);
-                      }
-                  }
-                }
-              default:
-                {
-                  return Center(
-                    child: CircularProgressIndicator.adaptive(
-                      backgroundColor: c.onBackground.withOpacity(0.2),
-                      valueColor: AlwaysStoppedAnimation(c.onBackground),
-                    ),
-                  );
-                }
-            }
-          }),
+              }
+            default:
+              {
+                return Center(
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: c.onBackground.withOpacity(0.2),
+                    valueColor: AlwaysStoppedAnimation(c.onBackground),
+                  ),
+                );
+              }
+          }
+        },
+      ),
     );
   }
 

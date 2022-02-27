@@ -17,7 +17,7 @@ class Note {
   final int? id;
   final String title;
   final String body;
-  final DateTime creationTime;
+  final String creationTime;
 
   const Note({
     this.id,
@@ -31,7 +31,7 @@ class Note {
     int? number,
     String? title,
     String? body,
-    DateTime? creationTime,
+    String? creationTime,
   }) =>
       Note(
         id: id ?? this.id,
@@ -43,7 +43,7 @@ class Note {
   static Note fromJson(Map<String, Object?> json) => Note(
         id: json[NoteFields.id] as int?,
         body: json[NoteFields.body] as String,
-        creationTime: DateTime.parse(json[NoteFields.creationTime] as String),
+        creationTime: json[NoteFields.creationTime] as String,
         title: json[NoteFields.title] as String,
       );
 
@@ -51,6 +51,6 @@ class Note {
         NoteFields.id: id,
         NoteFields.title: title,
         NoteFields.body: body,
-        NoteFields.creationTime: creationTime.toIso8601String(),
+        NoteFields.creationTime: creationTime,
       };
 }

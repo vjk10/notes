@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:notes/services/db/folders_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
@@ -13,6 +14,13 @@ class NotesDatabase {
     var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
     notesSnapshot = _notes;
     return notesSnapshot;
+  }
+
+  Future<List<DocumentSnapshot>> getFolders() async {
+    var _folders =
+        await ScientISSTdb.instance.collection("folders").getDocuments();
+    foldersSnapshot = _folders;
+    return foldersSnapshot;
   }
 
   setAutoSave(bool autoSave) async {
@@ -130,7 +138,67 @@ class NotesDatabase {
   }
 
   clearAllNotes() async {
-    await ScientISSTdb.instance.collection("notes").delete().whenComplete(() {
+    try {
+      await ScientISSTdb.instance.collection("notes").delete().whenComplete(() {
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            UniconsLine.trash,
+            color: c.error,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Notes Deleted Successfully!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
+
+  createFolder(Folder folder) async {
+    await ScientISSTdb.instance.collection("folders").add({
+      "title": folder.title,
+      "description": folder.description,
+      "creationTime": folder.creationTime,
+    }).whenComplete(() {
+      HapticFeedback.heavyImpact();
+      Get.offAllNamed('/mainScreen');
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          UniconsLine.check_circle,
+          color: c.primary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Folder Created Successfully!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    });
+  }
+
+  deleteFolder(String folderId) async {
+    await ScientISSTdb.instance
+        .collection("folders")
+        .document(folderId)
+        .delete()
+        .whenComplete(() {
+      HapticFeedback.heavyImpact();
+      Get.offAllNamed('/mainScreen');
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,
@@ -142,7 +210,7 @@ class NotesDatabase {
         ),
         duration: const Duration(seconds: 2),
         messageText: Text(
-          "Notes Deleted Successfully!",
+          "Folder Deleted Successfully!",
           style: Get.textTheme.caption
               ?.copyWith(color: Get.theme.colorScheme.onSurface),
         ),

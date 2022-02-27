@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen>
         controller: _tabController,
         children: [
           AllNotesView(notesFuture: NotesDatabase().getNotes()),
-          const FoldersView(),
+          FoldersView(foldersFuture: NotesDatabase().getFolders()),
         ],
       ),
     );

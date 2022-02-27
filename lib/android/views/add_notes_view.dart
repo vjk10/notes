@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -39,7 +40,7 @@ class _AddNoteViewState extends State<AddNoteView> {
               bodyController.text.isNotEmpty) {
             note = Note(
               body: bodyController.text.toString(),
-              creationTime: DateTime.now(),
+              creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
               title: titleController.text.toString(),
             );
             NotesDatabase().addNote(note);
@@ -62,7 +63,8 @@ class _AddNoteViewState extends State<AddNoteView> {
                       bodyController.text.isNotEmpty) {
                     note = Note(
                       body: bodyController.text.toString(),
-                      creationTime: DateTime.now(),
+                      creationTime:
+                          DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
                     );
                     NotesDatabase().addNote(note);
@@ -115,7 +117,8 @@ class _AddNoteViewState extends State<AddNoteView> {
                       bodyController.text.isNotEmpty) {
                     note = Note(
                       body: bodyController.text.toString(),
-                      creationTime: DateTime.now(),
+                      creationTime:
+                          DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
                     );
                     NotesDatabase().addNote(note);

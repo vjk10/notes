@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes/theme/colors.dart';
 
-ThemeData androidThemeLight = ThemeData(
+ThemeData androidThemeRegular = ThemeData(
   useMaterial3: true,
   backgroundColor: black,
   primaryColor: black,
@@ -50,7 +50,7 @@ ThemeData androidThemeLight = ThemeData(
   ),
 );
 
-ThemeData androidThemeDark = ThemeData(
+ThemeData androidThemePitchBlack = ThemeData(
   useMaterial3: true,
   backgroundColor: pitchblack,
   primaryColor: black,
@@ -61,7 +61,7 @@ ThemeData androidThemeDark = ThemeData(
       primaryContainer: yellow,
       onPrimary: black,
       onPrimaryContainer: black,
-      secondary: darkGrey,
+      secondary: grey,
       secondaryContainer: darkGrey,
       onSecondary: lightGrey,
       onSecondaryContainer: lightGrey,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes/android/data/data.dart';
 
-import '../data/data.dart';
-
-class NoNotesFound extends StatelessWidget {
-  const NoNotesFound({
+class NoFoldersFound extends StatelessWidget {
+  const NoFoldersFound({
     Key? key,
   }) : super(key: key);
 
@@ -16,7 +15,7 @@ class NoNotesFound extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/images/nonotes.png",
+            "assets/images/nofolders.png",
             width: Get.width / 2,
             height: Get.width / 2,
           ),
@@ -24,7 +23,7 @@ class NoNotesFound extends StatelessWidget {
             height: 10,
           ),
           Text(
-            "no notes found!",
+            "no folders found!",
             style: t.textTheme.headline6?.copyWith(color: c.secondary),
           ),
           SizedBox(

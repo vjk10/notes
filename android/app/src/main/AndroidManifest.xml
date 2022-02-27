@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.notes">
+    package="com.vlabs.notes">
    <application
         android:label="notes"
         android:name="${applicationName}"

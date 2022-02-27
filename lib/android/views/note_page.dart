@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -69,7 +70,8 @@ class _NotePageState extends State<NotePage> {
                         bodyController.text) {
                   note = Note(
                     body: bodyController.text.toString(),
-                    creationTime: DateTime.now(),
+                    creationTime:
+                        DateFormat('yyyy-MM-dd').format(DateTime.now()),
                     title: titleController.text.toString(),
                   );
                   NotesDatabase().updateNote(note, widget.noteId, true);
@@ -98,7 +100,8 @@ class _NotePageState extends State<NotePage> {
                               bodyController.text) {
                         note = Note(
                           body: bodyController.text.toString(),
-                          creationTime: DateTime.now(),
+                          creationTime:
+                              DateFormat('yyyy-MM-dd').format(DateTime.now()),
                           title: titleController.text.toString(),
                         );
                         NotesDatabase().updateNote(note, widget.noteId, true);
@@ -122,7 +125,8 @@ class _NotePageState extends State<NotePage> {
                       onPressed: () async {
                         note = Note(
                           body: bodyController.text.toString(),
-                          creationTime: DateTime.now(),
+                          creationTime:
+                              DateFormat('yyyy-MM-dd').format(DateTime.now()),
                           title: titleController.text.toString(),
                         );
                         NotesDatabase()

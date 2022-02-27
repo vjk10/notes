@@ -22,8 +22,8 @@ class AppThemes {
 
 final themeCollection = ThemeCollection(
   themes: {
-    AppThemes.regular: androidThemeLight,
-    AppThemes.pitchblack: androidThemeDark,
+    AppThemes.regular: androidThemeRegular,
+    AppThemes.pitchblack: androidThemePitchBlack,
   },
-  fallbackTheme: androidThemeLight,
+  fallbackTheme: androidThemeRegular,
 );

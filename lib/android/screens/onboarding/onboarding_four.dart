@@ -177,7 +177,8 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           "completed": true,
                         },
                       );
-                      Get.offNamedUntil('/mainScreen', (route) => false);
+                      // Get.offNamedUntil('/mainScreen', (route) => false);
+                      Get.offAllNamed('/mainScreen');
                     },
                     child: Text(
                       "Continue",

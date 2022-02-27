@@ -41,16 +41,16 @@ class _OnBoarding1State extends State<OnBoarding1> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/images/onboarding1.png",
-              width: Get.width,
-              fit: BoxFit.fitWidth,
+          Container(
+            width: Get.width,
+            height: Get.height,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/onboarding1.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Padding(
@@ -85,33 +85,42 @@ class _OnBoarding1State extends State<OnBoarding1> {
           ),
           Positioned(
             top: Get.height / 8,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: Get.statusBarHeight - 100,
-                  ),
-                  const NotesLogo(
-                    width: 24,
-                    height: 24,
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  SizedBox(
-                    width: Get.width - 30,
-                    child: Text(
-                      onBoarding1Message,
-                      style: t.textTheme.bodyText1?.copyWith(
-                        fontSize: 18,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: (Get.statusBarHeight - 100).isNegative
+                    ? c.surface
+                    : Colors.transparent,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (!(Get.statusBarHeight - 100).isNegative)
+                      SizedBox(
+                        height: Get.statusBarHeight - 100,
                       ),
-                      textAlign: TextAlign.center,
+                    const NotesLogo(
+                      width: 24,
+                      height: 24,
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    SizedBox(
+                      width: Get.width - 30,
+                      child: Text(
+                        onBoarding1Message,
+                        style: t.textTheme.bodyText1?.copyWith(
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           )

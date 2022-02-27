@@ -28,16 +28,16 @@ class _OnBoarding2State extends State<OnBoarding2> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/images/onboarding2.png",
-              width: Get.width,
-              fit: BoxFit.fitWidth,
+          Container(
+            width: Get.width,
+            height: Get.height,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/onboarding2.png"),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Padding(
@@ -102,89 +102,104 @@ class _OnBoarding2State extends State<OnBoarding2> {
           ),
           Positioned(
             top: Get.height / 8,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: Get.statusBarHeight - 100,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: (Get.statusBarHeight - 100).isNegative
+                        ? c.surface
+                        : Colors.transparent,
                   ),
-                  Text(
-                    "enter your name",
-                    style: t.textTheme.headline4?.copyWith(
-                      fontFamily: 'Theme Black',
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (!(Get.statusBarHeight - 100).isNegative)
+                          SizedBox(
+                            height: Get.statusBarHeight - 100,
+                          ),
+                        Text(
+                          "enter your name",
+                          style: t.textTheme.headline4?.copyWith(
+                            fontFamily: 'Theme Black',
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          width: Get.width - 30,
+                          child: Text(
+                            onBoarding2Message,
+                            style: t.textTheme.bodyText1?.copyWith(
+                              fontSize: 18,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  SizedBox(
-                    width: Get.width - 30,
-                    child: Text(
-                      onBoarding2Message,
-                      style: t.textTheme.bodyText1?.copyWith(
-                        fontSize: 18,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: Get.width - 40,
-                      child: TextFormField(
-                        controller: _nameController,
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.name,
-                        textCapitalization: TextCapitalization.words,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                            ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: Get.width - 40,
+                    child: TextFormField(
+                      controller: _nameController,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.name,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            10,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                            ),
+                          borderSide: BorderSide(
+                            color: c.surface,
                           ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                            ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            10,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              10,
-                            ),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                            ),
+                          borderSide: BorderSide(
+                            color: c.surface,
                           ),
-                          filled: true,
-                          fillColor: c.surface,
-                          contentPadding: const EdgeInsets.all(
-                            20.0,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            10,
                           ),
+                          borderSide: BorderSide(
+                            color: c.surface,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            10,
+                          ),
+                          borderSide: BorderSide(
+                            color: c.surface,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: c.surface,
+                        contentPadding: const EdgeInsets.all(
+                          20.0,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )
         ],
