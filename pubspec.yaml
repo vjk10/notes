@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none' 
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -30,6 +30,11 @@ dependencies:
   share_plus: ^3.1.0
   flutter_signin_button: ^2.0.0
   dropdown_button2: ^1.1.1
+  dynamic_themes: ^1.1.0
+  shared_preferences: ^2.0.13
+  package_info_plus: ^1.4.0
+  package_info_plus_web: ^1.0.4
+  package_info_plus_windows: ^1.0.4
 
 dev_dependencies:
   flutter_test:

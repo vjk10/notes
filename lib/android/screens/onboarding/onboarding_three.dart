@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:notes/services/db/database_notes.dart';
-import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
 import '../../data/data.dart';
 
@@ -113,19 +112,11 @@ class _OnBoarding3State extends State<OnBoarding3> {
                       ),
                     ),
                     onPressed: () async {
-                      await ScientISSTdb.instance
-                          .collection("userPref")
-                          .document("onboarding")
-                          .set(
-                        {
-                          "completed": true,
-                        },
-                      );
                       await NotesDatabase().setAutoSave(_autoSave);
-                      Get.offNamedUntil('/mainScreen', (route) => false);
+                      Get.offNamedUntil('/onboarding4', (route) => false);
                     },
                     child: Text(
-                      "Continue",
+                      "Next",
                       style: t.textTheme.button?.copyWith(
                         fontSize: 18,
                         color: c.onPrimary,

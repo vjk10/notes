@@ -1,5 +1,3 @@
-/*ANDROID SECTION FROM HERE****************************************************/
-
 //ANDROID THEME SECTION//
 import 'package:flutter/material.dart';
 import 'package:notes/theme/colors.dart';
@@ -48,7 +46,7 @@ ThemeData androidThemeLight = ThemeData(
     bodyText1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
     bodyText2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
     caption: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: white, fontFamily: 'Theme Font', fontSize: 18),
+    button: TextStyle(color: white, fontFamily: 'Theme Font'),
   ),
 );
 
@@ -96,6 +94,6 @@ ThemeData androidThemeDark = ThemeData(
     bodyText1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
     bodyText2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
     caption: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: white, fontFamily: 'Theme Font', fontSize: 18),
+    button: TextStyle(color: white, fontFamily: 'Theme Font'),
   ),
 );

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/theme/colors.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    getAppInfo();
     Future.delayed(const Duration(seconds: 2), () async {
       try {
         _onboardingSnapshot = await ScientISSTdb.instance
@@ -41,6 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
     super.initState();
+  }
+
+  getAppInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
   }
 
   @override
