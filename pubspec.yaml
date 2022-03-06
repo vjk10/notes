@@ -29,12 +29,20 @@ dependencies:
   flutter_switch: ^0.3.2
   share_plus: ^3.1.0
   flutter_signin_button: ^2.0.0
-  dropdown_button2: ^1.1.1
   dynamic_themes: ^1.1.0
   shared_preferences: ^2.0.13
   package_info_plus: ^1.4.0
   package_info_plus_web: ^1.0.4
   package_info_plus_windows: ^1.0.4
+  dropdown_button2: ^1.2.0
+  google_sign_in: ^5.2.4
+  google_sign_in_web: ^0.10.0+5
+  firebase_auth: ^3.3.9
+  firebase_auth_web: ^3.3.9
+  firebase_core: ^1.13.1
+  firebase_core_web: ^1.6.1
+  cloud_firestore: ^3.1.10
+  cloud_firestore_web: ^2.6.10
 
 dev_dependencies:
   flutter_test:

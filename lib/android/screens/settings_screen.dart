@@ -2,18 +2,25 @@ import 'dart:io';
 
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:filesize/filesize.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:notes/services/db/database_service.dart';
+import 'package:notes/services/google_sign_in.dart';
 import 'package:notes/services/db/theme/app_themes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -25,6 +32,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen>
     with SingleTickerProviderStateMixin {
   String userName = "Username";
+  String profileUrl = "";
   String cacheMemorySize = "0";
   String appMemorySize = "0";
   bool appMemoryFound = false;
@@ -32,11 +40,14 @@ class _SettingsScreenState extends State<SettingsScreen>
   late Directory tempDir;
   late Directory appDir;
   bool _autoSave = true;
-  final bool _accountLinked = false;
+  bool _accountLinked = false;
+  bool _isLoading = false;
   String selectedTheme = "";
   int selectedThemeId = 0;
 
   late DocumentSnapshot userSnapshot;
+  late fire_store.DocumentSnapshot firebaseUserDetails;
+  late User user;
 
   late AnimationController _bottomSheetController;
 
@@ -76,6 +87,28 @@ class _SettingsScreenState extends State<SettingsScreen>
         .document("user")
         .get();
     userName = userSnapshot.data["name"];
+    try {
+      user = FirebaseAuth.instance.currentUser!;
+
+      firebaseUserDetails = await fire_store.FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .get();
+      setState(() {
+        _accountLinked = true;
+        profileUrl = user.photoURL.toString();
+      });
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (kDebugMode) {
+          print(e.message);
+        }
+      }
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   getCacheMemory() async {
@@ -149,49 +182,88 @@ class _SettingsScreenState extends State<SettingsScreen>
               )),
           toolbarHeight: 80,
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10.0,
-              vertical: 20.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                UserDetails(userName: userName, accountLinked: _accountLinked),
-                const SizedBox(
-                  height: 50,
-                ),
-                userDataSection(),
-                deciveDataSection(),
-                Center(
-                  child: Visibility(
-                    visible: _accountLinked,
-                    child: SizedBox(
-                      width: Get.width,
-                      height: 75,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          "Logout",
-                          style: t.textTheme.button?.copyWith(
-                            color: c.onPrimary,
+        body: _isLoading
+            ? const Center(
+                child: NotesLoadingAndroid(),
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 20.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      UserDetails(
+                        userName: userName,
+                        profileUrl: profileUrl,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: Visibility(
+                          visible: !_accountLinked,
+                          child: SignInButton(
+                            Buttons.Google,
+                            onPressed: () async {
+                              await signInWithGoogle(context).whenComplete(() {
+                                setState(() {
+                                  _accountLinked = !_accountLinked;
+                                });
+                                getUserStatus();
+                              });
+                            },
+                            padding: const EdgeInsets.all(8),
+                            text: "  Sign in to backup notes",
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadiusDirectional.circular(25),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        height: _accountLinked ? 0 : 50,
+                      ),
+                      userDataSection(),
+                      deciveDataSection(),
+                      Center(
+                        child: Visibility(
+                          visible: _accountLinked,
+                          child: SizedBox(
+                            width: Get.width,
+                            height: 75,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                              ),
+                              onPressed: () async {
+                                await signOutGoogle(context).whenComplete(() {
+                                  setState(() {
+                                    profileUrl = "";
+                                    _accountLinked = !_accountLinked;
+                                  });
+                                });
+                              },
+                              child: Text(
+                                "Logout",
+                                style: t.textTheme.button?.copyWith(
+                                  color: c.onPrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ),
+                ),
+              ),
       ),
     );
   }
@@ -220,10 +292,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                   textAlign: TextAlign.start,
                   style: t.textTheme.button,
                 ),
-              ),
-              Visibility(
-                visible: _accountLinked,
-                child: cloudBackupTile(),
               ),
               usedStorageTile(),
               clearNotesTile(),
@@ -386,59 +454,85 @@ class _SettingsScreenState extends State<SettingsScreen>
                   width: Get.width,
                   height: Get.bottomBarHeight + 250,
                   child: Center(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: themesList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 50.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              changeTheme(index, context);
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Image.asset(
-                                      themesList[index]["url"].toString(),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: selectedThemeId == index
-                                        ? c.primary.withOpacity(0.2)
-                                        : c.secondary.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      themesList[index]["name"].toString(),
-                                      style: t.textTheme.button?.copyWith(
-                                        color: selectedThemeId == index
-                                            ? c.primary
-                                            : c.onSecondary,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            dragStartBehavior: DragStartBehavior.start,
+                            itemCount: themesList.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0, vertical: 50.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    changeTheme(index, context);
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Image.asset(
+                                            themesList[index]["url"].toString(),
+                                            width: 80,
+                                            height: 80,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: selectedThemeId == index
+                                              ? c.primary.withOpacity(0.2)
+                                              : c.secondary.withOpacity(0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            themesList[index]["name"]
+                                                .toString(),
+                                            style: t.textTheme.button?.copyWith(
+                                              color: selectedThemeId == index
+                                                  ? c.primary
+                                                  : c.onSecondary,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(
+                              UniconsLine.arrow_left,
+                              color: c.onBackground,
+                            ),
+                            Icon(
+                              UniconsLine.arrow_right,
+                              color: c.onBackground,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -484,11 +578,19 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
             ),
             trailing: TextButton(
-              onPressed: () {},
+              style: TextButton.styleFrom(
+                  backgroundColor: c.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  )),
+              onPressed: () {
+                DatabaseService().importNotes(user.uid);
+              },
               child: Text(
-                "Back Up",
+                "Import",
                 style: t.textTheme.button?.copyWith(
                   fontSize: 14,
+                  color: c.onPrimary,
                 ),
               ),
             ),

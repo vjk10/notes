@@ -6,14 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/views/all_notes_view.dart';
-import 'package:notes/android/views/folder_view.dart';
+import 'package:notes/android/views/all_folder_view.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  // final MainScreenArgument argument;
+  final int selectedIndex;
+
+  const MainScreen({
+    Key? key,
+    // required this.argument,
+    required this.selectedIndex,
+  }) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -31,6 +38,7 @@ class _MainScreenState extends State<MainScreen>
   late Directory appDir;
 
   late DocumentSnapshot userSnapshot;
+  late TabController _tabController;
 
   @override
   void didChangeDependencies() {
@@ -41,9 +49,14 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: myTabs.length, vsync: this);
+    _tabController = TabController(
+      length: myTabs.length,
+      vsync: this,
+      initialIndex: widget.selectedIndex,
+    );
     if (kDebugMode) {
       print("MAIN SCREEN INIT STATE");
+      print("SELECTED INDEX: " + widget.selectedIndex.toString());
     }
     super.initState();
   }
@@ -84,7 +97,6 @@ class _MainScreenState extends State<MainScreen>
             10,
           )),
       tabs: myTabs);
-  late TabController _tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -104,15 +116,18 @@ class _MainScreenState extends State<MainScreen>
               UniconsLine.setting,
               color: c.onBackground,
             ),
-          )
+          ),
         ],
         bottom: _tabBar,
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          AllNotesView(notesFuture: NotesDatabase().getNotes()),
-          FoldersView(foldersFuture: NotesDatabase().getFolders()),
+          AllNotesView(
+            notesFuture: NotesDatabase().getNotes(),
+            foldersFuture: NotesDatabase().getFolders(),
+          ),
+          AllFoldersView(foldersFuture: NotesDatabase().getFolders()),
         ],
       ),
     );

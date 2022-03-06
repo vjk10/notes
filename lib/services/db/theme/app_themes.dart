@@ -4,9 +4,13 @@ import 'package:notes/android/theme/android_theme.dart';
 class AppThemes {
   static const int regular = 0;
   static const int pitchblack = 1;
+  static const int kindaRed = 2;
+  static const int darkYellow = 3;
 
   final String regularName = "assets/images/regularTheme.png";
   final String pitchblackName = "assets/images/pitchBlackTheme.png";
+  final String kindaRedName = "assets/images/kindaRedTheme.png";
+  final String darkYellowName = "assets/images/darkYellowTheme.png";
 
   String getThemeName(int currentId) {
     if (currentId == regular) {
@@ -14,6 +18,12 @@ class AppThemes {
     }
     if (currentId == pitchblack) {
       return pitchblackName;
+    }
+    if (currentId == kindaRed) {
+      return kindaRedName;
+    }
+    if (currentId == darkYellow) {
+      return darkYellowName;
     } else {
       return regularName;
     }
@@ -24,6 +34,8 @@ final themeCollection = ThemeCollection(
   themes: {
     AppThemes.regular: androidThemeRegular,
     AppThemes.pitchblack: androidThemePitchBlack,
+    AppThemes.kindaRed: androidThemeKindaRed,
+    AppThemes.darkYellow: androidThemeDarkYellow,
   },
   fallbackTheme: androidThemeRegular,
 );

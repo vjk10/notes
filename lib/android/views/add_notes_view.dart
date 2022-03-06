@@ -26,6 +26,13 @@ class _AddNoteViewState extends State<AddNoteView> {
   }
 
   @override
+  void didChangeDependencies() {
+    t = Theme.of(context);
+    c = t.colorScheme;
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }

@@ -36,6 +36,13 @@ class _NotePageState extends State<NotePage> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    t = Theme.of(context);
+    c = t.colorScheme;
+    super.didChangeDependencies();
+  }
+
   Future refreshNote() async {
     setState(() {
       isLoading = true;

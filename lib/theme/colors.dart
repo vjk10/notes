@@ -24,3 +24,7 @@ MaterialColor purple = MaterialColor(0xFF706FC8, color);
 MaterialColor yellow = MaterialColor(0xFFFFC14B, color);
 MaterialColor green = MaterialColor(0xFF7CDC4F, color);
 MaterialColor lightBlack = MaterialColor(0xFF272636, color);
+MaterialColor kindaRedBackground = MaterialColor(0xFF311717, color);
+MaterialColor kindaRedSurface = MaterialColor(0xFF421F1F, color);
+MaterialColor darkYellowBackground = MaterialColor(0xFF261C00, color);
+MaterialColor darkYellowSurface = MaterialColor(0xFF2D2100, color);

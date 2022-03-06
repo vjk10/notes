@@ -30,14 +30,12 @@ class _OnBoarding2State extends State<OnBoarding2> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            width: Get.width,
-            height: Get.height,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/onboarding2.png"),
-                fit: BoxFit.cover,
-              ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Image.asset(
+              "assets/images/onboarding2.png",
+              width: Get.width,
+              fit: BoxFit.fitWidth,
             ),
           ),
           Padding(

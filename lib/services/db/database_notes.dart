@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:notes/android/screens/main_screen.dart';
+import 'package:notes/android/views/folder_view.dart';
 import 'package:notes/services/db/folders_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -10,6 +12,8 @@ import 'package:unicons/unicons.dart';
 import '../../android/data/data.dart';
 
 class NotesDatabase {
+  //NOTES SECTION
+
   Future<List<DocumentSnapshot>> getNotes() async {
     var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
     notesSnapshot = _notes;
@@ -164,6 +168,8 @@ class NotesDatabase {
     }
   }
 
+  //FOLDER SECTION
+
   createFolder(Folder folder) async {
     await ScientISSTdb.instance.collection("folders").add({
       "title": folder.title,
@@ -171,7 +177,7 @@ class NotesDatabase {
       "creationTime": folder.creationTime,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
-      Get.offAllNamed('/mainScreen');
+      Get.offAll(() => const MainScreen(selectedIndex: 1));
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,
@@ -189,6 +195,39 @@ class NotesDatabase {
         ),
       ));
     });
+  }
+
+  addToFolder(String folderName, String noteId, String noteTitle,
+      String noteBody) async {
+    await ScientISSTdb.instance.collection(folderName).document(noteId).set(
+      {
+        "title": noteTitle,
+        "body": noteBody,
+      },
+    ).whenComplete(
+      () {
+        HapticFeedback.heavyImpact();
+        Get.offAllNamed('/mainScreen');
+        Get.showSnackbar(
+          GetSnackBar(
+            shouldIconPulse: false,
+            backgroundColor: Get.theme.colorScheme.surface,
+            margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            borderRadius: 10,
+            icon: Icon(
+              UniconsLine.check_circle,
+              color: c.primary,
+            ),
+            duration: const Duration(seconds: 2),
+            messageText: Text(
+              "Added to Folder Successfully!",
+              style: Get.textTheme.caption
+                  ?.copyWith(color: Get.theme.colorScheme.onSurface),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   deleteFolder(String folderId) async {
@@ -211,6 +250,50 @@ class NotesDatabase {
         duration: const Duration(seconds: 2),
         messageText: Text(
           "Folder Deleted Successfully!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    });
+  }
+
+  Future<List<DocumentSnapshot>> getFolderNotes(String folderName) async {
+    var _folderNotes =
+        await ScientISSTdb.instance.collection(folderName).getDocuments();
+    for (var element in _folderNotes) {
+      if (kDebugMode) {
+        print(element.id);
+      }
+      var noteSnapshot = await ScientISSTdb.instance
+          .collection("notes")
+          .document(element.id)
+          .get();
+      folderNotesSnapshot.add(noteSnapshot);
+    }
+    // folderNotesSnapshot = _folderNotes;
+    return folderNotesSnapshot;
+  }
+
+  deleteFromFolder(String folderName, String noteId) async {
+    await ScientISSTdb.instance
+        .collection(folderName)
+        .document(noteId)
+        .delete()
+        .whenComplete(() {
+      HapticFeedback.heavyImpact();
+      Get.offAll(() => FolderView(folderName: folderName));
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          UniconsLine.trash,
+          color: c.error,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Note Removed from Folder",
           style: Get.textTheme.caption
               ?.copyWith(color: Get.theme.colorScheme.onSurface),
         ),

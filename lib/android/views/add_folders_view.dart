@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/folders_model.dart';
@@ -39,7 +40,10 @@ class _AddFolderViewState extends State<AddFolderView> {
         toolbarHeight: 80,
         leading: IconButton(
             onPressed: () {
-              Get.offAllNamed('/mainScreen');
+              // Get.offAllNamed('/mainScreen', arguments: MainScreenArgument(1));
+              Get.offAll(() => const MainScreen(
+                    selectedIndex: 1,
+                  ));
             },
             icon: Icon(
               UniconsLine.arrow_left,

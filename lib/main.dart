@@ -1,4 +1,5 @@
 import 'package:dynamic_themes/dynamic_themes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
@@ -10,6 +11,8 @@ import 'package:notes/android/screens/onboarding/onboarding_one.dart';
 import 'package:notes/android/screens/onboarding/onboarding_three.dart';
 import 'package:notes/android/screens/onboarding/onboarding_two.dart';
 import 'package:notes/android/screens/settings_screen.dart';
+import 'package:notes/android/views/add_folders_view.dart';
+import 'package:notes/android/views/add_notes_view.dart';
 import 'package:notes/services/db/theme/app_themes.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
@@ -17,8 +20,9 @@ import 'package:notes/windows/screens/theme/windows_theme.dart';
 
 import 'android/screens/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -52,11 +56,15 @@ class MyApp extends StatelessWidget {
           theme: theme,
           routes: {
             '/splash': (context) => const SplashScreen(),
-            '/mainScreen': (context) => const MainScreen(),
+            '/mainScreen': (context) => const MainScreen(
+                  selectedIndex: 0,
+                ),
             '/onboarding1': (context) => const OnBoarding1(),
             '/onboarding2': (context) => const OnBoarding2(),
             '/onboarding3': (context) => const OnBoarding3(),
             '/onboarding4': (context) => const OnBoarding4(),
+            '/addFolder': (context) => const AddFolderView(),
+            '/addNote': (context) => const AddNoteView(),
             '/settings': (contex) => const SettingsScreen(),
           },
           title: 'Notes',

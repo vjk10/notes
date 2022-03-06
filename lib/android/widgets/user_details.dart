@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:unicons/unicons.dart';
 
-class UserDetails extends StatelessWidget {
-  const UserDetails({
-    Key? key,
-    required this.userName,
-    required bool accountLinked,
-  })  : _accountLinked = accountLinked,
-        super(key: key);
+class UserDetails extends StatefulWidget {
+  const UserDetails({Key? key, required this.userName, this.profileUrl = ""})
+      : super(key: key);
 
-  final String userName;
-  final bool _accountLinked;
+  final String userName, profileUrl;
 
+  @override
+  State<UserDetails> createState() => _UserDetailsState();
+}
+
+class _UserDetailsState extends State<UserDetails> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -21,34 +20,25 @@ class UserDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            UniconsLine.smile,
-            color: c.onBackground,
-            size: 60,
-          ),
+          if (widget.profileUrl.isEmpty)
+            Icon(
+              UniconsLine.smile,
+              color: c.onBackground,
+              size: 60,
+            ),
+          if (widget.profileUrl.isNotEmpty)
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: c.primary,
+              backgroundImage: NetworkImage(widget.profileUrl),
+            ),
           Padding(
             padding: const EdgeInsets.only(
               top: 20.0,
             ),
             child: Text(
-              userName,
+              widget.userName,
               style: t.textTheme.headline5,
-            ),
-          ),
-          if (!_accountLinked)
-            const SizedBox(
-              height: 30,
-            ),
-          Visibility(
-            visible: !_accountLinked,
-            child: SignInButton(
-              Buttons.Google,
-              onPressed: () {},
-              padding: const EdgeInsets.all(8),
-              text: "  Sign in to backup notes",
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusDirectional.circular(25),
-              ),
             ),
           ),
         ],

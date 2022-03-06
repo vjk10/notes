@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -7,18 +8,23 @@ import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/views/add_notes_view.dart';
 import 'package:notes/android/views/note_page.dart';
+import 'package:notes/android/views/pick_folder.dart';
 import 'package:notes/android/widgets/no_notes_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:notes/services/db/database_service.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:unicons/unicons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
 class AllNotesView extends StatefulWidget {
   final Future<List<DocumentSnapshot>> notesFuture;
+  final Future<List<DocumentSnapshot>> foldersFuture;
   const AllNotesView({
     Key? key,
     required this.notesFuture,
+    required this.foldersFuture,
   }) : super(key: key);
 
   @override
@@ -27,14 +33,48 @@ class AllNotesView extends StatefulWidget {
 
 class _AllNotesViewState extends State<AllNotesView> {
   bool isLoading = false;
-  final bool _accountsLinked = false;
+  bool _accountLinked = false;
+
+  late fire_store.DocumentSnapshot firebaseUserDetails;
+  late User user;
 
   @override
   void initState() {
+    initUser();
     super.initState();
     if (kDebugMode) {
       print("ALL NOTES INIT STATE");
     }
+  }
+
+  initUser() async {
+    try {
+      user = FirebaseAuth.instance.currentUser!;
+      if (user.uid.isNotEmpty) {
+        firebaseUserDetails = await fire_store.FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.uid)
+            .get();
+        if (firebaseUserDetails.exists) {
+          setState(() {
+            _accountLinked = true;
+          });
+        }
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (kDebugMode) {
+          print(e.message);
+        }
+      }
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    t = Theme.of(context);
+    c = t.colorScheme;
+    super.didChangeDependencies();
   }
 
   @override
@@ -142,7 +182,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                     80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
                 menuItems: <FocusedMenuItem>[
                   // Add Each FocusedMenuItem  for Menu Options
-                  if (_accountsLinked)
+                  if (_accountLinked)
                     FocusedMenuItem(
                       backgroundColor: c.surface,
                       title: Text(
@@ -156,8 +196,41 @@ class _AllNotesViewState extends State<AllNotesView> {
                         UniconsLine.cloud_upload,
                         color: c.tertiary,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        DatabaseService().backUpSingleNote(
+                          user.uid,
+                          notesData.data![noteIndex].id,
+                          notesData.data![noteIndex].data["title"].toString(),
+                          notesData.data![noteIndex].data["body"].toString(),
+                          notesData.data![noteIndex].data["creationTime"]
+                              .toString(),
+                        );
+                      },
                     ),
+                  FocusedMenuItem(
+                    backgroundColor: c.surface,
+                    title: Text(
+                      "Add to Folder",
+                      style: t.textTheme.button?.copyWith(
+                        color: c.tertiary,
+                        fontSize: 12,
+                      ),
+                    ),
+                    trailingIcon: Icon(
+                      UniconsLine.folder_plus,
+                      color: c.tertiary,
+                    ),
+                    onPressed: () {
+                      Get.to(
+                        () => PickFolder(
+                          noteId: notesData.data![noteIndex].id,
+                          noteTitle: notesData.data![noteIndex].data["title"],
+                          noteBody: notesData.data![noteIndex].data["body"],
+                          foldersFuture: widget.foldersFuture,
+                        ),
+                      );
+                    },
+                  ),
                   FocusedMenuItem(
                     backgroundColor: c.surface,
                     title: Text(

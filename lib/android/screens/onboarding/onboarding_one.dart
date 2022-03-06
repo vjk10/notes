@@ -43,14 +43,12 @@ class _OnBoarding1State extends State<OnBoarding1> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          Container(
-            width: Get.width,
-            height: Get.height,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/onboarding1.png"),
-                fit: BoxFit.cover,
-              ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Image.asset(
+              "assets/images/onboarding1.png",
+              width: Get.width,
+              fit: BoxFit.fitWidth,
             ),
           ),
           Padding(
@@ -93,7 +91,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                     : Colors.transparent,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -115,6 +113,9 @@ class _OnBoarding1State extends State<OnBoarding1> {
                         onBoarding1Message,
                         style: t.textTheme.bodyText1?.copyWith(
                           fontSize: 18,
+                          color: (Get.statusBarHeight - 100).isNegative
+                              ? c.onSurface
+                              : c.onBackground,
                         ),
                         textAlign: TextAlign.center,
                       ),
