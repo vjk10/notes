@@ -6,11 +6,13 @@ class AppThemes {
   static const int pitchblack = 1;
   static const int kindaRed = 2;
   static const int darkYellow = 3;
+  static const int kindaWhite = 4;
 
   final String regularName = "assets/images/regularTheme.png";
   final String pitchblackName = "assets/images/pitchBlackTheme.png";
   final String kindaRedName = "assets/images/kindaRedTheme.png";
   final String darkYellowName = "assets/images/darkYellowTheme.png";
+  final String kindaWhiteName = "assets/images/kindaWhiteTheme.png";
 
   String getThemeName(int currentId) {
     if (currentId == regular) {
@@ -24,6 +26,9 @@ class AppThemes {
     }
     if (currentId == darkYellow) {
       return darkYellowName;
+    }
+    if (currentId == kindaWhite) {
+      return kindaWhiteName;
     } else {
       return regularName;
     }
@@ -36,6 +41,7 @@ final themeCollection = ThemeCollection(
     AppThemes.pitchblack: androidThemePitchBlack,
     AppThemes.kindaRed: androidThemeKindaRed,
     AppThemes.darkYellow: androidThemeDarkYellow,
+    AppThemes.kindaWhite: androidThemeKindaWhite,
   },
   fallbackTheme: androidThemeRegular,
 );

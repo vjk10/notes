@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/views/all_notes_view.dart';
 import 'package:notes/android/views/all_folder_view.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
@@ -102,12 +101,21 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const NotesLogo(
-          width: 18,
-          height: 18,
+        title: Text(
+          "notes",
+          style: t.textTheme.headline6,
         ),
         automaticallyImplyLeading: false,
         actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed('/clipboard');
+            },
+            icon: Icon(
+              UniconsLine.clipboard_notes,
+              color: c.onBackground,
+            ),
+          ),
           IconButton(
             onPressed: () {
               Get.toNamed('/settings');

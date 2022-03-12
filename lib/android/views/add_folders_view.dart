@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/screens/main_screen.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/folders_model.dart';
 import 'package:notes/services/db/notes_model.dart';
@@ -50,7 +49,10 @@ class _AddFolderViewState extends State<AddFolderView> {
               color: c.onBackground,
               size: 36,
             )),
-        title: const NotesLogo(),
+        title: Text(
+          "notes",
+          style: t.textTheme.headline6,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

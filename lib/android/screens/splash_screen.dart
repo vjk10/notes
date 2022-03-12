@@ -1,9 +1,9 @@
+import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
-import 'package:notes/theme/colors.dart';
+import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
@@ -19,6 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    getTheme();
     getAppInfo();
     Future.delayed(const Duration(seconds: 2), () async {
       try {
@@ -45,6 +46,17 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
+  getTheme() {
+    var themeID = DynamicTheme.of(context)!.themeId;
+    setState(() {
+      selectedThemeId = themeID;
+    });
+
+    if (kDebugMode) {
+      print("SELECTED THEME: " + selectedThemeId.toString());
+    }
+  }
+
   getAppInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appName = packageInfo.appName;
@@ -68,10 +80,13 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Center(
+            Center(
               child: Hero(
                 tag: "logoTag",
-                child: NotesLogo(),
+                child: Text(
+                  "notes",
+                  style: t.textTheme.headline6?.copyWith(fontSize: 24),
+                ),
               ),
             ),
             const SizedBox(
@@ -81,10 +96,7 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircularProgressIndicator.adaptive(
-                  backgroundColor: white.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation(white),
-                ),
+                const NotesLoadingAndroid(),
                 const SizedBox(
                   height: 10,
                 ),
@@ -92,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Text(
                     "Loading your notes",
                     style: TextStyle(
-                      color: white,
+                      color: c.onBackground,
                       fontFamily: 'Theme Black',
                       fontSize: 18,
                     ),

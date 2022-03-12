@@ -13,7 +13,8 @@ import 'package:notes/android/screens/onboarding/onboarding_two.dart';
 import 'package:notes/android/screens/settings_screen.dart';
 import 'package:notes/android/views/add_folders_view.dart';
 import 'package:notes/android/views/add_notes_view.dart';
-import 'package:notes/services/db/theme/app_themes.dart';
+import 'package:notes/android/views/clipboard_view.dart';
+import 'package:notes/services/theme/app_themes.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
 import 'package:notes/windows/screens/theme/windows_theme.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
             '/addFolder': (context) => const AddFolderView(),
             '/addNote': (context) => const AddNoteView(),
             '/settings': (contex) => const SettingsScreen(),
+            '/clipboard': (contex) => const ClipBoard(),
           },
           title: 'Notes',
           home: const SplashScreen(),

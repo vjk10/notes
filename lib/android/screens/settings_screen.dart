@@ -11,12 +11,11 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
 import 'package:notes/services/google_sign_in.dart';
-import 'package:notes/services/db/theme/app_themes.dart';
+import 'package:notes/services/theme/app_themes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:unicons/unicons.dart';
@@ -583,8 +582,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   )),
-              onPressed: () {
-                DatabaseService().importNotes(user.uid);
+              onPressed: () async {
+                await DatabaseService().importNotes(user.uid);
               },
               child: Text(
                 "Import",
@@ -718,9 +717,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                         applicationIcon: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            NotesLogo(),
-                            SizedBox(
+                          children: [
+                            Text(
+                              "notes",
+                              style:
+                                  t.textTheme.headline6?.copyWith(fontSize: 24),
+                            ),
+                            const SizedBox(
                               height: 10,
                             ),
                           ],

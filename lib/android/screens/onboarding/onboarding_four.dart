@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/services/db/theme/app_themes.dart';
+import 'package:notes/services/theme/app_themes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 class OnBoarding4 extends StatefulWidget {

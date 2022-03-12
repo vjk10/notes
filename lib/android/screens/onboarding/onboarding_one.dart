@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 import '../../data/data.dart';
@@ -100,9 +99,9 @@ class _OnBoarding1State extends State<OnBoarding1> {
                       SizedBox(
                         height: Get.statusBarHeight - 100,
                       ),
-                    const NotesLogo(
-                      width: 24,
-                      height: 24,
+                    Text(
+                      "notes",
+                      style: t.textTheme.headline6?.copyWith(fontSize: 24),
                     ),
                     const SizedBox(
                       height: 30,

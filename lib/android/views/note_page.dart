@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:notes/theme/colors.dart';
@@ -92,9 +91,9 @@ class _NotePageState extends State<NotePage> {
             },
             child: Scaffold(
               appBar: AppBar(
-                title: const NotesLogo(
-                  width: 18,
-                  height: 18,
+                title: Text(
+                  "notes",
+                  style: t.textTheme.headline6,
                 ),
                 toolbarHeight: 80,
                 leading: IconButton(

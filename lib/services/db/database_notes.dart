@@ -52,7 +52,7 @@ class NotesDatabase {
     return _returnSave;
   }
 
-  addNote(Note note) async {
+  addNote(Note note, bool importing) async {
     if (kDebugMode) {
       print(note.title);
     }
@@ -62,23 +62,25 @@ class NotesDatabase {
       "creationTime": note.creationTime,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
-      Get.offAllNamed('/mainScreen');
-      Get.showSnackbar(GetSnackBar(
-        shouldIconPulse: false,
-        backgroundColor: Get.theme.colorScheme.surface,
-        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        borderRadius: 10,
-        icon: Icon(
-          UniconsLine.check_circle,
-          color: c.primary,
-        ),
-        duration: const Duration(seconds: 2),
-        messageText: Text(
-          "Note Added Successfully!",
-          style: Get.textTheme.caption
-              ?.copyWith(color: Get.theme.colorScheme.onSurface),
-        ),
-      ));
+      if (!importing) {
+        Get.offAllNamed('/mainScreen');
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            UniconsLine.check_circle,
+            color: c.primary,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Note Added Successfully!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      }
     });
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/widgets/notes_logo.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:unicons/unicons.dart';
@@ -50,7 +49,7 @@ class _AddNoteViewState extends State<AddNoteView> {
               creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
               title: titleController.text.toString(),
             );
-            NotesDatabase().addNote(note);
+            NotesDatabase().addNote(note, true);
           } else {
             Get.offAllNamed('/mainScreen');
           }
@@ -74,7 +73,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                           DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
                     );
-                    NotesDatabase().addNote(note);
+                    NotesDatabase().addNote(note, false);
                   } else {
                     Get.offAllNamed('/mainScreen');
                   }
@@ -87,7 +86,10 @@ class _AddNoteViewState extends State<AddNoteView> {
                 color: c.onBackground,
                 size: 36,
               )),
-          title: const NotesLogo(),
+          title: Text(
+            "notes",
+            style: t.textTheme.headline6,
+          ),
           bottom: PreferredSize(
             preferredSize: Size(Get.width, 70),
             child: TextFormField(
@@ -128,7 +130,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                           DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
                     );
-                    NotesDatabase().addNote(note);
+                    NotesDatabase().addNote(note, false);
                   } else {
                     Get.showSnackbar(GetSnackBar(
                       shouldIconPulse: false,
