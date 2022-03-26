@@ -5,7 +5,6 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/theme/colors.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 import '../data/data.dart';
 
@@ -179,7 +178,7 @@ class _PickFolderState extends State<PickFolder> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          UniconsLine.folder,
+                          Icons.folder,
                           color: c.tertiary,
                           size: 80,
                         ),
@@ -209,7 +208,7 @@ class _PickFolderState extends State<PickFolder> {
                           spacing: 5,
                           children: [
                             Icon(
-                              UniconsLine.clock,
+                              Icons.schedule_rounded,
                               color: c.secondary,
                               size: 10,
                             ),

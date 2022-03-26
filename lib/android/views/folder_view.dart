@@ -12,7 +12,6 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:unicons/unicons.dart';
 
 class FolderView extends StatefulWidget {
   final String folderName;
@@ -63,7 +62,7 @@ class _FolderViewState extends State<FolderView> {
               Get.offAll(() => const MainScreen(selectedIndex: 1));
             },
             icon: Icon(
-              UniconsLine.arrow_left,
+              Icons.arrow_left,
               color: c.onBackground,
               size: 36,
             ),
@@ -165,7 +164,7 @@ class _FolderViewState extends State<FolderView> {
                         ),
                       ),
                       trailingIcon: Icon(
-                        UniconsLine.cloud_upload,
+                        Icons.cloud_upload,
                         color: c.tertiary,
                       ),
                       onPressed: () {},
@@ -180,7 +179,7 @@ class _FolderViewState extends State<FolderView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.share,
+                      Icons.share,
                       color: c.tertiary,
                     ),
                     onPressed: () {
@@ -205,7 +204,7 @@ class _FolderViewState extends State<FolderView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.trash,
+                      Icons.delete,
                       color: c.tertiary,
                     ),
                     onPressed: () {

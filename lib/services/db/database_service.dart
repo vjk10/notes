@@ -7,7 +7,6 @@ import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 class DatabaseService {
   backUpSingleNote(String uid, String noteId, String title, String body,
@@ -33,7 +32,7 @@ class DatabaseService {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            UniconsLine.cloud_check,
+            Icons.cloud_done_rounded,
             color: c.primary,
           ),
           duration: const Duration(seconds: 2),
@@ -83,20 +82,20 @@ class DatabaseService {
       for (var element in importSnapshot.docs) {
         if (kDebugMode) {
           print("Note Title: " + element.get("title"));
-          var note = Note(
-            body: element.get("body").toString(),
-            creationTime: element.get("creationDate"),
-            title: element.get("title").toString(),
-          );
-          await ScientISSTdb.instance
-              .collection("notes")
-              .document(element.get("noteId"))
-              .set({
-            "title": note.title,
-            "body": note.body,
-            "creationTime": note.creationTime,
-          });
         }
+        var note = Note(
+          body: element.get("body").toString(),
+          creationTime: element.get("creationDate"),
+          title: element.get("title").toString(),
+        );
+        await ScientISSTdb.instance
+            .collection("notes")
+            .document(element.get("noteId"))
+            .set({
+          "title": note.title,
+          "body": note.body,
+          "creationTime": note.creationTime,
+        });
       }
       Get.back();
       Get.showSnackbar(
@@ -106,7 +105,7 @@ class DatabaseService {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            UniconsLine.cloud_download,
+            Icons.cloud_download,
             color: c.primary,
           ),
           duration: const Duration(seconds: 2),

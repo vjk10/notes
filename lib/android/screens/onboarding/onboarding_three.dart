@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:notes/services/db/database_notes.dart';
-import 'package:unicons/unicons.dart';
 import '../../data/data.dart';
 
 class OnBoarding3 extends StatefulWidget {
@@ -69,14 +68,14 @@ class _OnBoarding3State extends State<OnBoarding3> {
                 FlutterSwitch(
                   activeColor: c.primary,
                   activeIcon: Icon(
-                    UniconsLine.save,
+                    Icons.save,
                     color: c.background,
                   ),
                   activeTextColor: c.onPrimary,
                   activeToggleColor: c.onPrimary,
                   inactiveColor: c.secondary,
                   inactiveIcon: Icon(
-                    UniconsLine.times_circle,
+                    Icons.highlight_off_rounded,
                     color: c.onError,
                   ),
                   inactiveTextColor: c.onSecondary,

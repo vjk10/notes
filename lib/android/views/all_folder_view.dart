@@ -9,7 +9,6 @@ import 'package:notes/android/widgets/no_folders_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 import '../data/data.dart';
 
@@ -33,6 +32,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(
           bottom: 20.0,
@@ -45,7 +45,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
           backgroundColor: c.primary,
           child: Center(
             child: Icon(
-              UniconsLine.folder_plus,
+              Icons.create_new_folder_outlined,
               color: c.onPrimary,
             ),
           ),
@@ -136,7 +136,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.share,
+                      Icons.share,
                       color: c.tertiary,
                     ),
                     onPressed: () {},
@@ -151,7 +151,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.trash,
+                      Icons.delete_rounded,
                       color: c.tertiary,
                     ),
                     onPressed: () {
@@ -180,7 +180,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            UniconsLine.folder,
+                            Icons.folder,
                             color: c.tertiary,
                             size: 80,
                           ),
@@ -210,7 +210,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                             spacing: 5,
                             children: [
                               Icon(
-                                UniconsLine.clock,
+                                Icons.schedule_rounded,
                                 color: c.secondary,
                                 size: 10,
                               ),

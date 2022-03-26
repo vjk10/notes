@@ -6,7 +6,6 @@ import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/folders_model.dart';
 import 'package:notes/services/db/notes_model.dart';
-import 'package:unicons/unicons.dart';
 
 class AddFolderView extends StatefulWidget {
   const AddFolderView({Key? key}) : super(key: key);
@@ -45,7 +44,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                   ));
             },
             icon: Icon(
-              UniconsLine.arrow_left,
+              Icons.arrow_left,
               color: c.onBackground,
               size: 36,
             )),
@@ -60,7 +59,7 @@ class _AddFolderViewState extends State<AddFolderView> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              UniconsLine.folder,
+              Icons.folder,
               color: c.tertiary,
               size: Get.width / 2,
             ),

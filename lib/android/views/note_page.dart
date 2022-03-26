@@ -7,7 +7,6 @@ import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:notes/theme/colors.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 class NotePage extends StatefulWidget {
   final String noteId;
@@ -119,7 +118,7 @@ class _NotePageState extends State<NotePage> {
                     }
                   },
                   icon: Icon(
-                    UniconsLine.arrow_left,
+                    Icons.arrow_left,
                     color: c.onBackground,
                     size: 36,
                   ),
@@ -139,7 +138,7 @@ class _NotePageState extends State<NotePage> {
                             .updateNote(note, noteSnapshot.id, false);
                       },
                       icon: Icon(
-                        UniconsLine.save,
+                        Icons.save,
                         color: c.primary,
                       ),
                     ),
@@ -152,7 +151,7 @@ class _NotePageState extends State<NotePage> {
                       NotesDatabase().deleteNote(noteSnapshot.id);
                     },
                     icon: Icon(
-                      UniconsLine.trash,
+                      Icons.delete,
                       color: c.error,
                     ),
                   ),

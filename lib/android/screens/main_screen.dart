@@ -9,7 +9,6 @@ import 'package:notes/android/views/all_notes_view.dart';
 import 'package:notes/android/views/all_folder_view.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 class MainScreen extends StatefulWidget {
   // final MainScreenArgument argument;
@@ -33,9 +32,9 @@ class _MainScreenState extends State<MainScreen>
   String userProfile = "";
   bool appMemoryFound = false;
   bool cacheFound = false;
+
   late Directory tempDir;
   late Directory appDir;
-
   late DocumentSnapshot userSnapshot;
   late TabController _tabController;
 
@@ -109,19 +108,10 @@ class _MainScreenState extends State<MainScreen>
         actions: [
           IconButton(
             onPressed: () {
-              Get.toNamed('/clipboard');
-            },
-            icon: Icon(
-              UniconsLine.clipboard_notes,
-              color: c.onBackground,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
               Get.toNamed('/settings');
             },
             icon: Icon(
-              UniconsLine.setting,
+              Icons.settings,
               color: c.onBackground,
             ),
           ),

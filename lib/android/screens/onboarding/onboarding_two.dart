@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../data/data.dart';
 
@@ -75,7 +74,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                             vertical: 10, horizontal: 10),
                         borderRadius: 10,
                         icon: Icon(
-                          UniconsLine.user_circle,
+                          Icons.account_circle_rounded,
                           color: c.error,
                         ),
                         duration: const Duration(seconds: 2),

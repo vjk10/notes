@@ -2,12 +2,12 @@ import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as chat_types;
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:unicons/unicons.dart';
 
 class ClipBoard extends StatefulWidget {
   const ClipBoard({Key? key}) : super(key: key);
@@ -21,10 +21,32 @@ class _ClipBoardState extends State<ClipBoard> {
   String clipboard = "";
   late User user;
   Map<String, chat_types.PreviewData> datas = {};
+  late ScrollController _hideButtonController;
+  bool _isVisible = true;
 
   @override
   void initState() {
     getUserStatus();
+    _hideButtonController = ScrollController();
+    _hideButtonController.addListener(() {
+      if (_hideButtonController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isVisible == true) {
+          setState(() {
+            _isVisible = false;
+          });
+        }
+      } else {
+        if (_hideButtonController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (_isVisible == false) {
+            setState(() {
+              _isVisible = true;
+            });
+          }
+        }
+      }
+    });
     super.initState();
   }
 
@@ -73,6 +95,7 @@ class _ClipBoardState extends State<ClipBoard> {
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     return ListView(
+                      controller: _hideButtonController,
                       children: snapshot.data!.docs
                           .map((e) => GestureDetector(
                                 onLongPress: () async {
@@ -95,7 +118,7 @@ class _ClipBoardState extends State<ClipBoard> {
                                           vertical: 16, horizontal: 16),
                                       borderRadius: 10,
                                       icon: Icon(
-                                        UniconsLine.clipboard_notes,
+                                        Icons.content_paste_rounded,
                                         color: c.primary,
                                       ),
                                       duration: const Duration(seconds: 2),
@@ -156,96 +179,99 @@ class _ClipBoardState extends State<ClipBoard> {
                     return const SizedBox();
                   }
                 }),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: Get.width - 70,
-                      child: TextField(
-                        controller: clipboardController,
-                        textCapitalization: TextCapitalization.none,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                              width: 2,
+            Visibility(
+              visible: _isVisible,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: Get.width - 70,
+                        child: TextField(
+                          controller: clipboardController,
+                          textCapitalization: TextCapitalization.none,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: c.surface,
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                              width: 2,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: c.surface,
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                              width: 2,
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: c.surface,
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                              width: 2,
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: c.surface,
+                                width: 2,
+                              ),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: c.surface,
-                              width: 2,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: c.surface,
+                                width: 2,
+                              ),
                             ),
+                            filled: true,
+                            fillColor: c.surface,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
                           ),
-                          filled: true,
-                          fillColor: c.surface,
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 2),
-                      child: GestureDetector(
-                        onTap: () async {
-                          if (clipboardController.text.isNotEmpty) {
-                            await FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(user.uid)
-                                .collection("clipboards")
-                                .doc()
-                                .set({
-                              "text": clipboardController.text
-                            }).whenComplete(() {
-                              setState(() {
-                                clipboardController.text = "";
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0, right: 2),
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (clipboardController.text.isNotEmpty) {
+                              await FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(user.uid)
+                                  .collection("clipboards")
+                                  .doc()
+                                  .set({
+                                "text": clipboardController.text
+                              }).whenComplete(() {
+                                setState(() {
+                                  clipboardController.text = "";
+                                });
                               });
-                            });
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: c.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              UniconsLine.clipboard_notes,
-                              color: c.background,
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: c.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.content_paste_rounded,
+                                color: c.background,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

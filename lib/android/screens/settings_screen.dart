@@ -18,7 +18,6 @@ import 'package:notes/services/google_sign_in.dart';
 import 'package:notes/services/theme/app_themes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
 class SettingsScreen extends StatefulWidget {
@@ -175,7 +174,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 Get.offAllNamed('/mainScreen');
               },
               icon: Icon(
-                UniconsLine.arrow_left,
+                Icons.arrow_left,
                 color: c.onBackground,
                 size: 36,
               )),
@@ -353,7 +352,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Center(
           child: ListTile(
             leading: Icon(
-              UniconsLine.save,
+              Icons.save,
               color: c.tertiary,
               size: 24,
             ),
@@ -393,7 +392,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Center(
           child: ListTile(
             leading: Icon(
-              UniconsLine.palette,
+              Icons.palette,
               color: c.tertiary,
               size: 24,
             ),
@@ -522,11 +521,11 @@ class _SettingsScreenState extends State<SettingsScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Icon(
-                              UniconsLine.arrow_left,
+                              Icons.arrow_left,
                               color: c.onBackground,
                             ),
                             Icon(
-                              UniconsLine.arrow_right,
+                              Icons.arrow_right,
                               color: c.onBackground,
                             ),
                           ],
@@ -566,7 +565,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Center(
           child: ListTile(
             leading: Icon(
-              UniconsLine.cloud,
+              Icons.cloud,
               color: c.tertiary,
               size: 24,
             ),
@@ -612,7 +611,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Center(
           child: ListTile(
             leading: Icon(
-              UniconsLine.folder,
+              Icons.folder,
               color: c.tertiary,
               size: 24,
             ),
@@ -645,7 +644,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Center(
           child: ListTile(
             leading: Icon(
-              UniconsLine.trash_alt,
+              Icons.delete_outline_rounded,
               color: c.tertiary,
               size: 24,
             ),
@@ -686,7 +685,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Center(
           child: ListTile(
             leading: Icon(
-              UniconsLine.info_circle,
+              Icons.info_outline_rounded,
               color: c.tertiary,
               size: 24,
             ),

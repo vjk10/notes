@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:unicons/unicons.dart';
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,7 +45,7 @@ Future<String> signInWithGoogle(BuildContext context) async {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            UniconsLine.google,
+            Icons.person_rounded,
             color: c.primary,
           ),
           duration: const Duration(seconds: 2),
@@ -127,7 +126,7 @@ Future<String> signOutGoogle(BuildContext context) async {
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       borderRadius: 10,
       icon: Icon(
-        UniconsLine.google,
+        Icons.logout_rounded,
         color: c.error,
       ),
       duration: const Duration(seconds: 2),

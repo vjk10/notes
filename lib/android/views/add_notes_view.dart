@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/notes_model.dart';
-import 'package:unicons/unicons.dart';
 
 class AddNoteView extends StatefulWidget {
   const AddNoteView({Key? key}) : super(key: key);
@@ -82,7 +81,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                 }
               },
               icon: Icon(
-                UniconsLine.arrow_left,
+                Icons.arrow_left,
                 color: c.onBackground,
                 size: 36,
               )),
@@ -139,7 +138,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                           vertical: 16, horizontal: 16),
                       borderRadius: 10,
                       icon: Icon(
-                        UniconsLine.exclamation_octagon,
+                        Icons.warning_rounded,
                         color: c.tertiary,
                       ),
                       duration: const Duration(seconds: 2),
@@ -152,7 +151,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                   }
                 },
                 icon: Icon(
-                  UniconsLine.save,
+                  Icons.save,
                   color: c.onBackground,
                   size: 24,
                 ),

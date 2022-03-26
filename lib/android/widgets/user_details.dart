@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:unicons/unicons.dart';
 
 class UserDetails extends StatefulWidget {
   const UserDetails({Key? key, required this.userName, this.profileUrl = ""})
@@ -22,7 +21,7 @@ class _UserDetailsState extends State<UserDetails> {
         children: [
           if (widget.profileUrl.isEmpty)
             Icon(
-              UniconsLine.smile,
+              Icons.emoji_emotions_rounded,
               color: c.onBackground,
               size: 60,
             ),

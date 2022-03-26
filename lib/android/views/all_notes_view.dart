@@ -15,7 +15,6 @@ import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:unicons/unicons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
 class AllNotesView extends StatefulWidget {
@@ -34,6 +33,7 @@ class AllNotesView extends StatefulWidget {
 class _AllNotesViewState extends State<AllNotesView> {
   bool isLoading = false;
   bool _accountLinked = false;
+  bool userSignedIn = false;
 
   late fire_store.DocumentSnapshot firebaseUserDetails;
   late User user;
@@ -51,6 +51,7 @@ class _AllNotesViewState extends State<AllNotesView> {
     try {
       user = FirebaseAuth.instance.currentUser!;
       if (user.uid.isNotEmpty) {
+        userSignedIn = true;
         firebaseUserDetails = await fire_store.FirebaseFirestore.instance
             .collection("users")
             .doc(user.uid)
@@ -85,21 +86,17 @@ class _AllNotesViewState extends State<AllNotesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 20.0,
-        ),
-        child: FloatingActionButton.large(
-          heroTag: "addNoteTag",
-          onPressed: () {
-            Get.to(() => const AddNoteView());
-          },
-          backgroundColor: c.primary,
-          child: Center(
-            child: Icon(
-              UniconsLine.file_plus_alt,
-              color: c.onPrimary,
-            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton.large(
+        heroTag: "addNoteTag",
+        onPressed: () {
+          Get.to(() => const AddNoteView());
+        },
+        backgroundColor: c.primary,
+        child: Center(
+          child: Icon(
+            Icons.note_add_outlined,
+            color: c.onPrimary,
           ),
         ),
       ),
@@ -137,6 +134,55 @@ class _AllNotesViewState extends State<AllNotesView> {
               }
           }
         },
+      ),
+      bottomNavigationBar: Visibility(
+        visible: false,
+        child: SizedBox(
+          height: 60,
+          child: BottomAppBar(
+            color: c.surface,
+            shape: const CircularNotchedRectangle(),
+            clipBehavior: Clip.none,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 20,
+                ),
+                Icon(
+                  Icons.add_task,
+                  color: c.onSurface,
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Icon(
+                  Icons.notification_add,
+                  color: c.onSurface,
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Icon(
+                  Icons.request_page,
+                  color: c.onSurface,
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Visibility(
+                  visible: userSignedIn,
+                  child: Icon(
+                    Icons.content_paste_rounded,
+                    color: c.onBackground,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -193,7 +239,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                         ),
                       ),
                       trailingIcon: Icon(
-                        UniconsLine.cloud_upload,
+                        Icons.cloud_upload,
                         color: c.tertiary,
                       ),
                       onPressed: () {
@@ -217,7 +263,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.folder_plus,
+                      Icons.create_new_folder_rounded,
                       color: c.tertiary,
                     ),
                     onPressed: () {
@@ -241,7 +287,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.share,
+                      Icons.share,
                       color: c.tertiary,
                     ),
                     onPressed: () {
@@ -265,7 +311,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                       ),
                     ),
                     trailingIcon: Icon(
-                      UniconsLine.trash,
+                      Icons.delete,
                       color: c.tertiary,
                     ),
                     onPressed: () {

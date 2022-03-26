@@ -1,13 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/views/folder_view.dart';
 import 'package:notes/services/db/folders_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:unicons/unicons.dart';
 
 import '../../android/data/data.dart';
 
@@ -70,7 +69,7 @@ class NotesDatabase {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            UniconsLine.check_circle,
+            Icons.check_circle,
             color: c.primary,
           ),
           duration: const Duration(seconds: 2),
@@ -103,7 +102,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          UniconsLine.check_circle,
+          Icons.check_circle,
           color: c.primary,
         ),
         duration: const Duration(seconds: 2),
@@ -130,7 +129,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          UniconsLine.trash,
+          Icons.delete,
           color: c.error,
         ),
         duration: const Duration(seconds: 2),
@@ -152,7 +151,7 @@ class NotesDatabase {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            UniconsLine.trash,
+            Icons.delete,
             color: c.error,
           ),
           duration: const Duration(seconds: 2),
@@ -186,7 +185,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          UniconsLine.check_circle,
+          Icons.check_circle,
           color: c.primary,
         ),
         duration: const Duration(seconds: 2),
@@ -217,7 +216,7 @@ class NotesDatabase {
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             borderRadius: 10,
             icon: Icon(
-              UniconsLine.check_circle,
+              Icons.check_circle,
               color: c.primary,
             ),
             duration: const Duration(seconds: 2),
@@ -246,7 +245,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          UniconsLine.trash,
+          Icons.delete,
           color: c.error,
         ),
         duration: const Duration(seconds: 2),
@@ -290,7 +289,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          UniconsLine.trash,
+          Icons.delete,
           color: c.error,
         ),
         duration: const Duration(seconds: 2),
