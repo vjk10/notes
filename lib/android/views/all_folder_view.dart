@@ -32,22 +32,18 @@ class _AllFoldersViewState extends State<AllFoldersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 20.0,
-        ),
-        child: FloatingActionButton.large(
-          heroTag: "folderTag",
-          onPressed: () {
-            Get.to(() => const AddFolderView());
-          },
-          backgroundColor: c.primary,
-          child: Center(
-            child: Icon(
-              Icons.create_new_folder_outlined,
-              color: c.onPrimary,
-            ),
+      backgroundColor: c.background,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton.large(
+        heroTag: "folderTag",
+        onPressed: () {
+          Get.to(() => const AddFolderView());
+        },
+        backgroundColor: c.primaryContainer,
+        child: Center(
+          child: Icon(
+            Icons.create_new_folder_outlined,
+            color: c.onPrimaryContainer,
           ),
         ),
       ),
@@ -127,32 +123,32 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                 menuItems: <FocusedMenuItem>[
                   // Add Each FocusedMenuItem  for Menu Options
                   FocusedMenuItem(
-                    backgroundColor: c.surface,
+                    backgroundColor: c.secondaryContainer,
                     title: Text(
-                      "Share",
+                      "Favorite",
                       style: t.textTheme.button?.copyWith(
-                        color: c.tertiary,
+                        color: c.onSecondaryContainer,
                         fontSize: 12,
                       ),
                     ),
                     trailingIcon: Icon(
-                      Icons.share,
-                      color: c.tertiary,
+                      Icons.favorite_border_outlined,
+                      color: c.onSecondaryContainer,
                     ),
                     onPressed: () {},
                   ),
                   FocusedMenuItem(
-                    backgroundColor: c.surface,
+                    backgroundColor: c.secondaryContainer,
                     title: Text(
                       "Delete",
                       style: t.textTheme.button?.copyWith(
-                        color: c.tertiary,
+                        color: c.onSecondaryContainer,
                         fontSize: 12,
                       ),
                     ),
                     trailingIcon: Icon(
-                      Icons.delete_rounded,
-                      color: c.tertiary,
+                      Icons.delete_outlined,
+                      color: c.onSecondaryContainer,
                     ),
                     onPressed: () {
                       NotesDatabase()
@@ -171,7 +167,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                         borderRadius: BorderRadius.circular(15)),
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -180,7 +176,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.folder,
+                            Icons.folder_outlined,
                             color: c.tertiary,
                             size: 80,
                           ),
@@ -210,7 +206,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                             spacing: 5,
                             children: [
                               Icon(
-                                Icons.schedule_rounded,
+                                Icons.schedule_outlined,
                                 color: c.secondary,
                                 size: 10,
                               ),

@@ -1,4 +1,3 @@
-import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +18,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    getTheme();
     getAppInfo();
     Future.delayed(const Duration(seconds: 2), () async {
       try {
@@ -46,17 +44,6 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-  getTheme() {
-    var themeID = DynamicTheme.of(context)!.themeId;
-    setState(() {
-      selectedThemeId = themeID;
-    });
-
-    if (kDebugMode) {
-      print("SELECTED THEME: " + selectedThemeId.toString());
-    }
-  }
-
   getAppInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appName = packageInfo.appName;
@@ -75,6 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

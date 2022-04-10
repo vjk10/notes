@@ -10,7 +10,7 @@ import 'package:scientisst_db/scientisst_db.dart';
 
 class DatabaseService {
   backUpSingleNote(String uid, String noteId, String title, String body,
-      String creationDate) async {
+      String creationDate, bool pinned) async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
@@ -22,6 +22,7 @@ class DatabaseService {
         "title": title,
         "body": body,
         "creationDate": creationDate,
+        "pinned": pinned
       },
     ).whenComplete(() {
       HapticFeedback.heavyImpact();
@@ -84,10 +85,11 @@ class DatabaseService {
           print("Note Title: " + element.get("title"));
         }
         var note = Note(
-          body: element.get("body").toString(),
-          creationTime: element.get("creationDate"),
-          title: element.get("title").toString(),
-        );
+            body: element.get("body").toString(),
+            creationTime: element.get("creationDate"),
+            title: element.get("title").toString(),
+            pinned: element.get("pinned"),
+            isList: element.get("isList"));
         await ScientISSTdb.instance
             .collection("notes")
             .document(element.get("noteId"))
@@ -95,6 +97,8 @@ class DatabaseService {
           "title": note.title,
           "body": note.body,
           "creationTime": note.creationTime,
+          "pinned": note.pinned,
+          "isList": note.isList
         });
       }
       Get.back();

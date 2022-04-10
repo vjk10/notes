@@ -73,8 +73,8 @@ class _MainScreenState extends State<MainScreen>
       isScrollable: true,
       enableFeedback: true,
       controller: _tabController,
-      labelColor: c.tertiary,
-      unselectedLabelColor: c.tertiaryContainer,
+      labelColor: c.primary,
+      unselectedLabelColor: c.secondary,
       labelPadding: EdgeInsets.only(
         left: Get.width / 6,
         right: Get.width / 6,
@@ -84,13 +84,14 @@ class _MainScreenState extends State<MainScreen>
       ),
       indicatorSize: TabBarIndicatorSize.label,
       indicatorWeight: 4,
-      indicatorColor: c.tertiary,
+      indicatorColor: c.primary,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       indicator: ContainerTabIndicator(
           height: 5,
           padding: const EdgeInsets.only(
             top: 15,
           ),
-          color: c.tertiary,
+          color: c.primary,
           radius: BorderRadius.circular(
             10,
           )),
@@ -99,7 +100,10 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: c.secondaryContainer.withAlpha(50),
         title: Text(
           "notes",
           style: t.textTheme.headline6,
@@ -111,7 +115,7 @@ class _MainScreenState extends State<MainScreen>
               Get.toNamed('/settings');
             },
             icon: Icon(
-              Icons.settings,
+              Icons.settings_outlined,
               color: c.onBackground,
             ),
           ),
@@ -122,6 +126,7 @@ class _MainScreenState extends State<MainScreen>
         controller: _tabController,
         children: [
           AllNotesView(
+            pinnedNotesFuture: NotesDatabase().getPinnedNotes(),
             notesFuture: NotesDatabase().getNotes(),
             foldersFuture: NotesDatabase().getFolders(),
           ),

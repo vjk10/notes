@@ -6,6 +6,7 @@ import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/screens/main_screen.dart';
+import 'package:notes/android/views/list_view.dart';
 import 'package:notes/android/views/note_page.dart';
 import 'package:notes/android/widgets/no_notes_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
@@ -52,7 +53,10 @@ class _FolderViewState extends State<FolderView> {
         return true;
       },
       child: Scaffold(
+        backgroundColor: c.background,
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: c.secondaryContainer.withAlpha(50),
           title: Text(
             "/ " + widget.folderName,
             style: t.textTheme.headline5,
@@ -62,9 +66,8 @@ class _FolderViewState extends State<FolderView> {
               Get.offAll(() => const MainScreen(selectedIndex: 1));
             },
             icon: Icon(
-              Icons.arrow_left,
+              Icons.arrow_back,
               color: c.onBackground,
-              size: 36,
             ),
           ),
           automaticallyImplyLeading: true,
@@ -132,9 +135,24 @@ class _FolderViewState extends State<FolderView> {
               ),
               child: FocusedMenuHolder(
                 onPressed: () {
-                  Get.to(
-                    () => NotePage(noteId: folderNotesData.data![noteIndex].id),
-                  );
+                  // Get.to(
+                  //   () => NotePage(noteId: folderNotesData.data![noteIndex].id),
+                  // );
+                  if (kDebugMode) {
+                    print(folderNotesData.data![noteIndex].data["isList"] ==
+                        true);
+                  }
+                  if (folderNotesData.data![noteIndex].data["isList"] == true) {
+                    Get.to(
+                      () => ListviewView(
+                          noteId: folderNotesData.data![noteIndex].id),
+                    );
+                  } else {
+                    Get.to(
+                      () =>
+                          NotePage(noteId: folderNotesData.data![noteIndex].id),
+                    );
+                  }
                 },
                 menuWidth: Get.width * 0.50,
                 blurSize: 5.0,
@@ -215,14 +233,30 @@ class _FolderViewState extends State<FolderView> {
                 ],
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(
-                      () =>
-                          NotePage(noteId: folderNotesData.data![noteIndex].id),
-                    );
+                    // Get.to(
+                    //   () =>
+                    //       NotePage(noteId: folderNotesData.data![noteIndex].id),
+                    // );
+                    if (kDebugMode) {
+                      print(folderNotesData.data![noteIndex].data["isList"] ==
+                          true);
+                    }
+                    if (folderNotesData.data![noteIndex].data["isList"] ==
+                        true) {
+                      Get.to(
+                        () => ListviewView(
+                            noteId: folderNotesData.data![noteIndex].id),
+                      );
+                    } else {
+                      Get.to(
+                        () => NotePage(
+                            noteId: folderNotesData.data![noteIndex].id),
+                      );
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                         borderRadius: BorderRadius.circular(15)),
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),

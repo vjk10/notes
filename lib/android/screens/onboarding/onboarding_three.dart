@@ -16,6 +16,11 @@ class _OnBoarding3State extends State<OnBoarding3> {
   bool _autoSave = true;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     t = Theme.of(context);
     c = t.colorScheme;
@@ -25,9 +30,8 @@ class _OnBoarding3State extends State<OnBoarding3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       body: Stack(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        // mainAxisAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
         children: [
           Align(
@@ -68,8 +72,8 @@ class _OnBoarding3State extends State<OnBoarding3> {
                 FlutterSwitch(
                   activeColor: c.primary,
                   activeIcon: Icon(
-                    Icons.save,
-                    color: c.background,
+                    Icons.save_outlined,
+                    color: c.onPrimaryContainer,
                   ),
                   activeTextColor: c.onPrimary,
                   activeToggleColor: c.onPrimary,

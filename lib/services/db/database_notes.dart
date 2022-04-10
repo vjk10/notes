@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/views/folder_view.dart';
 import 'package:notes/services/db/folders_model.dart';
+import 'package:notes/services/db/note_list_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
@@ -15,8 +17,16 @@ class NotesDatabase {
 
   Future<List<DocumentSnapshot>> getNotes() async {
     var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
+    _notes.removeWhere((element) => element.data["pinned"] == true);
     notesSnapshot = _notes;
     return notesSnapshot;
+  }
+
+  Future<List<DocumentSnapshot>> getPinnedNotes() async {
+    var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
+    _notes.removeWhere((element) => element.data["pinned"] != true);
+    pinnedNotesSnapshot = _notes;
+    return pinnedNotesSnapshot;
   }
 
   Future<List<DocumentSnapshot>> getFolders() async {
@@ -59,6 +69,7 @@ class NotesDatabase {
       "title": note.title,
       "body": note.body,
       "creationTime": note.creationTime,
+      "pinned": note.pinned
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (!importing) {
@@ -69,7 +80,7 @@ class NotesDatabase {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            Icons.check_circle,
+            Icons.check_circle_outline,
             color: c.primary,
           ),
           duration: const Duration(seconds: 2),
@@ -91,6 +102,7 @@ class NotesDatabase {
       "title": note.title,
       "body": note.body,
       "creationTime": note.creationTime,
+      "pinned": note.pinned
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (goBack) {
@@ -102,7 +114,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          Icons.check_circle,
+          Icons.check_circle_outline,
           color: c.primary,
         ),
         duration: const Duration(seconds: 2),
@@ -129,7 +141,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          Icons.delete,
+          Icons.delete_outline,
           color: c.error,
         ),
         duration: const Duration(seconds: 2),
@@ -151,7 +163,7 @@ class NotesDatabase {
           margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           borderRadius: 10,
           icon: Icon(
-            Icons.delete,
+            Icons.delete_outline,
             color: c.error,
           ),
           duration: const Duration(seconds: 2),
@@ -185,7 +197,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          Icons.check_circle,
+          Icons.check_circle_outline,
           color: c.primary,
         ),
         duration: const Duration(seconds: 2),
@@ -216,7 +228,7 @@ class NotesDatabase {
             margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             borderRadius: 10,
             icon: Icon(
-              Icons.check_circle,
+              Icons.check_circle_outline,
               color: c.primary,
             ),
             duration: const Duration(seconds: 2),
@@ -245,7 +257,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          Icons.delete,
+          Icons.delete_outline,
           color: c.error,
         ),
         duration: const Duration(seconds: 2),
@@ -289,7 +301,7 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          Icons.delete,
+          Icons.delete_outline,
           color: c.error,
         ),
         duration: const Duration(seconds: 2),
@@ -300,5 +312,151 @@ class NotesDatabase {
         ),
       ));
     });
+  }
+
+  saveList(
+    TextEditingController titleController,
+    List<TextEditingController> controllers,
+    bool pinned,
+    List<NoteListItem> noteList,
+  ) {
+    if (controllers.isNotEmpty) {
+      if (titleController.text.isNotEmpty &&
+          controllers.first.text.isNotEmpty) {
+        ScientISSTdb.instance
+            .collection("notes")
+            .document(titleController.text)
+            .set({
+          "title": titleController.text,
+          "body": noteList.first.text,
+          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          "pinned": pinned,
+          "isList": true,
+          "totalItems": noteList.length
+        });
+        for (var c = 0; c < noteList.length; c++) {
+          if (kDebugMode) {
+            print(noteList[c].text.toString());
+          }
+          ScientISSTdb.instance
+              .collection("notes")
+              .document(titleController.text)
+              .collection(c.toString())
+              .document(c.toString())
+              .set({
+            "text": noteList[c].text,
+            "checked": noteList[c].checked,
+            "index": noteList[c].index,
+          });
+        }
+      } else {
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.warning_rounded,
+            color: c.tertiary,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Empty List!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      }
+    } else {
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          Icons.warning_rounded,
+          color: c.tertiary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Empty List!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    }
+  }
+
+  updateList(
+    TextEditingController titleController,
+    List<TextEditingController> controllers,
+    bool pinned,
+    List<NoteListItem> noteList,
+  ) {
+    if (controllers.isNotEmpty) {
+      if (titleController.text.isNotEmpty &&
+          controllers.first.text.isNotEmpty) {
+        ScientISSTdb.instance
+            .collection("notes")
+            .document(titleController.text)
+            .update({
+          "title": titleController.text,
+          "body": noteList.first.text,
+          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          "pinned": pinned,
+          "isList": true,
+          "totalItems": noteList.length
+        });
+        for (var c = 0; c < noteList.length; c++) {
+          if (kDebugMode) {
+            print(noteList[c].text.toString());
+          }
+          ScientISSTdb.instance
+              .collection("notes")
+              .document(titleController.text)
+              .collection(c.toString())
+              .document(c.toString())
+              .set({
+            "text": noteList[c].text,
+            "checked": noteList[c].checked,
+            "index": noteList[c].index,
+          });
+        }
+      } else {
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.warning_rounded,
+            color: c.tertiary,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Empty List!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      }
+    } else {
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          Icons.warning_rounded,
+          color: c.tertiary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Empty List!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    }
   }
 }

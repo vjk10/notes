@@ -25,6 +25,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
@@ -80,8 +81,8 @@ class _OnBoarding2State extends State<OnBoarding2> {
                         duration: const Duration(seconds: 2),
                         messageText: Text(
                           "We didn't get your name yet!",
-                          style: Get.textTheme.caption?.copyWith(
-                              color: Get.theme.colorScheme.onSurface),
+                          style:
+                              t.textTheme.caption?.copyWith(color: c.onSurface),
                         ),
                       ));
                     }

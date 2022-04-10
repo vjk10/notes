@@ -52,13 +52,6 @@ class _ClipBoardState extends State<ClipBoard> {
 
   getUserStatus() async {
     user = FirebaseAuth.instance.currentUser!;
-    DocumentSnapshot userCollection = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(user.uid)
-        .get();
-    if (userCollection.exists) {
-      clipboardController.text = userCollection.get("clipboard");
-    }
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getClipBoardData() {
@@ -80,8 +73,11 @@ class _ClipBoardState extends State<ClipBoard> {
         return true;
       },
       child: Scaffold(
+        backgroundColor: c.background,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: c.secondaryContainer.withAlpha(50),
           title: Text(
             "clipboard",
             style: t.textTheme.headline5,
@@ -139,7 +135,7 @@ class _ClipBoardState extends State<ClipBoard> {
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(20),
                                       ),
-                                      color: c.surface,
+                                      color: c.secondaryContainer,
                                     ),
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.all(
@@ -148,6 +144,8 @@ class _ClipBoardState extends State<ClipBoard> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: LinkPreview(
+                                          openOnPreviewImageTap: true,
+                                          openOnPreviewTitleTap: true,
                                           enableAnimation: true,
                                           onPreviewDataFetched: (data) {
                                             setState(() {
@@ -161,7 +159,7 @@ class _ClipBoardState extends State<ClipBoard> {
                                           text: e.get("text"),
                                           linkStyle:
                                               t.textTheme.button?.copyWith(
-                                            color: c.tertiary,
+                                            color: c.onSecondaryContainer,
                                           ),
                                           textStyle: t.textTheme.button
                                               ?.copyWith(color: c.onSurface),
@@ -190,6 +188,8 @@ class _ClipBoardState extends State<ClipBoard> {
                       SizedBox(
                         width: Get.width - 70,
                         child: TextField(
+                          style: t.textTheme.bodySmall
+                              ?.copyWith(color: c.onSecondary),
                           controller: clipboardController,
                           textCapitalization: TextCapitalization.none,
                           textInputAction: TextInputAction.done,
@@ -197,40 +197,40 @@ class _ClipBoardState extends State<ClipBoard> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
-                                color: c.surface,
+                                color: c.secondary,
                                 width: 2,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
-                                color: c.surface,
+                                color: c.secondary,
                                 width: 2,
                               ),
                             ),
                             disabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
-                                color: c.surface,
+                                color: c.secondary,
                                 width: 2,
                               ),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
-                                color: c.surface,
+                                color: c.secondary,
                                 width: 2,
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide(
-                                color: c.surface,
+                                color: c.secondary,
                                 width: 2,
                               ),
                             ),
                             filled: true,
-                            fillColor: c.surface,
+                            fillColor: c.secondary,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                           ),

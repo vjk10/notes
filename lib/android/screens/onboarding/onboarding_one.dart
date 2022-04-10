@@ -39,6 +39,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -101,7 +102,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                       ),
                     Text(
                       "notes",
-                      style: t.textTheme.headline6?.copyWith(fontSize: 24),
+                      style: t.textTheme.headline4,
                     ),
                     const SizedBox(
                       height: 30,

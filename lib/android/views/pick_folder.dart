@@ -36,7 +36,11 @@ class _PickFolderState extends State<PickFolder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       appBar: AppBar(
+        toolbarHeight: 80,
+        elevation: 0,
+        backgroundColor: c.secondaryContainer.withAlpha(50),
         automaticallyImplyLeading: false,
         title: Text(
           "select folder",
@@ -79,7 +83,7 @@ class _PickFolderState extends State<PickFolder> {
         },
       ),
       bottomNavigationBar: Container(
-        color: Colors.transparent,
+        color: c.secondaryContainer.withAlpha(50),
         width: Get.width,
         height: 80,
         child: Row(
@@ -155,11 +159,18 @@ class _PickFolderState extends State<PickFolder> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    selectedIndex = folderIndex;
-                    folderName =
-                        foldersData.data![folderIndex].data["title"].toString();
-                  });
+                  if (selectedIndex == -1) {
+                    setState(() {
+                      selectedIndex = folderIndex;
+                      folderName = foldersData.data![folderIndex].data["title"]
+                          .toString();
+                    });
+                  } else {
+                    setState(() {
+                      selectedIndex = -1;
+                      folderName = "";
+                    });
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -169,7 +180,7 @@ class _PickFolderState extends State<PickFolder> {
                             : c.surface,
                         width: folderIndex == selectedIndex ? 2 : 0,
                       ),
-                      color: c.surface,
+                      color: c.secondaryContainer,
                       borderRadius: BorderRadius.circular(15)),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),

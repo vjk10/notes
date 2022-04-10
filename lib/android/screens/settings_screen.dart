@@ -14,11 +14,15 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
+import 'package:notes/services/db/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
-import 'package:notes/services/theme/app_themes.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../services/theme/android_app_themes.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -35,6 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   String appMemorySize = "0";
   bool appMemoryFound = false;
   bool cacheFound = false;
+  bool materialYouActive = false;
   late Directory tempDir;
   late Directory appDir;
   bool _autoSave = true;
@@ -43,6 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   String selectedTheme = "";
   int selectedThemeId = 0;
 
+  late SharedPreferences _pref;
   late DocumentSnapshot userSnapshot;
   late fire_store.DocumentSnapshot firebaseUserDetails;
   late User user;
@@ -53,6 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   void initState() {
     _bottomSheetController = AnimationController(vsync: this);
     themesList = themes.toList();
+    _initPrefs();
     getTheme();
     getSaveStatus();
     getUserStatus();
@@ -60,15 +67,32 @@ class _SettingsScreenState extends State<SettingsScreen>
     super.initState();
   }
 
-  getTheme() {
-    var themeID = DynamicTheme.of(context)!.themeId;
-    setState(() {
-      selectedThemeId = themeID;
-      selectedTheme = AppThemes().getThemeName(themeID);
-    });
+  _initPrefs() async {
+    _pref = await SharedPreferences.getInstance();
+  }
 
-    if (kDebugMode) {
-      print("SELECTED THEME: " + selectedTheme);
+  getTheme() async {
+    try {
+      var themeID = DynamicTheme.of(context)!.themeId;
+      setState(() {
+        selectedThemeId = themeID;
+        selectedTheme = AppThemes().getThemeName(themeID);
+      });
+
+      if (kDebugMode) {
+        print("SELECTED THEME: " + selectedTheme);
+      }
+    } catch (e) {
+      var _pref = await SharedPreferences.getInstance();
+      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      if (kDebugMode) {
+        print("Selected Theme: " + selectedThemeId.toString());
+      }
+      if (selectedTheme.isEmpty) {
+        setState(() {
+          selectedTheme = AppThemes().getThemeName(selectedThemeId);
+        });
+      }
     }
   }
 
@@ -164,7 +188,9 @@ class _SettingsScreenState extends State<SettingsScreen>
         return true;
       },
       child: Scaffold(
+        backgroundColor: c.background,
         appBar: AppBar(
+          backgroundColor: c.secondaryContainer.withAlpha(50),
           title: Text(
             "settings",
             style: t.textTheme.headline5,
@@ -174,9 +200,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                 Get.offAllNamed('/mainScreen');
               },
               icon: Icon(
-                Icons.arrow_left,
+                Icons.arrow_back_rounded,
                 color: c.onBackground,
-                size: 36,
               )),
           toolbarHeight: 80,
         ),
@@ -330,13 +355,68 @@ class _SettingsScreenState extends State<SettingsScreen>
                 visible: _accountLinked,
                 child: cloudBackupTile(),
               ),
+              materialYou(),
+              Consumer<ThemeNotifier>(
+                builder: (context, notifier, child) => Visibility(
+                  visible: !notifier.material3,
+                  child: themeDataTile(),
+                ),
+              ),
               autoSaveTile(),
-              themeDataTile(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Consumer<ThemeNotifier> materialYou() {
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+      return Container(
+        width: Get.width - 20,
+        height: 80,
+        decoration: BoxDecoration(
+          color: c.surface,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: ListTile(
+              leading: Icon(
+                Icons.palette_outlined,
+                color: c.primary,
+                size: 24,
+              ),
+              title: Text(
+                "Material You",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                ),
+              ),
+              trailing: Switch.adaptive(
+                  activeColor: c.primary,
+                  inactiveThumbColor: c.secondary,
+                  value: notifier.material3,
+                  onChanged: (value) async {
+                    HapticFeedback.heavyImpact();
+                    notifier.toggleTheme();
+                    selectedThemeId = _pref.getInt('selectedThemeId')!;
+                    if (kDebugMode) {
+                      print("Selected Theme: " + selectedThemeId.toString());
+                    }
+                    if (selectedTheme.isEmpty) {
+                      setState(() {
+                        selectedTheme =
+                            AppThemes().getThemeName(selectedThemeId);
+                      });
+                    }
+                  }),
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   Container autoSaveTile() {
@@ -353,7 +433,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.save,
-              color: c.tertiary,
+              color: c.primary,
               size: 24,
             ),
             title: Text(
@@ -379,6 +459,202 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
+  Container cloudBackupTile() {
+    return Container(
+      width: Get.width - 20,
+      height: 80,
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.backup_outlined,
+              color: c.primary,
+              size: 24,
+            ),
+            title: Text(
+              "Cloud Backup",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+              ),
+            ),
+            trailing: TextButton(
+              style: TextButton.styleFrom(
+                  backgroundColor: c.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  )),
+              onPressed: () async {
+                await DatabaseService().importNotes(user.uid);
+              },
+              child: Text(
+                "Import",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                  color: c.onPrimary,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container usedStorageTile() {
+    return Container(
+      width: Get.width - 20,
+      height: 80,
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.folder_outlined,
+              color: c.primary,
+              size: 24,
+            ),
+            title: Text(
+              "Used Storage",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+              ),
+            ),
+            trailing: Text(
+              cacheMemorySize,
+              style: t.textTheme.bodyText1,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container clearNotesTile() {
+    return Container(
+      width: Get.width - 20,
+      height: 80,
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.delete_outline_rounded,
+              color: c.primary,
+              size: 24,
+            ),
+            title: Text(
+              "Clear All Notes",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+              ),
+            ),
+            trailing: GestureDetector(
+              onTap: () {
+                NotesDatabase().clearAllNotes();
+              },
+              child: Text(
+                "Clear",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                  color: c.error,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container appDetailsTile() {
+    return Container(
+      width: Get.width - 20,
+      height: 80,
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.info_outline_rounded,
+              color: c.primary,
+              size: 24,
+            ),
+            title: Text(
+              "Licenses and Info",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+              ),
+            ),
+            trailing: TextButton(
+              onPressed: () {
+                Get.to(() => Theme(
+                      data: t.copyWith(
+                        colorScheme: c,
+                        cardColor: c.background,
+                        backgroundColor: c.background,
+                        appBarTheme: AppBarTheme(
+                          iconTheme: IconThemeData(
+                            color: c.onBackground,
+                          ),
+                          color: c.background,
+                          elevation: 0,
+                          toolbarHeight: 80,
+                          titleTextStyle: t.textTheme.headline5,
+                        ),
+                      ),
+                      child: LicensePage(
+                        applicationIcon: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "notes",
+                              style:
+                                  t.textTheme.headline6?.copyWith(fontSize: 24),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                        applicationLegalese: "Simple notes taking app",
+                        applicationName: " ",
+                        applicationVersion:
+                            "v" + version + " (build v" + buildNumber + ")",
+                      ),
+                    ));
+              },
+              child: Text(
+                "v" + version + " (build v" + buildNumber + ")",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                  color: c.error,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Container themeDataTile() {
     return Container(
       width: Get.width - 20,
@@ -393,7 +669,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.palette,
-              color: c.tertiary,
+              color: c.primary,
               size: 24,
             ),
             title: Text(
@@ -550,201 +826,5 @@ class _SettingsScreenState extends State<SettingsScreen>
       selectedThemeId = index;
     });
     DynamicTheme.of(context)!.setTheme(index);
-  }
-
-  Container cloudBackupTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.cloud,
-              color: c.tertiary,
-              size: 24,
-            ),
-            title: Text(
-              "Cloud Backup",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: c.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  )),
-              onPressed: () async {
-                await DatabaseService().importNotes(user.uid);
-              },
-              child: Text(
-                "Import",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.onPrimary,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container usedStorageTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.folder,
-              color: c.tertiary,
-              size: 24,
-            ),
-            title: Text(
-              "Used Storage",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: Text(
-              cacheMemorySize,
-              style: t.textTheme.bodyText1,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container clearNotesTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.delete_outline_rounded,
-              color: c.tertiary,
-              size: 24,
-            ),
-            title: Text(
-              "Clear All Notes",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
-                NotesDatabase().clearAllNotes();
-              },
-              child: Text(
-                "Clear",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container appDetailsTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.info_outline_rounded,
-              color: c.tertiary,
-              size: 24,
-            ),
-            title: Text(
-              "Licenses and Info",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: TextButton(
-              onPressed: () {
-                Get.to(() => Theme(
-                      data: t.copyWith(
-                        colorScheme: c,
-                        cardColor: c.background,
-                        backgroundColor: c.background,
-                        appBarTheme: AppBarTheme(
-                          iconTheme: IconThemeData(
-                            color: c.onBackground,
-                          ),
-                          color: c.background,
-                          elevation: 0,
-                          toolbarHeight: 80,
-                          titleTextStyle: t.textTheme.headline5,
-                        ),
-                      ),
-                      child: LicensePage(
-                        applicationIcon: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "notes",
-                              style:
-                                  t.textTheme.headline6?.copyWith(fontSize: 24),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                        applicationLegalese: "Simple notes taking app",
-                        applicationName: " ",
-                        applicationVersion:
-                            "v" + version + " (build v" + buildNumber + ")",
-                      ),
-                    ));
-              },
-              child: Text(
-                "v" + version + " (build v" + buildNumber + ")",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

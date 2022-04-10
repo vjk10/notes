@@ -27,6 +27,7 @@ class _NotePageState extends State<NotePage> {
   late DocumentSnapshot noteSnapshot;
   late String title, body;
   bool isLoading = false;
+  bool pinned = false;
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _NotePageState extends State<NotePage> {
     setState(() {
       titleController.text = noteSnapshot.data["title"].toString();
       bodyController.text = noteSnapshot.data["body"].toString();
+      pinned = noteSnapshot.data["pinned"];
       isLoading = false;
     });
   }
@@ -74,11 +76,12 @@ class _NotePageState extends State<NotePage> {
                     noteSnapshot.data["body"].toString() !=
                         bodyController.text) {
                   note = Note(
-                    body: bodyController.text.toString(),
-                    creationTime:
-                        DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                    title: titleController.text.toString(),
-                  );
+                      body: bodyController.text.toString(),
+                      creationTime:
+                          DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                      title: titleController.text.toString(),
+                      pinned: pinned,
+                      isList: false);
                   NotesDatabase().updateNote(note, widget.noteId, true);
                 } else {
                   Get.offAllNamed('/mainScreen');
@@ -89,7 +92,10 @@ class _NotePageState extends State<NotePage> {
               return false;
             },
             child: Scaffold(
+              backgroundColor: c.background,
               appBar: AppBar(
+                backgroundColor: c.background,
+                elevation: 0,
                 title: Text(
                   "notes",
                   style: t.textTheme.headline6,
@@ -108,6 +114,8 @@ class _NotePageState extends State<NotePage> {
                           creationTime:
                               DateFormat('yyyy-MM-dd').format(DateTime.now()),
                           title: titleController.text.toString(),
+                          pinned: pinned,
+                          isList: false,
                         );
                         NotesDatabase().updateNote(note, widget.noteId, true);
                       } else {
@@ -118,9 +126,8 @@ class _NotePageState extends State<NotePage> {
                     }
                   },
                   icon: Icon(
-                    Icons.arrow_left,
+                    Icons.arrow_back,
                     color: c.onBackground,
-                    size: 36,
                   ),
                 ),
                 actions: [
@@ -129,16 +136,17 @@ class _NotePageState extends State<NotePage> {
                     child: IconButton(
                       onPressed: () async {
                         note = Note(
-                          body: bodyController.text.toString(),
-                          creationTime:
-                              DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                          title: titleController.text.toString(),
-                        );
+                            body: bodyController.text.toString(),
+                            creationTime:
+                                DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                            title: titleController.text.toString(),
+                            pinned: pinned,
+                            isList: false);
                         NotesDatabase()
                             .updateNote(note, noteSnapshot.id, false);
                       },
                       icon: Icon(
-                        Icons.save,
+                        Icons.save_outlined,
                         color: c.primary,
                       ),
                     ),
@@ -151,7 +159,7 @@ class _NotePageState extends State<NotePage> {
                       NotesDatabase().deleteNote(noteSnapshot.id);
                     },
                     icon: Icon(
-                      Icons.delete,
+                      Icons.delete_outline,
                       color: c.error,
                     ),
                   ),

@@ -2,10 +2,14 @@ import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/services/theme/app_themes.dart';
+import 'package:notes/services/db/notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
+
+import '../../../services/theme/android_app_themes.dart';
 
 class OnBoarding4 extends StatefulWidget {
   const OnBoarding4({Key? key}) : super(key: key);
@@ -17,6 +21,7 @@ class OnBoarding4 extends StatefulWidget {
 class _OnBoarding4State extends State<OnBoarding4> {
   String selectedTheme = "";
   int selectedThemeId = 0;
+  bool material3Available = false;
 
   @override
   void initState() {
@@ -26,6 +31,12 @@ class _OnBoarding4State extends State<OnBoarding4> {
   }
 
   getTheme() {
+    var primary = palette.primary.toString();
+    if (primary.isNotEmpty) {
+      setState(() {
+        material3Available = true;
+      });
+    }
     var themeID = DynamicTheme.of(context)!.themeId;
     setState(() {
       selectedThemeId = themeID;
@@ -57,6 +68,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -74,82 +86,151 @@ class _OnBoarding4State extends State<OnBoarding4> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "choose themes",
-                  style: t.textTheme.headline4?.copyWith(
-                    fontFamily: 'Theme Black',
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: Get.width - 30,
-                  child: Text(
-                    onBoarding3Message,
-                    textAlign: TextAlign.center,
-                    style: t.textTheme.bodyText1?.copyWith(
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: Get.width,
-                  height: Get.bottomBarHeight + 250,
-                  child: Center(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: themesList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 50.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              changeTheme(index, context);
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Image.asset(
-                                      themesList[index]["url"].toString(),
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: selectedThemeId == index
-                                        ? c.primary.withOpacity(0.2)
-                                        : c.secondary.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      themesList[index]["name"].toString(),
-                                      style: t.textTheme.button?.copyWith(
-                                        color: selectedThemeId == index
-                                            ? c.primary
-                                            : c.onSecondary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                if (material3Available)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: Get.statusBarHeight,
+                      ),
+                      Text(
+                        "hey! your device supports dynamic color :)",
+                        style: t.textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Consumer<ThemeNotifier>(
+                        builder: (context, notifier, child) => FlutterSwitch(
+                          activeColor: c.primary,
+                          activeIcon: Center(
+                            child: Icon(
+                              Icons.palette_outlined,
+                              color: c.onPrimaryContainer,
                             ),
                           ),
-                        );
-                      },
+                          activeTextColor: c.onPrimary,
+                          activeToggleColor: c.onPrimary,
+                          inactiveColor: c.secondary,
+                          inactiveIcon: Center(
+                            child: Icon(
+                              Icons.highlight_off_rounded,
+                              color: c.onError,
+                            ),
+                          ),
+                          inactiveTextColor: c.onSecondary,
+                          inactiveToggleColor: c.error,
+                          width: 150,
+                          height: 70,
+                          valueFontSize: 18.0,
+                          toggleSize: 35.0,
+                          value: notifier.material3,
+                          borderRadius: 50.0,
+                          padding: 8.0,
+                          showOnOff: true,
+                          onToggle: (val) {
+                            HapticFeedback.heavyImpact();
+                            notifier.toggleTheme();
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "switch on to use dynamic color",
+                        style: t.textTheme.bodyLarge,
+                      )
+                    ],
+                  ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Consumer<ThemeNotifier>(
+                  builder: (context, notifier, child) => Visibility(
+                    visible: !notifier.material3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "choose themes",
+                          style: t.textTheme.headline4?.copyWith(
+                            fontFamily: 'Theme Black',
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: Get.width,
+                          height: Get.bottomBarHeight + 250,
+                          child: Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: themesList.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 50.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      changeTheme(index, context);
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Image.asset(
+                                              themesList[index]["url"]
+                                                  .toString(),
+                                              width: 80,
+                                              height: 80,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: selectedThemeId == index
+                                                ? c.primary.withOpacity(0.2)
+                                                : c.secondary.withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              themesList[index]["name"]
+                                                  .toString(),
+                                              style:
+                                                  t.textTheme.button?.copyWith(
+                                                color: selectedThemeId == index
+                                                    ? c.primary
+                                                    : c.onSecondary,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

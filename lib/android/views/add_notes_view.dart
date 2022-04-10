@@ -47,6 +47,7 @@ class _AddNoteViewState extends State<AddNoteView> {
               body: bodyController.text.toString(),
               creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
               title: titleController.text.toString(),
+              pinned: false,
             );
             NotesDatabase().addNote(note, true);
           } else {
@@ -58,7 +59,10 @@ class _AddNoteViewState extends State<AddNoteView> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: c.background,
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: c.background,
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
@@ -71,19 +75,21 @@ class _AddNoteViewState extends State<AddNoteView> {
                       creationTime:
                           DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
+                      pinned: false,
                     );
                     NotesDatabase().addNote(note, false);
                   } else {
-                    Get.offAllNamed('/mainScreen');
+                    // Get.offAllNamed('/mainScreen');
+                    Get.back();
                   }
                 } else {
-                  Get.offAllNamed('/mainScreen');
+                  // Get.offAllNamed('/mainScreen');
+                  Get.back();
                 }
               },
               icon: Icon(
-                Icons.arrow_left,
+                Icons.arrow_back,
                 color: c.onBackground,
-                size: 36,
               )),
           title: Text(
             "notes",
@@ -128,6 +134,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                       creationTime:
                           DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
+                      pinned: false,
                     );
                     NotesDatabase().addNote(note, false);
                   } else {
@@ -151,7 +158,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                   }
                 },
                 icon: Icon(
-                  Icons.save,
+                  Icons.save_outlined,
                   color: c.onBackground,
                   size: 24,
                 ),

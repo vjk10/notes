@@ -33,8 +33,11 @@ class _AddFolderViewState extends State<AddFolderView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: c.background,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: c.secondaryContainer.withAlpha(50),
         toolbarHeight: 80,
         leading: IconButton(
             onPressed: () {
@@ -44,9 +47,8 @@ class _AddFolderViewState extends State<AddFolderView> {
                   ));
             },
             icon: Icon(
-              Icons.arrow_left,
+              Icons.arrow_back,
               color: c.onBackground,
-              size: 36,
             )),
         title: Text(
           "notes",
@@ -59,7 +61,7 @@ class _AddFolderViewState extends State<AddFolderView> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              Icons.folder,
+              Icons.folder_outlined,
               color: c.tertiary,
               size: Get.width / 2,
             ),
@@ -88,7 +90,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -96,7 +98,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -104,7 +106,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -112,11 +114,11 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     filled: true,
-                    fillColor: c.surface,
+                    fillColor: c.secondaryContainer,
                     contentPadding: const EdgeInsets.all(
                       25.0,
                     ),
@@ -149,7 +151,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -157,7 +159,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -165,7 +167,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -173,11 +175,11 @@ class _AddFolderViewState extends State<AddFolderView> {
                         25,
                       ),
                       borderSide: BorderSide(
-                        color: c.surface,
+                        color: c.secondaryContainer,
                       ),
                     ),
                     filled: true,
-                    fillColor: c.surface,
+                    fillColor: c.secondaryContainer,
                     contentPadding: const EdgeInsets.all(
                       25.0,
                     ),
