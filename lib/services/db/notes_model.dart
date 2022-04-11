@@ -8,6 +8,7 @@ class NoteFields {
     creationTime,
     pinned,
     isList,
+    isExpense,
     totalItems
   ];
   static const String id = '_id';
@@ -16,6 +17,7 @@ class NoteFields {
   static const String creationTime = '_creationTime';
   static const String pinned = '_pinned';
   static const String isList = '_isList';
+  static const String isExpense = '_isExpense';
   static const String totalItems = '_totalItems';
 }
 
@@ -26,6 +28,7 @@ class Note {
   final String creationTime;
   final bool? pinned;
   final bool? isList;
+  final bool? isExpense;
   final int? totalItems;
 
   const Note(
@@ -35,6 +38,7 @@ class Note {
       required this.title,
       this.pinned,
       this.isList,
+      this.isExpense,
       this.totalItems});
 
   Note copy(
@@ -45,6 +49,7 @@ class Note {
           String? creationTime,
           bool? pinned,
           bool? isList,
+          bool? isExpense,
           int? totalItems}) =>
       Note(
           id: id ?? this.id,
@@ -53,6 +58,7 @@ class Note {
           creationTime: creationTime ?? this.creationTime,
           pinned: pinned ?? this.pinned,
           isList: isList ?? this.isList,
+          isExpense: isExpense ?? this.isExpense,
           totalItems: totalItems ?? this.totalItems);
 
   static Note fromJson(Map<String, Object?> json) => Note(
@@ -62,6 +68,7 @@ class Note {
       title: json[NoteFields.title] as String,
       pinned: json[NoteFields.pinned] as bool,
       isList: json[NoteFields.isList] as bool,
+      isExpense: json[NoteFields.isExpense] as bool,
       totalItems: json[NoteFields.totalItems] as int);
 
   Map<String, Object?> toJson() => {
@@ -71,6 +78,7 @@ class Note {
         NoteFields.creationTime: creationTime,
         NoteFields.pinned: pinned,
         NoteFields.isList: isList,
+        NoteFields.isExpense: isExpense,
         NoteFields.totalItems: totalItems
       };
 }

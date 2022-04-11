@@ -37,7 +37,7 @@ class AppThemes {
 
 final themeCollection = ThemeCollection(
   themes: {
-    AppThemes.regular: androidThemeDark,
+    AppThemes.regular: androidThemeRegular,
     AppThemes.pitchblack: androidThemePitchBlack,
     AppThemes.kindaRed: androidThemeKindaRed,
     AppThemes.darkYellow: androidThemeDarkYellow,

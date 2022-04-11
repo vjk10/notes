@@ -14,7 +14,7 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
-import 'package:notes/services/db/notifier.dart';
+import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';

@@ -203,6 +203,7 @@ class _ListviewViewState extends State<ListviewView> {
         ),
         body: ReorderableListView.builder(
           onReorder: (int oldIndex, int newIndex) {
+            if (newIndex > oldIndex) newIndex--;
             setState(() {
               final _index = newIndex;
               final _itemInDrag = noteListItems.removeAt(oldIndex);
@@ -290,6 +291,7 @@ class _ListviewViewState extends State<ListviewView> {
           }
           setState(() {
             noteListItems.removeAt(index);
+            controllers.removeAt(index);
           });
         },
         child: Icon(

@@ -66,6 +66,8 @@ class _AddListViewState extends State<AddListView> {
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
+                NotesDatabase().saveList(
+                    titleController, controllers, false, noteListItems);
                 Get.offAllNamed('/mainScreen');
               },
               icon: Icon(
@@ -158,13 +160,13 @@ class _AddListViewState extends State<AddListView> {
         ),
         body: ReorderableListView.builder(
           onReorder: (int oldIndex, int newIndex) {
+            if (newIndex > oldIndex) newIndex--;
             setState(() {
               final _index = newIndex;
               final _itemInDrag = noteListItems.removeAt(oldIndex);
-              final _controllerDrag = controllers.elementAt(oldIndex);
+              final _controllerDrag = controllers.removeAt(oldIndex);
               noteListItems.insert(_index, _itemInDrag);
               controllers.insert(_index, _controllerDrag);
-              controllers.removeAt(oldIndex);
             });
           },
           shrinkWrap: true,
@@ -246,6 +248,7 @@ class _AddListViewState extends State<AddListView> {
           }
           setState(() {
             noteListItems.removeAt(index);
+            controllers.removeAt(index);
           });
         },
         child: Icon(

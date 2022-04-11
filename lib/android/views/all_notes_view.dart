@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/views/add_list_view.dart';
 import 'package:notes/android/views/add_notes_view.dart';
+import 'package:notes/android/views/add_expense_tracker.dart';
+import 'package:notes/android/views/expense_tracker_view.dart';
 import 'package:notes/android/views/list_view.dart';
 import 'package:notes/android/views/note_page.dart';
 import 'package:notes/android/views/pick_folder.dart';
@@ -280,13 +282,18 @@ class _AllNotesViewState extends State<AllNotesView> {
                 // const SizedBox(
                 //   width: 40,
                 // ),
-                // Icon(
-                //   Icons.request_page,
-                //   color: c.onSecondaryContainer,
-                // ),
-                // const SizedBox(
-                //   width: 40,
-                // ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const AddExpenseTrackerView());
+                  },
+                  child: Icon(
+                    Icons.request_page,
+                    color: c.onSecondaryContainer,
+                  ),
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
                 Visibility(
                   visible: userSignedIn,
                   child: GestureDetector(
@@ -397,8 +404,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                             DateFormat('yyyy-MM-dd').format(DateTime.now()),
                         title:
                             notesData.data![noteIndex].data["title"].toString(),
-                        pinned:
-                            notesData.data![noteIndex].data["pinned"] ?? false,
+                        pinned: !notesData.data![noteIndex].data["pinned"],
                       );
                       await NotesDatabase().updateNote(
                           _note, notesData.data![noteIndex].id, true);
@@ -473,13 +479,19 @@ class _AllNotesViewState extends State<AllNotesView> {
                 child: GestureDetector(
                   onTap: () {
                     if (kDebugMode) {
-                      print(notesData.data![noteIndex].data["isList"] == true);
+                      print(notesData.data![noteIndex].data["isList"] ??
+                          false == true);
                     }
-                    if (notesData.data![noteIndex].data["isList"] == true) {
+                    if (notesData.data![noteIndex].data["isList"] ??
+                        false == true) {
                       Get.to(
                         () =>
                             ListviewView(noteId: notesData.data![noteIndex].id),
                       );
+                    } else if (notesData.data![noteIndex].data["isExpense"] ==
+                        true) {
+                      Get.to(() => ExpenseTrackerView(
+                          noteId: notesData.data![noteIndex].id));
                     } else {
                       Get.to(
                         () => NotePage(noteId: notesData.data![noteIndex].id),

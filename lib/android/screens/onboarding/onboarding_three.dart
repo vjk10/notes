@@ -73,7 +73,7 @@ class _OnBoarding3State extends State<OnBoarding3> {
                   activeColor: c.primary,
                   activeIcon: Icon(
                     Icons.save_outlined,
-                    color: c.onPrimaryContainer,
+                    color: c.primary,
                   ),
                   activeTextColor: c.onPrimary,
                   activeToggleColor: c.onPrimary,

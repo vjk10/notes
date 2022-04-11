@@ -19,7 +19,7 @@ import 'package:notes/android/theme/android_theme.dart';
 import 'package:notes/android/views/add_folders_view.dart';
 import 'package:notes/android/views/add_notes_view.dart';
 import 'package:notes/android/views/clipboard_view.dart';
-import 'package:notes/services/db/notifier.dart';
+import 'package:notes/services/notifier.dart';
 import 'package:notes/services/theme/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
@@ -69,9 +69,11 @@ class MyApp extends StatelessWidget {
                 m3Dark = DynamicColorScheme.generate(_palette, dark: true);
                 if (notifier.material3) {
                   return GetMaterialApp(
+                    themeMode: ThemeMode.system,
                     debugShowCheckedModeBanner: kDebugMode,
-                    theme: androidThemeRegular.copyWith(colorScheme: m3Light),
-                    darkTheme: androidThemeDark.copyWith(colorScheme: m3Dark),
+                    theme: androidThemeDark.copyWith(colorScheme: m3Light),
+                    darkTheme:
+                        androidThemeRegular.copyWith(colorScheme: m3Dark),
                     routes: {
                       '/splash': (context) => const SplashScreen(),
                       '/mainScreen': (context) => const MainScreen(

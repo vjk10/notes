@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/views/folder_view.dart';
 import 'package:notes/services/db/folders_model.dart';
+import 'package:notes/services/db/note_expense_model.dart';
 import 'package:notes/services/db/note_list_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -420,6 +421,154 @@ class NotesDatabase {
             "text": noteList[c].text,
             "checked": noteList[c].checked,
             "index": noteList[c].index,
+          });
+        }
+      } else {
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.warning_rounded,
+            color: c.tertiary,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Empty List!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      }
+    } else {
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          Icons.warning_rounded,
+          color: c.tertiary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Empty List!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    }
+  }
+
+  saveExpenseSheet(
+    TextEditingController titleController,
+    TextEditingController bodyController,
+    bool pinned,
+    List<ExpenseModel> expenses,
+  ) {
+    if (titleController.text.isNotEmpty) {
+      if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
+        ScientISSTdb.instance
+            .collection("notes")
+            .document(titleController.text)
+            .set({
+          "title": titleController.text,
+          "body": bodyController.text,
+          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          "pinned": pinned,
+          "isList": false,
+          "isExpense": true,
+          "totalItems": expenses.length
+        });
+        for (var c = 0; c < expenses.length; c++) {
+          if (kDebugMode) {
+            print(expenses[c].type.toString());
+          }
+          ScientISSTdb.instance
+              .collection("notes")
+              .document(titleController.text)
+              .collection(c.toString())
+              .document(c.toString())
+              .set({
+            "index": expenses[c].index,
+            "type": expenses[c].type,
+            "amount": expenses[c].amount,
+            "description": expenses[c].description,
+          });
+        }
+      } else {
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.warning_rounded,
+            color: c.tertiary,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Empty List!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      }
+    } else {
+      Get.showSnackbar(GetSnackBar(
+        shouldIconPulse: false,
+        backgroundColor: Get.theme.colorScheme.surface,
+        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        borderRadius: 10,
+        icon: Icon(
+          Icons.warning_rounded,
+          color: c.tertiary,
+        ),
+        duration: const Duration(seconds: 2),
+        messageText: Text(
+          "Empty List!",
+          style: Get.textTheme.caption
+              ?.copyWith(color: Get.theme.colorScheme.onSurface),
+        ),
+      ));
+    }
+  }
+
+  updateExpenseSheet(
+    TextEditingController titleController,
+    TextEditingController bodyController,
+    bool pinned,
+    List<ExpenseModel> expenses,
+  ) {
+    if (titleController.text.isNotEmpty) {
+      if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
+        ScientISSTdb.instance
+            .collection("notes")
+            .document(titleController.text)
+            .update({
+          "title": titleController.text,
+          "body": bodyController.text,
+          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          "pinned": pinned,
+          "isList": false,
+          "isExpense": true,
+          "totalItems": expenses.length
+        });
+        for (var c = 0; c < expenses.length; c++) {
+          if (kDebugMode) {
+            print(expenses[c].type.toString());
+          }
+          ScientISSTdb.instance
+              .collection("notes")
+              .document(titleController.text)
+              .collection(c.toString())
+              .document(c.toString())
+              .set({
+            "index": expenses[c].index,
+            "type": expenses[c].type,
+            "amount": expenses[c].amount,
+            "description": expenses[c].description,
           });
         }
       } else {
