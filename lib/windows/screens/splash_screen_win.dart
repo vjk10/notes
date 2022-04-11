@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:notes/theme/colors.dart';
-import 'package:notes/windows/widgets/notes_logo.dart';
 
 class SplashScreenWin extends StatefulWidget {
   const SplashScreenWin({Key? key}) : super(key: key);
@@ -21,7 +20,7 @@ class _SplashScreenWinState extends State<SplashScreenWin> {
             const Center(
               child: Hero(
                 tag: "logoTag",
-                child: NotesLogoWin(),
+                child: Text("notes"),
               ),
             ),
             const SizedBox(

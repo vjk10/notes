@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:notes/theme/colors.dart';
 
 class UnderConstruction extends StatefulWidget {
@@ -82,14 +81,6 @@ class _UnderConstructionState extends State<UnderConstruction> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Center(
-                  child: LottieBuilder.asset(
-                    "assets/lottie/under-construction.json",
-                    alignment: Alignment.center,
-                    width: screenSize.width / 4,
-                    height: screenSize.width / 4,
-                  ),
-                ),
                 const SizedBox(
                   height: 10,
                 ),

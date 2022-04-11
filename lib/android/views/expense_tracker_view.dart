@@ -6,6 +6,7 @@ import 'package:notes/android/widgets/text_dialog.dart';
 import 'package:notes/services/data_table_services.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_expense_model.dart';
+import 'package:notes/services/expense_services.dart';
 import 'package:notes/services/utils.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
@@ -230,8 +231,8 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       onWillPop: () async {
         bool _autosave = await NotesDatabase().checkAutoSave();
         if (_autosave) {
-          NotesDatabase().saveExpenseSheet(
-              titleController, bodyController, false, expenses);
+          NotesDatabase().updateExpenseSheet(
+              titleController, bodyController, pinned, expenses);
         }
         Get.offAllNamed('/mainScreen');
         return true;
@@ -251,7 +252,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
             onPressed: () async {
               bool _autosave = await NotesDatabase().checkAutoSave();
               if (_autosave) {
-                NotesDatabase().saveExpenseSheet(
+                NotesDatabase().updateExpenseSheet(
                     titleController, bodyController, false, expenses);
                 Get.offAllNamed('/mainScreen');
               } else {
@@ -382,7 +383,10 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  ExpenseServices()
+                      .downloadExcel(titleController.text, expenses);
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
