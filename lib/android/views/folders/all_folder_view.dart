@@ -3,14 +3,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
-import 'package:notes/android/views/add_folders_view.dart';
-import 'package:notes/android/views/folder_view.dart';
+import 'package:notes/android/views/folders/add_folders_view.dart';
+import 'package:notes/android/views/folders/folder_view.dart';
 import 'package:notes/android/widgets/no_folders_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
-import '../data/data.dart';
+import '../../data/data.dart';
 
 class AllFoldersView extends StatefulWidget {
   final Future<List<DocumentSnapshot>> foldersFuture;

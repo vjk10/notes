@@ -1,16 +1,8 @@
 import 'dart:io';
-
 import 'package:excel/excel.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:notes/services/db/note_expense_model.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart'
     as permission_handler;
-import 'package:shared_storage/shared_storage.dart';
-
-import '../android/data/data.dart';
+import 'package:notes/services/imports.dart';
 
 class ExpenseServices {
   List<String> headers = ["Row", "Type", "Amount", "Description"];
@@ -32,18 +24,22 @@ class ExpenseServices {
             .value = headers[header];
       }
       // Adding Records
-      for (var expense = 1; expense < expenses.length; expense++) {
+      for (var expense = 0; expense < expenses.length; expense++) {
         sheet
-            .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: expense))
+            .cell(CellIndex.indexByColumnRow(
+                columnIndex: 0, rowIndex: expense + 1))
             .value = expenses[expense].index;
         sheet
-            .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: expense))
+            .cell(CellIndex.indexByColumnRow(
+                columnIndex: 1, rowIndex: expense + 1))
             .value = expenses[expense].type;
         sheet
-            .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: expense))
+            .cell(CellIndex.indexByColumnRow(
+                columnIndex: 2, rowIndex: expense + 1))
             .value = expenses[expense].amount;
         sheet
-            .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: expense))
+            .cell(CellIndex.indexByColumnRow(
+                columnIndex: 3, rowIndex: expense + 1))
             .value = expenses[expense].description;
       }
       var fileBytes = excel.save();

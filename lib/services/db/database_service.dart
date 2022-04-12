@@ -1,12 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:notes/android/data/data.dart';
-import 'package:notes/android/widgets/notes_loading.dart';
-import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
+import 'package:notes/services/imports.dart';
 
 class DatabaseService {
   backUpSingleNote(String uid, String noteId, String title, String body,

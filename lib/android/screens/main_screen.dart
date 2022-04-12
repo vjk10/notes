@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/views/all_notes_view.dart';
-import 'package:notes/android/views/all_folder_view.dart';
+import 'package:notes/android/views/notes/all_notes_view.dart';
+import 'package:notes/android/views/folders/all_folder_view.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 

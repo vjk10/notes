@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/double_dialog.dart';
 import 'package:notes/android/widgets/text_dialog.dart';
 import 'package:notes/services/data_table_services.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_expense_model.dart';
 import 'package:notes/services/utils.dart';
-
-import '../data/data.dart';
 
 class AddExpenseTrackerView extends StatefulWidget {
   const AddExpenseTrackerView({Key? key}) : super(key: key);

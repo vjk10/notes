@@ -7,13 +7,13 @@ import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/views/add_list_view.dart';
-import 'package:notes/android/views/add_notes_view.dart';
-import 'package:notes/android/views/add_expense_tracker.dart';
-import 'package:notes/android/views/expense_tracker_view.dart';
-import 'package:notes/android/views/list_view.dart';
-import 'package:notes/android/views/note_page.dart';
-import 'package:notes/android/views/pick_folder.dart';
+import 'package:notes/android/views/notes/add_notes_view.dart';
+import 'package:notes/android/views/expenses/add_expense_tracker.dart';
+import 'package:notes/android/views/expenses/expense_tracker_view.dart';
+import 'package:notes/android/views/list/add_list_view.dart';
+import 'package:notes/android/views/list/list_view.dart';
+import 'package:notes/android/views/notes/note_page.dart';
+import 'package:notes/android/views/folders/pick_folder.dart';
 import 'package:notes/android/widgets/no_notes_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -22,7 +22,7 @@ import 'package:scientisst_db/scientisst_db.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
-import '../../services/db/notes_model.dart';
+import '../../../services/db/notes_model.dart';
 
 class AllNotesView extends StatefulWidget {
   final Future<List<DocumentSnapshot>> notesFuture;

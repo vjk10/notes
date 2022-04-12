@@ -6,7 +6,7 @@ import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/theme/colors.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
-import '../data/data.dart';
+import '../../data/data.dart';
 
 class PickFolder extends StatefulWidget {
   final Future<List<DocumentSnapshot>> foldersFuture;

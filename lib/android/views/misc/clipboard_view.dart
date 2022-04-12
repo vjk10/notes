@@ -1,13 +1,14 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as chat_types;
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:notes/android/data/data.dart';
+
+import '../../data/data.dart';
 
 class ClipBoard extends StatefulWidget {
   const ClipBoard({Key? key}) : super(key: key);

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/double_dialog.dart';
 import 'package:notes/android/widgets/text_dialog.dart';
 import 'package:notes/services/data_table_services.dart';
@@ -9,8 +10,6 @@ import 'package:notes/services/db/note_expense_model.dart';
 import 'package:notes/services/expense_services.dart';
 import 'package:notes/services/utils.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-
-import '../data/data.dart';
 
 class ExpenseTrackerView extends StatefulWidget {
   final String noteId;

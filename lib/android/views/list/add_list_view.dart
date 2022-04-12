@@ -1,82 +1,39 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_list_model.dart';
-import 'package:scientisst_db/scientisst_db.dart';
-import '../../services/db/notes_model.dart';
-import '../data/data.dart';
+import 'package:notes/services/db/notes_model.dart';
 
-class ListviewView extends StatefulWidget {
-  final String noteId;
-  const ListviewView({Key? key, required this.noteId}) : super(key: key);
+class AddListView extends StatefulWidget {
+  const AddListView({Key? key}) : super(key: key);
 
   @override
-  State<ListviewView> createState() => _ListviewViewState();
+  State<AddListView> createState() => _AddListViewState();
 }
 
-class _ListviewViewState extends State<ListviewView> {
+class _AddListViewState extends State<AddListView> {
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
   int currentIndex = 0;
   late Note note;
   List<int> rows = [];
   List<bool> checked = [];
-  List<TextEditingController> controllers = [];
   List<NoteListItem> noteListItems = [];
   List<ListTile> listItems = [];
-
-  bool pinned = false;
-  int totalItems = 0;
-  late DocumentSnapshot noteSnapshot;
-  List<DocumentSnapshot> listSnapshot = [];
-  List<CollectionReference> collectionSnapshot = [];
+  List<TextEditingController> controllers = [];
 
   late String title, body;
   @override
   void initState() {
-    refreshNote();
-    // rows.length = currentIndex;
+    noteListItems.length = currentIndex;
+    NoteListItem item =
+        NoteListItem(index: currentIndex, text: "List Item", checked: false);
+    noteListItems.insert(0, item);
+    controllers.add(TextEditingController());
+    currentIndex = noteListItems.length;
     super.initState();
-  }
-
-  refreshNote() async {
-    if (kDebugMode) {
-      print("NOTE ID: " + widget.noteId);
-    }
-    noteSnapshot = await ScientISSTdb.instance
-        .collection("notes")
-        .document(widget.noteId)
-        .get();
-    setState(() {
-      titleController.text = noteSnapshot.data["title"].toString();
-      bodyController.text = noteSnapshot.data["body"].toString();
-      totalItems = noteSnapshot.data["totalItems"];
-      pinned = noteSnapshot.data["pinned"] as bool;
-    });
-    for (var c = 0; c < totalItems; c++) {
-      DocumentSnapshot _collectionSnapshot = await ScientISSTdb.instance
-          .collection("notes")
-          .document(widget.noteId)
-          .collection(c.toString())
-          .document(c.toString())
-          .get();
-      if (kDebugMode) {
-        print(_collectionSnapshot.data["text"].toString());
-      }
-      setState(() {
-        // rows.add(currentIndex);
-        // checked.add(false);
-        NoteListItem item = NoteListItem(
-            text: _collectionSnapshot.data["text"].toString(),
-            index: _collectionSnapshot.data["index"],
-            checked: _collectionSnapshot.data["checked"]);
-        controllers.add(TextEditingController(
-            text: _collectionSnapshot.data["text"].toString()));
-        noteListItems.add(item);
-        currentIndex = currentIndex + 1;
-      });
-    }
   }
 
   @override
@@ -96,7 +53,7 @@ class _ListviewViewState extends State<ListviewView> {
     return WillPopScope(
       onWillPop: () async {
         NotesDatabase()
-            .updateList(titleController, controllers, pinned, noteListItems);
+            .saveList(titleController, controllers, false, noteListItems);
         Get.offAllNamed('/mainScreen');
         return false;
       },
@@ -109,6 +66,8 @@ class _ListviewViewState extends State<ListviewView> {
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
+                NotesDatabase().saveList(
+                    titleController, controllers, false, noteListItems);
                 Get.offAllNamed('/mainScreen');
               },
               icon: Icon(
@@ -151,10 +110,8 @@ class _ListviewViewState extends State<ListviewView> {
               padding: const EdgeInsets.all(10.0),
               child: TextButton.icon(
                 onPressed: () async {
-                  // NotesDatabase().saveList(
-                  //     titleController, controllers, pinned, rows, checked);
-                  NotesDatabase().updateList(
-                      titleController, controllers, pinned, noteListItems);
+                  NotesDatabase().saveList(
+                      titleController, controllers, false, noteListItems);
                 },
                 icon: Icon(
                   Icons.save_outlined,

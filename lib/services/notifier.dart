@@ -1,8 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../android/data/data.dart';
+import 'package:notes/services/imports.dart';
 
 class ThemeNotifier extends ChangeNotifier {
   late SharedPreferences _pref;
