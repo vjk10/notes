@@ -6,4 +6,4 @@ Simple Note Taking App
 
 ## Getting Started
 
-Install notes to enjoy all you notes locally and cloud bakcups with a choic
+Install notes to enjoy all you notes locally and cloud bakcups with a choice

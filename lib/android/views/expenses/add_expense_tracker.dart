@@ -7,6 +7,7 @@ import 'package:notes/android/widgets/text_dialog.dart';
 import 'package:notes/services/data_table_services.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_expense_model.dart';
+import 'package:notes/services/expense_services.dart';
 import 'package:notes/services/utils.dart';
 
 class AddExpenseTrackerView extends StatefulWidget {
@@ -336,7 +337,10 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  ExpenseServices()
+                      .downloadExcel(titleController.text, expenses);
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

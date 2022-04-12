@@ -8,9 +8,10 @@ class ExpenseServices {
   List<String> headers = ["Row", "Type", "Amount", "Description"];
 
   downloadExcel(String sheetName, List<ExpenseModel> expenses) async {
-    var status = await permission_handler.Permission.storage.status;
+    var status =
+        await permission_handler.Permission.manageExternalStorage.status;
     if (status.isDenied) {
-      await permission_handler.Permission.storage.request();
+      await permission_handler.Permission.manageExternalStorage.request();
     } else {
       final excel = Excel.createExcel();
       final sheet = excel[excel.getDefaultSheet()!];
