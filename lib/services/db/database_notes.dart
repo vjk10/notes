@@ -312,8 +312,7 @@ class NotesDatabase {
     List<NoteListItem> noteList,
   ) {
     if (controllers.isNotEmpty) {
-      if (titleController.text.isNotEmpty &&
-          controllers.first.text.isNotEmpty) {
+      if (titleController.text.isNotEmpty && noteList.isNotEmpty) {
         ScientISSTdb.instance
             .collection("notes")
             .document(titleController.text)
@@ -323,6 +322,7 @@ class NotesDatabase {
           "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
           "pinned": pinned,
           "isList": true,
+          "isExpense": false,
           "totalItems": noteList.length
         });
         for (var c = 0; c < noteList.length; c++) {
@@ -340,7 +340,7 @@ class NotesDatabase {
             "index": noteList[c].index,
           });
         }
-      } else {
+      } else if (noteList.isEmpty) {
         Get.showSnackbar(GetSnackBar(
           shouldIconPulse: false,
           backgroundColor: Get.theme.colorScheme.surface,
@@ -348,11 +348,28 @@ class NotesDatabase {
           borderRadius: 10,
           icon: Icon(
             Icons.warning_rounded,
-            color: c.tertiary,
+            color: c.error,
           ),
           duration: const Duration(seconds: 2),
           messageText: Text(
             "Empty List!",
+            style: Get.textTheme.caption
+                ?.copyWith(color: Get.theme.colorScheme.onSurface),
+          ),
+        ));
+      } else if (titleController.text.isEmpty) {
+        Get.showSnackbar(GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: Get.theme.colorScheme.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.warning_rounded,
+            color: c.error,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "Enter a List Name",
             style: Get.textTheme.caption
                 ?.copyWith(color: Get.theme.colorScheme.onSurface),
           ),
@@ -365,12 +382,12 @@ class NotesDatabase {
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         borderRadius: 10,
         icon: Icon(
-          Icons.warning_rounded,
-          color: c.tertiary,
+          Icons.error_outline_outlined,
+          color: c.error,
         ),
         duration: const Duration(seconds: 2),
         messageText: Text(
-          "Empty List!",
+          "Error Occured, Please try again!",
           style: Get.textTheme.caption
               ?.copyWith(color: Get.theme.colorScheme.onSurface),
         ),
@@ -396,6 +413,7 @@ class NotesDatabase {
           "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
           "pinned": pinned,
           "isList": true,
+          "isExpense": false,
           "totalItems": noteList.length
         });
         for (var c = 0; c < noteList.length; c++) {

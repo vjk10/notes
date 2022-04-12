@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -44,13 +45,35 @@ class _AllNotesViewState extends State<AllNotesView> {
   bool _accountLinked = false;
   bool userSignedIn = false;
   bool pinnedNotes = false;
+  bool _isVisible = true;
 
+  late ScrollController _scrollController;
   late fire_store.DocumentSnapshot firebaseUserDetails;
   late User user;
 
   @override
   void initState() {
     initUser();
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (_isVisible == true) {
+          setState(() {
+            _isVisible = false;
+          });
+        }
+      } else {
+        if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          if (_isVisible == false) {
+            setState(() {
+              _isVisible = true;
+            });
+          }
+        }
+      }
+    });
     checkPinned();
     super.initState();
     if (kDebugMode) {
@@ -107,20 +130,35 @@ class _AllNotesViewState extends State<AllNotesView> {
     return Scaffold(
       backgroundColor: c.background,
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton.large(
-        heroTag: "addNoteTag",
-        onPressed: () {
-          Get.to(() => const AddNoteView());
-        },
-        backgroundColor: c.primaryContainer,
-        child: Center(
-          child: Icon(
-            Icons.note_add_outlined,
-            color: c.onPrimaryContainer,
-          ),
-        ),
-      ),
+      floatingActionButton: _isVisible
+          ? FloatingActionButton.large(
+              heroTag: "addNoteTag",
+              onPressed: () {
+                Get.to(() => const AddNoteView());
+              },
+              backgroundColor: c.primaryContainer,
+              child: Center(
+                child: Icon(
+                  Icons.note_add_outlined,
+                  color: c.onPrimaryContainer,
+                ),
+              ),
+            )
+          : FloatingActionButton.small(
+              heroTag: "addNoteTag",
+              onPressed: () {
+                Get.to(() => const AddNoteView());
+              },
+              backgroundColor: c.primaryContainer,
+              child: Center(
+                child: Icon(
+                  Icons.note_add_outlined,
+                  color: c.onPrimaryContainer,
+                ),
+              ),
+            ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: pinnedNotes
               ? CrossAxisAlignment.start
@@ -242,6 +280,9 @@ class _AllNotesViewState extends State<AllNotesView> {
                     }
                 }
               },
+            ),
+            const SizedBox(
+              height: 20,
             ),
           ],
         ),

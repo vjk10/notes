@@ -397,6 +397,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               trailing: Switch.adaptive(
                   activeColor: c.primary,
                   inactiveThumbColor: c.secondary,
+                  inactiveTrackColor: c.tertiaryContainer,
                   value: notifier.material3,
                   onChanged: (value) async {
                     HapticFeedback.heavyImpact();
@@ -445,6 +446,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             trailing: Switch.adaptive(
                 activeColor: c.primary,
                 inactiveThumbColor: c.secondary,
+                inactiveTrackColor: c.tertiaryContainer,
                 value: _autoSave,
                 onChanged: (value) async {
                   HapticFeedback.heavyImpact();
@@ -698,7 +700,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   void showThemeSheet() {
     Get.bottomSheet(
       SizedBox(
-        height: Get.bottomBarHeight + 350,
+        height: Get.height / 2,
         child: BottomSheet(
           animationController: _bottomSheetController,
           enableDrag: true,
@@ -726,7 +728,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ),
                 SizedBox(
                   width: Get.width,
-                  height: Get.bottomBarHeight + 250,
+                  height: Get.height / 3,
                   child: Center(
                     child: Stack(
                       alignment: Alignment.center,

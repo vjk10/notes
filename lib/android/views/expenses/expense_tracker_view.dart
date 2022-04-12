@@ -266,20 +266,27 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
           actions: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: TextButton.icon(
+              child: IconButton(
                 onPressed: () async {
                   NotesDatabase().updateExpenseSheet(
                       titleController, bodyController, pinned, expenses);
                 },
                 icon: Icon(
                   Icons.save_outlined,
-                  color: c.onBackground,
-                  size: 24,
+                  color: c.primary,
                 ),
-                label: Text(
-                  "Save",
-                  style: t.textTheme.button?.copyWith(fontSize: 18),
-                ),
+              ),
+            ),
+            IconButton(
+              onPressed: () async {
+                if (kDebugMode) {
+                  print("DOC ID: " + noteSnapshot.id.toString());
+                }
+                NotesDatabase().deleteNote(noteSnapshot.id);
+              },
+              icon: Icon(
+                Icons.delete_outline,
+                color: c.error,
               ),
             ),
           ],

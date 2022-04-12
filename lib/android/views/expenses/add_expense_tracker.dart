@@ -182,10 +182,12 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool _autosave = await NotesDatabase().checkAutoSave();
-        if (_autosave) {
-          NotesDatabase().saveExpenseSheet(
-              titleController, bodyController, false, expenses);
+        if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
+          bool _autosave = await NotesDatabase().checkAutoSave();
+          if (_autosave) {
+            NotesDatabase().saveExpenseSheet(
+                titleController, bodyController, false, expenses);
+          }
         }
         Get.offAllNamed('/mainScreen');
         return true;
@@ -203,11 +205,12 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           ),
           leading: IconButton(
             onPressed: () async {
-              bool _autosave = await NotesDatabase().checkAutoSave();
-              if (_autosave) {
-                NotesDatabase().saveExpenseSheet(
-                    titleController, bodyController, false, expenses);
-                Get.offAllNamed('/mainScreen');
+              if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
+                bool _autosave = await NotesDatabase().checkAutoSave();
+                if (_autosave) {
+                  NotesDatabase().saveExpenseSheet(
+                      titleController, bodyController, false, expenses);
+                }
               } else {
                 Get.offAllNamed('/mainScreen');
               }
@@ -220,19 +223,16 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           actions: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: TextButton.icon(
+              child: IconButton(
                 onPressed: () async {
-                  NotesDatabase().saveExpenseSheet(
-                      titleController, bodyController, false, expenses);
+                  if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
+                    NotesDatabase().saveExpenseSheet(
+                        titleController, bodyController, false, expenses);
+                  }
                 },
                 icon: Icon(
                   Icons.save_outlined,
-                  color: c.onBackground,
-                  size: 24,
-                ),
-                label: Text(
-                  "Save",
-                  style: t.textTheme.button?.copyWith(fontSize: 18),
+                  color: c.primary,
                 ),
               ),
             ),

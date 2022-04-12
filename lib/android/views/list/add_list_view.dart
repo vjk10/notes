@@ -52,13 +52,18 @@ class _AddListViewState extends State<AddListView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        NotesDatabase()
-            .saveList(titleController, controllers, false, noteListItems);
+        bool _autosave = await NotesDatabase().checkAutoSave();
+        if (_autosave) {
+          if (noteListItems.isNotEmpty && titleController.text.isNotEmpty) {
+            NotesDatabase()
+                .saveList(titleController, controllers, false, noteListItems);
+          }
+        }
         Get.offAllNamed('/mainScreen');
         return false;
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: c.background,
         appBar: AppBar(
           elevation: 0,
@@ -66,8 +71,14 @@ class _AddListViewState extends State<AddListView> {
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
-                NotesDatabase().saveList(
-                    titleController, controllers, false, noteListItems);
+                bool _autosave = await NotesDatabase().checkAutoSave();
+                if (_autosave) {
+                  if (noteListItems.isNotEmpty &&
+                      titleController.text.isNotEmpty) {
+                    NotesDatabase().saveList(
+                        titleController, controllers, false, noteListItems);
+                  }
+                }
                 Get.offAllNamed('/mainScreen');
               },
               icon: Icon(
@@ -126,63 +137,67 @@ class _AddListViewState extends State<AddListView> {
             ),
           ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
-          child: SizedBox(
-            height: 70,
-            child: FloatingActionButton.extended(
-              backgroundColor: c.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ReorderableListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                onReorder: (int oldIndex, int newIndex) {
+                  if (newIndex > oldIndex) newIndex--;
+                  setState(() {
+                    final _index = newIndex;
+                    final _itemInDrag = noteListItems.removeAt(oldIndex);
+                    final _controllerDrag = controllers.removeAt(oldIndex);
+                    noteListItems.insert(_index, _itemInDrag);
+                    controllers.insert(_index, _controllerDrag);
+                  });
+                },
+                shrinkWrap: true,
+                itemCount: noteListItems.length,
+                itemBuilder: (context, index) {
+                  if (kDebugMode) {
+                    print("List Length : " + noteListItems.length.toString());
+                    print(
+                        "List Text : " + noteListItems[index].text.toString());
+                  }
+                  if (noteListItems.isNotEmpty) {
+                    final item = noteListItems.elementAt(index);
+                    return buildItem(item, index);
+                  } else {
+                    return const SizedBox();
+                  }
+                },
               ),
-              onPressed: () {
-                NoteListItem item =
-                    NoteListItem(index: currentIndex, text: "", checked: false);
-                noteListItems.add(item);
-                setState(() {
-                  controllers.add(TextEditingController());
-                  currentIndex = currentIndex + 1;
-                });
-              },
-              icon: Icon(
-                Icons.playlist_add_rounded,
-                color: c.onPrimary,
-              ),
-              label: Text(
-                "Add List Item",
-                style: t.textTheme.button?.copyWith(
-                  color: c.onPrimary,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Get.width / 6),
+                child: TextButton.icon(
+                  onPressed: () {
+                    NoteListItem item = NoteListItem(
+                        index: currentIndex, text: "", checked: false);
+                    noteListItems.add(item);
+                    setState(() {
+                      controllers.add(TextEditingController());
+                      currentIndex = currentIndex + 1;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    color: c.outline,
+                    size: 20,
+                  ),
+                  label: Text(
+                    "Add Item",
+                    style: t.textTheme.button?.copyWith(
+                      color: c.outline,
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              )
+            ],
           ),
-        ),
-        body: ReorderableListView.builder(
-          onReorder: (int oldIndex, int newIndex) {
-            if (newIndex > oldIndex) newIndex--;
-            setState(() {
-              final _index = newIndex;
-              final _itemInDrag = noteListItems.removeAt(oldIndex);
-              final _controllerDrag = controllers.removeAt(oldIndex);
-              noteListItems.insert(_index, _itemInDrag);
-              controllers.insert(_index, _controllerDrag);
-            });
-          },
-          shrinkWrap: true,
-          itemCount: noteListItems.length,
-          itemBuilder: (context, index) {
-            if (kDebugMode) {
-              print("List Length : " + noteListItems.length.toString());
-              print("List Text : " + noteListItems[index].text.toString());
-            }
-            if (noteListItems.isNotEmpty) {
-              final item = noteListItems.elementAt(index);
-              return buildItem(item, index);
-            } else {
-              return const SizedBox();
-            }
-          },
         ),
       ),
     );
