@@ -10,7 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/views/misc/notes_web_view.dart';
+import 'package:notes/android/views/misc/pp_html_view.dart';
+import 'package:notes/android/views/misc/tc_html_view.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -616,7 +617,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
                           width: Get.width - 50,
-                          height: Get.height / 4,
+                          height: Get.height / 3,
                           decoration: BoxDecoration(
                             color: c.secondaryContainer,
                             borderRadius: BorderRadius.circular(25),
@@ -636,9 +637,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                     ),
                                   ),
                                   onPressed: () {
-                                    Get.to(() => const NotesWebView(
-                                        appBarTitle: 'Privacy Policy',
-                                        uri: privacyPolicyUrl));
+                                    Get.to(() => const PPHtmlView());
                                   },
                                   icon: Icon(
                                     Icons.policy_outlined,
@@ -646,6 +645,34 @@ class _SettingsScreenState extends State<SettingsScreen>
                                   ),
                                   label: Text(
                                     "Privacy Policy",
+                                    style: t.textTheme.button?.copyWith(
+                                      color: c.onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: Get.width - 70,
+                                height: 75,
+                                child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: c.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Get.to(() => const TCHtmlView());
+                                  },
+                                  icon: Icon(
+                                    Icons.gavel_outlined,
+                                    color: c.onPrimary,
+                                  ),
+                                  label: Text(
+                                    "Terms & Conditions",
                                     style: t.textTheme.button?.copyWith(
                                       color: c.onPrimary,
                                     ),
