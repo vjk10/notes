@@ -186,7 +186,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
         if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
           bool _autosave = await NotesDatabase().checkAutoSave();
           if (_autosave) {
-            NotesDatabase().saveExpenseSheet(
+            await NotesDatabase().saveExpenseSheet(
                 titleController, bodyController, false, expenses);
           }
         }

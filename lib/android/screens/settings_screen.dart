@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/misc/notes_web_view.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -606,42 +607,121 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             trailing: TextButton(
               onPressed: () {
-                Get.to(() => Theme(
-                      data: t.copyWith(
-                        colorScheme: c,
-                        cardColor: c.background,
-                        backgroundColor: c.background,
-                        appBarTheme: AppBarTheme(
-                          iconTheme: IconThemeData(
-                            color: c.onBackground,
+                Get.bottomSheet(
+                  BottomSheet(
+                    backgroundColor: Colors.transparent,
+                    onClosing: () {},
+                    builder: (_) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                          width: Get.width - 50,
+                          height: Get.height / 4,
+                          decoration: BoxDecoration(
+                            color: c.secondaryContainer,
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          color: c.background,
-                          elevation: 0,
-                          toolbarHeight: 80,
-                          titleTextStyle: t.textTheme.headline5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: Get.width - 70,
+                                height: 75,
+                                child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: c.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Get.to(() => const NotesWebView(
+                                        appBarTitle: 'Privacy Policy',
+                                        uri: privacyPolicyUrl));
+                                  },
+                                  icon: Icon(
+                                    Icons.policy_outlined,
+                                    color: c.onPrimary,
+                                  ),
+                                  label: Text(
+                                    "Privacy Policy",
+                                    style: t.textTheme.button?.copyWith(
+                                      color: c.onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: Get.width - 70,
+                                height: 75,
+                                child: TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: c.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      navToLicense();
+                                    },
+                                    icon: Icon(
+                                      Icons.lightbulb_outline,
+                                      color: c.onPrimary,
+                                    ),
+                                    label: Text(
+                                      "Licenses",
+                                      style: t.textTheme.button?.copyWith(
+                                        color: c.onPrimary,
+                                      ),
+                                    )),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      child: LicensePage(
-                        applicationIcon: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "notes",
-                              style:
-                                  t.textTheme.headline6?.copyWith(fontSize: 24),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                        applicationLegalese: "Simple notes taking app",
-                        applicationName: " ",
-                        applicationVersion:
-                            "v" + version + " (build v" + buildNumber + ")",
-                      ),
-                    ));
+                      );
+                    },
+                  ),
+                );
+                // Get.to(() => Theme(
+                //       data: t.copyWith(
+                //         colorScheme: c,
+                //         cardColor: c.background,
+                //         backgroundColor: c.background,
+                //         appBarTheme: AppBarTheme(
+                //           iconTheme: IconThemeData(
+                //             color: c.onBackground,
+                //           ),
+                //           color: c.background,
+                //           elevation: 0,
+                //           toolbarHeight: 80,
+                //           titleTextStyle: t.textTheme.headline5,
+                //         ),
+                //       ),
+                //       child: LicensePage(
+                //         applicationIcon: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.center,
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             Text(
+                //               "notes",
+                //               style:
+                //                   t.textTheme.headline6?.copyWith(fontSize: 24),
+                //             ),
+                //             const SizedBox(
+                //               height: 10,
+                //             ),
+                //           ],
+                //         ),
+                //         applicationLegalese: "Simple notes taking app",
+                //         applicationName: " ",
+                //         applicationVersion:
+                //             "v" + version + " (build v" + buildNumber + ")",
+                //       ),
+                //     ));
               },
               child: Text(
                 "v" + version + " (build v" + buildNumber + ")",
@@ -655,6 +735,43 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
       ),
     );
+  }
+
+  void navToLicense() {
+    Get.to(() => Theme(
+          data: t.copyWith(
+            colorScheme: c,
+            cardColor: c.background,
+            backgroundColor: c.background,
+            appBarTheme: AppBarTheme(
+              iconTheme: IconThemeData(
+                color: c.onBackground,
+              ),
+              color: c.background,
+              elevation: 0,
+              toolbarHeight: 80,
+              titleTextStyle: t.textTheme.headline5,
+            ),
+          ),
+          child: LicensePage(
+            applicationIcon: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "notes",
+                  style: t.textTheme.headline6?.copyWith(fontSize: 24),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+            applicationLegalese: "Simple notes taking app",
+            applicationName: " ",
+            applicationVersion: "v" + version + " (build v" + buildNumber + ")",
+          ),
+        ));
   }
 
   Container themeDataTile() {
