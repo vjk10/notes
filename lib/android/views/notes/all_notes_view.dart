@@ -369,6 +369,14 @@ class _AllNotesViewState extends State<AllNotesView> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: notesData.data?.length,
           itemBuilder: (context, noteIndex) {
+            if (kDebugMode) {
+              print("ISLIST" +
+                  notesData.data![noteIndex].data["isList"].toString());
+              print("ISEXPENSE" +
+                  notesData.data![noteIndex].data["isExpense"].toString());
+              print("PINNED" +
+                  notesData.data![noteIndex].data["pinned"].toString());
+            }
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 5.0,
@@ -394,8 +402,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                     10.0, // Offset value to show menuItem from the selected item
                 menuItems: <FocusedMenuItem>[
                   // Add Each FocusedMenuItem  for Menu Options
-                  if (_accountLinked &&
-                      !notesData.data![noteIndex].data["isList"])
+                  if (_accountLinked)
                     FocusedMenuItem(
                       backgroundColor: c.secondaryContainer,
                       title: Text(
@@ -438,17 +445,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                       color: c.onSecondaryContainer,
                     ),
                     onPressed: () async {
-                      var _note = Note(
-                        body:
-                            notesData.data![noteIndex].data["body"].toString(),
-                        creationTime:
-                            DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                        title:
-                            notesData.data![noteIndex].data["title"].toString(),
-                        pinned: !notesData.data![noteIndex].data["pinned"],
-                      );
-                      await NotesDatabase().updateNote(
-                          _note, notesData.data![noteIndex].id, true);
+                      await pinNote(notesData, noteIndex);
                     },
                   ),
                   FocusedMenuItem(
@@ -489,14 +486,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                       color: c.onSecondaryContainer,
                     ),
                     onPressed: () {
-                      Share.share(
-                        "*" +
-                            notesData.data![noteIndex].data["title"]
-                                .toString() +
-                            "*" +
-                            "\n\n" +
-                            notesData.data![noteIndex].data["body"].toString(),
-                      );
+                      shareNote(notesData, noteIndex);
                     },
                   ),
                   FocusedMenuItem(
@@ -519,10 +509,6 @@ class _AllNotesViewState extends State<AllNotesView> {
                 ],
                 child: GestureDetector(
                   onTap: () {
-                    if (kDebugMode) {
-                      print(notesData.data![noteIndex].data["isList"] ??
-                          false == true);
-                    }
                     if (notesData.data![noteIndex].data["isList"] ??
                         false == true) {
                       Get.to(
@@ -557,8 +543,12 @@ class _AllNotesViewState extends State<AllNotesView> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Text(notesData.data![noteIndex].data["body"]
-                              .toString())
+                          Text(
+                            notesData.data![noteIndex].data["body"].toString(),
+                            maxLines: 15,
+                            softWrap: true,
+                            overflow: TextOverflow.fade,
+                          )
                         ],
                       ),
                     ),
@@ -568,5 +558,31 @@ class _AllNotesViewState extends State<AllNotesView> {
             );
           }),
     );
+  }
+
+  void shareNote(
+      AsyncSnapshot<List<DocumentSnapshot>> notesData, int noteIndex) {
+    Share.share(
+      "*" +
+          notesData.data![noteIndex].data["title"].toString() +
+          "*" +
+          "\n\n" +
+          notesData.data![noteIndex].data["body"].toString(),
+    );
+  }
+
+  Future<void> pinNote(
+      AsyncSnapshot<List<DocumentSnapshot>> notesData, int noteIndex) async {
+    var _note = Note(
+      body: notesData.data![noteIndex].data["body"].toString(),
+      creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      title: notesData.data![noteIndex].data["title"].toString(),
+      pinned: !notesData.data![noteIndex].data["pinned"],
+      isExpense: notesData.data![noteIndex].data["isExpense"],
+      isList: notesData.data![noteIndex].data["isList"],
+      totalItems: notesData.data![noteIndex].data["totalItems"],
+    );
+    await NotesDatabase()
+        .updateNote(_note, notesData.data![noteIndex].id, true);
   }
 }

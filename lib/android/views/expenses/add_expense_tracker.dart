@@ -227,8 +227,12 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
               child: IconButton(
                 onPressed: () async {
                   if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
-                    NotesDatabase().saveExpenseSheet(
-                        titleController, bodyController, false, expenses);
+                    await NotesDatabase()
+                        .saveExpenseSheet(
+                            titleController, bodyController, false, expenses)
+                        .whenComplete(() {
+                      Get.offAllNamed('/mainScreen');
+                    });
                   }
                 },
                 icon: Icon(

@@ -44,12 +44,14 @@ class _AddNoteViewState extends State<AddNoteView> {
           if (titleController.text.isNotEmpty ||
               bodyController.text.isNotEmpty) {
             note = Note(
-              body: bodyController.text.toString(),
-              creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-              title: titleController.text.toString(),
-              pinned: false,
-            );
-            NotesDatabase().addNote(note, true);
+                body: bodyController.text.toString(),
+                creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                title: titleController.text.toString(),
+                pinned: false,
+                isList: false,
+                isExpense: false,
+                totalItems: 0);
+            NotesDatabase().addNote(note, false);
           } else {
             Get.offAllNamed('/mainScreen');
           }
@@ -71,12 +73,14 @@ class _AddNoteViewState extends State<AddNoteView> {
                   if (titleController.text.isNotEmpty ||
                       bodyController.text.isNotEmpty) {
                     note = Note(
-                      body: bodyController.text.toString(),
-                      creationTime:
-                          DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                      title: titleController.text.toString(),
-                      pinned: false,
-                    );
+                        body: bodyController.text.toString(),
+                        creationTime:
+                            DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        title: titleController.text.toString(),
+                        pinned: false,
+                        isList: false,
+                        isExpense: false,
+                        totalItems: 0);
                     NotesDatabase().addNote(note, false);
                   } else {
                     // Get.offAllNamed('/mainScreen');
@@ -130,12 +134,14 @@ class _AddNoteViewState extends State<AddNoteView> {
                   if (titleController.text.isNotEmpty ||
                       bodyController.text.isNotEmpty) {
                     note = Note(
-                      body: bodyController.text.toString(),
-                      creationTime:
-                          DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                      title: titleController.text.toString(),
-                      pinned: false,
-                    );
+                        body: bodyController.text.toString(),
+                        creationTime:
+                            DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        title: titleController.text.toString(),
+                        pinned: false,
+                        isList: false,
+                        isExpense: false,
+                        totalItems: 0);
                     NotesDatabase().addNote(note, false);
                   } else {
                     Get.showSnackbar(GetSnackBar(

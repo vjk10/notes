@@ -81,7 +81,9 @@ class _NotePageState extends State<NotePage> {
                           DateFormat('yyyy-MM-dd').format(DateTime.now()),
                       title: titleController.text.toString(),
                       pinned: pinned,
-                      isList: false);
+                      isList: false,
+                      isExpense: false,
+                      totalItems: 0);
                   NotesDatabase().updateNote(note, widget.noteId, true);
                 } else {
                   Get.offAllNamed('/mainScreen');

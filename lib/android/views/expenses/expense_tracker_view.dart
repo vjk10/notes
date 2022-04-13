@@ -231,9 +231,14 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
         bool _autosave = await NotesDatabase().checkAutoSave();
         if (_autosave) {
           NotesDatabase().updateExpenseSheet(
-              titleController, bodyController, pinned, expenses);
+            titleController,
+            bodyController,
+            pinned,
+            expenses,
+            widget.noteId,
+          );
         }
-        Get.offAllNamed('/mainScreen');
+        // Get.offAllNamed('/mainScreen');
         return true;
       },
       child: Scaffold(
@@ -252,7 +257,12 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
               bool _autosave = await NotesDatabase().checkAutoSave();
               if (_autosave) {
                 NotesDatabase().updateExpenseSheet(
-                    titleController, bodyController, false, expenses);
+                  titleController,
+                  bodyController,
+                  false,
+                  expenses,
+                  widget.noteId,
+                );
                 Get.offAllNamed('/mainScreen');
               } else {
                 Get.offAllNamed('/mainScreen');
@@ -269,7 +279,12 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
               child: IconButton(
                 onPressed: () async {
                   NotesDatabase().updateExpenseSheet(
-                      titleController, bodyController, pinned, expenses);
+                    titleController,
+                    bodyController,
+                    pinned,
+                    expenses,
+                    widget.noteId,
+                  );
                 },
                 icon: Icon(
                   Icons.save_outlined,

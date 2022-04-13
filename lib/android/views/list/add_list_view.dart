@@ -55,7 +55,7 @@ class _AddListViewState extends State<AddListView> {
         bool _autosave = await NotesDatabase().checkAutoSave();
         if (_autosave) {
           if (noteListItems.isNotEmpty && titleController.text.isNotEmpty) {
-            NotesDatabase()
+            await NotesDatabase()
                 .saveList(titleController, controllers, false, noteListItems);
           }
         }
@@ -75,7 +75,7 @@ class _AddListViewState extends State<AddListView> {
                 if (_autosave) {
                   if (noteListItems.isNotEmpty &&
                       titleController.text.isNotEmpty) {
-                    NotesDatabase().saveList(
+                    await NotesDatabase().saveList(
                         titleController, controllers, false, noteListItems);
                   }
                 }
@@ -121,8 +121,12 @@ class _AddListViewState extends State<AddListView> {
               padding: const EdgeInsets.all(10.0),
               child: TextButton.icon(
                 onPressed: () async {
-                  NotesDatabase().saveList(
-                      titleController, controllers, false, noteListItems);
+                  await NotesDatabase()
+                      .saveList(
+                          titleController, controllers, false, noteListItems)
+                      .whenComplete(() {
+                    Get.offAllNamed('/mainScreen');
+                  });
                 },
                 icon: Icon(
                   Icons.save_outlined,

@@ -60,7 +60,10 @@ class NotesDatabase {
       "title": note.title,
       "body": note.body,
       "creationTime": note.creationTime,
-      "pinned": note.pinned
+      "pinned": note.pinned,
+      "isList": note.isList,
+      "isExpense": note.isExpense,
+      "totalItems": note.totalItems
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (!importing) {
@@ -93,7 +96,10 @@ class NotesDatabase {
       "title": note.title,
       "body": note.body,
       "creationTime": note.creationTime,
-      "pinned": note.pinned
+      "pinned": note.pinned,
+      "isList": note.isList,
+      "isExpense": note.isExpense,
+      "totalItems": note.totalItems
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (goBack) {
@@ -305,41 +311,61 @@ class NotesDatabase {
     });
   }
 
-  saveList(
+  Future saveList(
     TextEditingController titleController,
     List<TextEditingController> controllers,
     bool pinned,
     List<NoteListItem> noteList,
-  ) {
+  ) async {
     if (controllers.isNotEmpty) {
       if (titleController.text.isNotEmpty && noteList.isNotEmpty) {
-        ScientISSTdb.instance
-            .collection("notes")
-            .document(titleController.text)
-            .set({
-          "title": titleController.text,
-          "body": noteList.first.text,
-          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          "pinned": pinned,
-          "isList": true,
-          "isExpense": false,
-          "totalItems": noteList.length
-        });
-        for (var c = 0; c < noteList.length; c++) {
-          if (kDebugMode) {
-            print(noteList[c].text.toString());
+        var note = Note(
+            title: titleController.text,
+            body: noteList.first.text,
+            creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+            pinned: pinned,
+            isList: true,
+            isExpense: false,
+            totalItems: noteList.length);
+        await ScientISSTdb.instance.collection("notes").add({
+          "title": note.title,
+          "body": note.body,
+          "creationTime": note.creationTime,
+          "pinned": note.pinned,
+          "isList": note.isList,
+          "isExpense": note.isExpense,
+          "totalItems": note.totalItems
+        }).then((value) {
+          // ScientISSTdb.instance
+          //     .collection("notes")
+          //     .document(titleController.text)
+          //     .set({
+          //   "title": titleController.text,
+          //   "body": noteList.first.text,
+          //   "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          //   "pinned": pinned,
+          //   "isList": true,
+          //   "isExpense": false,
+          //   "totalItems": noteList.length
+          // });
+          for (var c = 0; c < noteList.length; c++) {
+            if (kDebugMode) {
+              print(noteList[c].text.toString());
+              print("ID" + value.id.toString());
+            }
+            ScientISSTdb.instance
+                .collection("notes")
+                // .document(titleController.text)
+                .document(value.id)
+                .collection(c.toString())
+                .document(c.toString())
+                .set({
+              "text": noteList[c].text,
+              "checked": noteList[c].checked,
+              "index": noteList[c].index,
+            });
           }
-          ScientISSTdb.instance
-              .collection("notes")
-              .document(titleController.text)
-              .collection(c.toString())
-              .document(c.toString())
-              .set({
-            "text": noteList[c].text,
-            "checked": noteList[c].checked,
-            "index": noteList[c].index,
-          });
-        }
+        });
       } else if (noteList.isEmpty) {
         Get.showSnackbar(GetSnackBar(
           shouldIconPulse: false,
@@ -395,18 +421,22 @@ class NotesDatabase {
     }
   }
 
-  updateList(
+  Future updateList(
     TextEditingController titleController,
     List<TextEditingController> controllers,
     bool pinned,
     List<NoteListItem> noteList,
-  ) {
+    String noteId,
+  ) async {
     if (controllers.isNotEmpty) {
       if (titleController.text.isNotEmpty &&
           controllers.first.text.isNotEmpty) {
-        ScientISSTdb.instance
+        if (kDebugMode) {
+          print(noteId);
+        }
+        await ScientISSTdb.instance
             .collection("notes")
-            .document(titleController.text)
+            .document(noteId)
             .update({
           "title": titleController.text,
           "body": noteList.first.text,
@@ -420,9 +450,9 @@ class NotesDatabase {
           if (kDebugMode) {
             print(noteList[c].text.toString());
           }
-          ScientISSTdb.instance
+          await ScientISSTdb.instance
               .collection("notes")
-              .document(titleController.text)
+              .document(noteId)
               .collection(c.toString())
               .document(c.toString())
               .set({
@@ -469,42 +499,61 @@ class NotesDatabase {
     }
   }
 
-  saveExpenseSheet(
+  Future saveExpenseSheet(
     TextEditingController titleController,
     TextEditingController bodyController,
     bool pinned,
     List<ExpenseModel> expenses,
-  ) {
+  ) async {
     if (titleController.text.isNotEmpty) {
       if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
-        ScientISSTdb.instance
-            .collection("notes")
-            .document(titleController.text)
-            .set({
-          "title": titleController.text,
-          "body": bodyController.text,
-          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          "pinned": pinned,
-          "isList": false,
-          "isExpense": true,
-          "totalItems": expenses.length
-        });
-        for (var c = 0; c < expenses.length; c++) {
-          if (kDebugMode) {
-            print(expenses[c].type.toString());
+        var note = Note(
+          title: titleController.text,
+          body: bodyController.text,
+          creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          pinned: pinned,
+          isList: false,
+          isExpense: true,
+          totalItems: expenses.length,
+        );
+        await ScientISSTdb.instance.collection("notes").add({
+          "title": note.title,
+          "body": note.body,
+          "creationTime": note.creationTime,
+          "pinned": note.pinned,
+          "isList": note.isList,
+          "isExpense": note.isExpense,
+          "totalItems": note.totalItems
+        }).then((value) async {
+          for (var c = 0; c < expenses.length; c++) {
+            if (kDebugMode) {
+              print(expenses[c].type.toString());
+            }
+            await ScientISSTdb.instance
+                .collection("notes")
+                .document(value.id)
+                .collection(c.toString())
+                .document(c.toString())
+                .set({
+              "index": expenses[c].index,
+              "type": expenses[c].type,
+              "amount": expenses[c].amount,
+              "description": expenses[c].description,
+            });
           }
-          ScientISSTdb.instance
-              .collection("notes")
-              .document(titleController.text)
-              .collection(c.toString())
-              .document(c.toString())
-              .set({
-            "index": expenses[c].index,
-            "type": expenses[c].type,
-            "amount": expenses[c].amount,
-            "description": expenses[c].description,
-          });
-        }
+        });
+        // ScientISSTdb.instance
+        //     .collection("notes")
+        //     .document(titleController.text)
+        //     .set({
+        //   "title": titleController.text,
+        //   "body": bodyController.text,
+        //   "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        //   "pinned": pinned,
+        //   "isList": false,
+        //   "isExpense": true,
+        //   "totalItems": expenses.length
+        // });
       } else {
         Get.showSnackbar(GetSnackBar(
           shouldIconPulse: false,
@@ -543,17 +592,18 @@ class NotesDatabase {
     }
   }
 
-  updateExpenseSheet(
+  Future updateExpenseSheet(
     TextEditingController titleController,
     TextEditingController bodyController,
     bool pinned,
     List<ExpenseModel> expenses,
-  ) {
+    String noteId,
+  ) async {
     if (titleController.text.isNotEmpty) {
       if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
-        ScientISSTdb.instance
+        await ScientISSTdb.instance
             .collection("notes")
-            .document(titleController.text)
+            .document(noteId)
             .update({
           "title": titleController.text,
           "body": bodyController.text,
@@ -567,9 +617,9 @@ class NotesDatabase {
           if (kDebugMode) {
             print(expenses[c].type.toString());
           }
-          ScientISSTdb.instance
+          await ScientISSTdb.instance
               .collection("notes")
-              .document(titleController.text)
+              .document(noteId)
               .collection(c.toString())
               .document(c.toString())
               .set({

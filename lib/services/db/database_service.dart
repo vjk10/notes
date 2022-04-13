@@ -79,11 +79,14 @@ class DatabaseService {
           print("Note Title: " + element.get("title"));
         }
         var note = Note(
-            body: element.get("body").toString(),
-            creationTime: element.get("creationDate"),
-            title: element.get("title").toString(),
-            pinned: element.get("pinned"),
-            isList: element.get("isList"));
+          body: element.get("body").toString(),
+          creationTime: element.get("creationDate"),
+          title: element.get("title").toString(),
+          pinned: element.get("pinned"),
+          isList: element.get("isList"),
+          isExpense: element.get("isExpense"),
+          totalItems: element.get("totalItems"),
+        );
         await ScientISSTdb.instance
             .collection("notes")
             .document(element.get("noteId"))

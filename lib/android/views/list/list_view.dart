@@ -32,6 +32,7 @@ class _ListviewViewState extends State<ListviewView> {
   late DocumentSnapshot noteSnapshot;
   List<DocumentSnapshot> listSnapshot = [];
   List<CollectionReference> collectionSnapshot = [];
+  bool _saved = false;
 
   late String title, body;
   @override
@@ -99,8 +100,13 @@ class _ListviewViewState extends State<ListviewView> {
         bool _autosave = await NotesDatabase().checkAutoSave();
         if (_autosave) {
           if (noteListItems.isNotEmpty) {
-            NotesDatabase().updateList(
-                titleController, controllers, pinned, noteListItems);
+            await NotesDatabase().updateList(
+              titleController,
+              controllers,
+              pinned,
+              noteListItems,
+              widget.noteId,
+            );
           }
         }
         Get.offAllNamed('/mainScreen');
@@ -118,8 +124,13 @@ class _ListviewViewState extends State<ListviewView> {
                 bool _autosave = await NotesDatabase().checkAutoSave();
                 if (_autosave) {
                   if (noteListItems.isNotEmpty) {
-                    NotesDatabase().updateList(
-                        titleController, controllers, pinned, noteListItems);
+                    await NotesDatabase().updateList(
+                      titleController,
+                      controllers,
+                      pinned,
+                      noteListItems,
+                      widget.noteId,
+                    );
                   }
                 }
                 Get.offAllNamed('/mainScreen');
@@ -139,6 +150,7 @@ class _ListviewViewState extends State<ListviewView> {
               style: t.textTheme.headline4,
               onChanged: (value) {
                 setState(() {
+                  _saved = false;
                   title = value.toString();
                 });
               },
@@ -164,8 +176,21 @@ class _ListviewViewState extends State<ListviewView> {
               padding: const EdgeInsets.all(10.0),
               child: TextButton.icon(
                 onPressed: () async {
-                  NotesDatabase().updateList(
-                      titleController, controllers, pinned, noteListItems);
+                  if (!_saved) {
+                    await NotesDatabase()
+                        .updateList(
+                      titleController,
+                      controllers,
+                      pinned,
+                      noteListItems,
+                      widget.noteId,
+                    )
+                        .whenComplete(() {
+                      setState(() {
+                        _saved = true;
+                      });
+                    });
+                  }
                 },
                 icon: Icon(
                   Icons.save_outlined,
@@ -256,6 +281,7 @@ class _ListviewViewState extends State<ListviewView> {
           GestureDetector(
             onTap: () {
               setState(() {
+                _saved = false;
                 item.checked = !item.checked;
               });
             },
@@ -274,6 +300,7 @@ class _ListviewViewState extends State<ListviewView> {
               controller: controllers[index],
               onChanged: (value) {
                 setState(() {
+                  _saved = false;
                   item.text = controllers[index].text;
                 });
               },
@@ -305,6 +332,7 @@ class _ListviewViewState extends State<ListviewView> {
             print(item);
           }
           setState(() {
+            _saved = false;
             noteListItems.removeAt(index);
             controllers.removeAt(index);
           });
