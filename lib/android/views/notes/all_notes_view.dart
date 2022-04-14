@@ -44,7 +44,6 @@ class _AllNotesViewState extends State<AllNotesView> {
   bool isLoading = false;
   bool _accountLinked = false;
   bool userSignedIn = false;
-  bool pinnedNotes = false;
   bool _isVisible = true;
 
   late ScrollController _scrollController;
@@ -74,19 +73,10 @@ class _AllNotesViewState extends State<AllNotesView> {
         }
       }
     });
-    checkPinned();
     super.initState();
     if (kDebugMode) {
       print("ALL NOTES INIT STATE");
     }
-  }
-
-  checkPinned() {
-    widget.pinnedNotesFuture.then((value) {
-      setState(() {
-        pinnedNotes = value.isNotEmpty;
-      });
-    });
   }
 
   initUser() async {
@@ -160,96 +150,21 @@ class _AllNotesViewState extends State<AllNotesView> {
       body: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          crossAxisAlignment: pinnedNotes
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Visibility(
-              visible: pinnedNotes,
-              child: Column(
-                crossAxisAlignment: pinnedNotes
-                    ? CrossAxisAlignment.start
-                    : CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 15.0,
-                    ),
-                    child: Text(
-                      "pinned",
-                      style: t.textTheme.bodyLarge,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  FutureBuilder(
-                    future: widget.pinnedNotesFuture,
-                    builder: (context,
-                        AsyncSnapshot<List<DocumentSnapshot>> notesData) {
-                      switch (notesData.connectionState) {
-                        case ConnectionState.waiting:
-                          {
-                            return const Center(
-                              child: NotesLoadingAndroid(),
-                            );
-                          }
-                        case ConnectionState.done:
-                          {
-                            switch (notesData.data!.length) {
-                              case 0:
-                                {
-                                  return const SizedBox();
-                                }
-                              default:
-                                {
-                                  return notesGrid(notesData);
-                                }
-                            }
-                          }
-                        default:
-                          {
-                            return Center(
-                              child: CircularProgressIndicator.adaptive(
-                                backgroundColor:
-                                    c.onBackground.withOpacity(0.2),
-                                valueColor:
-                                    AlwaysStoppedAnimation(c.onBackground),
-                              ),
-                            );
-                          }
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
             const SizedBox(
               height: 10,
             ),
-            Visibility(
-              visible: pinnedNotes,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20.0,
-                  vertical: 15.0,
-                ),
-                child: Text(
-                  "others",
-                  style: t.textTheme.bodyLarge,
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ),
-            FutureBuilder(
-              future: widget.notesFuture,
-              builder:
-                  (context, AsyncSnapshot<List<DocumentSnapshot>> notesData) {
-                switch (notesData.connectionState) {
+            // PINNED NOTES
+            StreamBuilder<List<DocumentSnapshot>>(
+              stream:
+                  ScientISSTdb.instance.collection("notes").watchDocuments(),
+              builder: ((context,
+                  AsyncSnapshot<List<DocumentSnapshot>> pinnedSnapshot) {
+                pinnedSnapshot.data
+                    ?.removeWhere((element) => element.data["pinned"] == false);
+                switch (pinnedSnapshot.connectionState) {
                   case ConnectionState.waiting:
                     {
                       return const Center(
@@ -258,28 +173,135 @@ class _AllNotesViewState extends State<AllNotesView> {
                     }
                   case ConnectionState.done:
                     {
-                      switch (notesData.data!.length) {
+                      switch (pinnedSnapshot.data!.length) {
                         case 0:
                           {
-                            return const NoNotesFound();
+                            return const SizedBox();
                           }
                         default:
                           {
-                            return notesGrid(notesData);
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                    vertical: 15.0,
+                                  ),
+                                  child: Text(
+                                    "Pinned",
+                                    style: t.textTheme.bodyLarge,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                notesGrid(pinnedSnapshot),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                    vertical: 15.0,
+                                  ),
+                                  child: Text(
+                                    "Others",
+                                    style: t.textTheme.bodyLarge,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
+                            );
                           }
                       }
                     }
                   default:
                     {
-                      return Center(
-                        child: CircularProgressIndicator.adaptive(
-                          backgroundColor: c.onBackground.withOpacity(0.2),
-                          valueColor: AlwaysStoppedAnimation(c.onBackground),
-                        ),
-                      );
+                      switch (pinnedSnapshot.data!.length) {
+                        case 0:
+                          {
+                            return const SizedBox();
+                          }
+                        default:
+                          {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                    vertical: 15.0,
+                                  ),
+                                  child: Text(
+                                    "Pinned",
+                                    style: t.textTheme.bodyLarge,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                notesGrid(pinnedSnapshot),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                    vertical: 15.0,
+                                  ),
+                                  child: Text(
+                                    "Others",
+                                    style: t.textTheme.bodyLarge,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                      }
                     }
                 }
-              },
+              }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            // OTHER NOTES
+            StreamBuilder<List<DocumentSnapshot>>(
+              stream:
+                  ScientISSTdb.instance.collection("notes").watchDocuments(),
+              builder: ((context,
+                  AsyncSnapshot<List<DocumentSnapshot>> otherSnapshot) {
+                otherSnapshot.data
+                    ?.removeWhere((element) => element.data["pinned"] == true);
+                switch (otherSnapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    {
+                      return const Center(
+                        child: NotesLoadingAndroid(),
+                      );
+                    }
+                  case ConnectionState.done:
+                    {
+                      switch (otherSnapshot.data!.length) {
+                        case 0:
+                          {
+                            return const Center(child: NoNotesFound());
+                          }
+                        default:
+                          {
+                            return notesGrid(otherSnapshot);
+                          }
+                      }
+                    }
+                  default:
+                    {
+                      switch (otherSnapshot.data!.length) {
+                        case 0:
+                          {
+                            return const Center(child: NoNotesFound());
+                          }
+                        default:
+                          {
+                            return notesGrid(otherSnapshot);
+                          }
+                      }
+                    }
+                }
+              }),
             ),
             const SizedBox(
               height: 20,

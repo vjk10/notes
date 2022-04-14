@@ -67,7 +67,8 @@ class NotesDatabase {
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (!importing) {
-        Get.offAllNamed('/mainScreen');
+        // Get.offAllNamed('/mainScreen');
+        Get.back();
         Get.showSnackbar(GetSnackBar(
           shouldIconPulse: false,
           backgroundColor: Get.theme.colorScheme.surface,
@@ -103,7 +104,8 @@ class NotesDatabase {
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (goBack) {
-        Get.offAllNamed('/mainScreen');
+        // Get.offAllNamed('/mainScreen');
+        Get.back();
       }
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
@@ -131,7 +133,8 @@ class NotesDatabase {
         .delete()
         .whenComplete(() {
       HapticFeedback.heavyImpact();
-      Get.offAllNamed('/mainScreen');
+      // Get.offAllNamed('/mainScreen');
+      Get.back();
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,
@@ -187,7 +190,8 @@ class NotesDatabase {
       "creationTime": folder.creationTime,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
-      Get.offAll(() => const MainScreen(selectedIndex: 1));
+      // Get.offAll(() => const MainScreen(selectedIndex: 1));
+      Get.to(() => const MainScreen(selectedIndex: 1));
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,
@@ -217,7 +221,8 @@ class NotesDatabase {
     ).whenComplete(
       () {
         HapticFeedback.heavyImpact();
-        Get.offAllNamed('/mainScreen');
+        // Get.offAllNamed('/mainScreen');
+        Get.back();
         Get.showSnackbar(
           GetSnackBar(
             shouldIconPulse: false,
@@ -247,7 +252,8 @@ class NotesDatabase {
         .delete()
         .whenComplete(() {
       HapticFeedback.heavyImpact();
-      Get.offAllNamed('/mainScreen');
+      // Get.offAllNamed('/mainScreen');
+      Get.back();
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,
@@ -291,7 +297,8 @@ class NotesDatabase {
         .delete()
         .whenComplete(() {
       HapticFeedback.heavyImpact();
-      Get.offAll(() => FolderView(folderName: folderName));
+      // Get.offAll(() => FolderView(folderName: folderName));
+      Get.to(() => FolderView(folderName: folderName));
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,

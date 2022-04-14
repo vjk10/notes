@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none' 
 
-version: 1.0.4+1
+version: 1.0.4+4
 
 environment:
   sdk: ">=2.16.0 <3.0.0"

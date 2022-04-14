@@ -44,7 +44,7 @@ class _PickFolderState extends State<PickFolder> {
         automaticallyImplyLeading: false,
         title: Text(
           "select folder",
-          style: t.textTheme.headline6,
+          style: t.textTheme.headline5,
         ),
       ),
       body: FutureBuilder(
@@ -60,11 +60,13 @@ class _PickFolderState extends State<PickFolder> {
                 switch (foldersData.data?.length) {
                   case 0:
                     {
-                      return Text(
-                        "No folders",
-                        textAlign: TextAlign.center,
-                        style: t.textTheme.bodyText1?.copyWith(
-                          color: c.onSurface,
+                      return Center(
+                        child: Text(
+                          "No folders",
+                          textAlign: TextAlign.center,
+                          style: t.textTheme.bodyText1?.copyWith(
+                            color: c.onSurface,
+                          ),
                         ),
                       );
                     }
