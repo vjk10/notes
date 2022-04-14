@@ -3,8 +3,16 @@ import 'package:scientisst_db/scientisst_db.dart';
 import 'package:notes/services/imports.dart';
 
 class DatabaseService {
-  backUpSingleNote(String uid, String noteId, String title, String body,
-      String creationDate, bool pinned) async {
+  backUpSingleNote(
+      String uid,
+      String noteId,
+      String title,
+      String body,
+      String creationDate,
+      bool pinned,
+      bool isList,
+      bool isExpense,
+      int totalItems) async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
@@ -82,10 +90,10 @@ class DatabaseService {
           body: element.get("body").toString(),
           creationTime: element.get("creationDate"),
           title: element.get("title").toString(),
-          pinned: element.get("pinned"),
-          isList: element.get("isList"),
-          isExpense: element.get("isExpense"),
-          totalItems: element.get("totalItems"),
+          pinned: element.get("pinned") as bool,
+          isList: element.get("isList") as bool,
+          isExpense: element.get("isExpense") as bool,
+          totalItems: element.get("totalItems") as int,
         );
         await ScientISSTdb.instance
             .collection("notes")
@@ -95,7 +103,9 @@ class DatabaseService {
           "body": note.body,
           "creationTime": note.creationTime,
           "pinned": note.pinned,
-          "isList": note.isList
+          "isList": note.isList,
+          "isExpense": note.isExpense,
+          "totalItems": note.totalItems,
         });
       }
       Get.back();

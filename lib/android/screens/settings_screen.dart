@@ -357,7 +357,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 visible: _accountLinked,
                 child: cloudBackupTile(),
               ),
-              materialYou(),
+              if (m3YouAvail) materialYou(),
               Consumer<ThemeNotifier>(
                 builder: (context, notifier, child) => Visibility(
                   visible: !notifier.material3,
@@ -617,7 +617,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
                           width: Get.width - 50,
-                          height: Get.height / 3,
+                          height: Get.height / 2,
                           decoration: BoxDecoration(
                             color: c.secondaryContainer,
                             borderRadius: BorderRadius.circular(25),

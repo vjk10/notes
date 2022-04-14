@@ -65,6 +65,7 @@ class MyApp extends StatelessWidget {
             return DynamicColorBuilder(builder: (CorePalette? _palette) {
               if (_palette != null) {
                 palette = _palette;
+                m3YouAvail = true;
                 m3Light = DynamicColorScheme.generate(_palette, dark: false);
                 m3Dark = DynamicColorScheme.generate(_palette, dark: true);
                 if (notifier.material3) {
@@ -92,27 +93,6 @@ class MyApp extends StatelessWidget {
                     home: const SplashScreen(),
                   );
                 } else {
-                  // return GetMaterialApp(
-                  //   debugShowCheckedModeBanner: kDebugMode,
-                  //   theme: androidThemeDark,
-                  //   darkTheme: androidThemeDark,
-                  //   routes: {
-                  //     '/splash': (context) => const SplashScreen(),
-                  //     '/mainScreen': (context) => const MainScreen(
-                  //           selectedIndex: 0,
-                  //         ),
-                  //     '/onboarding1': (context) => const OnBoarding1(),
-                  //     '/onboarding2': (context) => const OnBoarding2(),
-                  //     '/onboarding3': (context) => const OnBoarding3(),
-                  //     '/onboarding4': (context) => const OnBoarding4(),
-                  //     '/addFolder': (context) => const AddFolderView(),
-                  //     '/addNote': (context) => const AddNoteView(),
-                  //     '/settings': (contex) => const SettingsScreen(),
-                  //     '/clipboard': (contex) => const ClipBoard(),
-                  //   },
-                  //   title: 'Notes',
-                  //   home: const SplashScreen(),
-                  // );
                   return DynamicTheme(
                     themeCollection: themeCollection,
                     defaultThemeId: AppThemes.regular,
@@ -139,26 +119,29 @@ class MyApp extends StatelessWidget {
                   );
                 }
               } else {
-                return GetMaterialApp(
-                  debugShowCheckedModeBanner: kDebugMode,
-                  theme: androidThemeRegular,
-                  darkTheme: androidThemeDark,
-                  routes: {
-                    '/splash': (context) => const SplashScreen(),
-                    '/mainScreen': (context) => const MainScreen(
-                          selectedIndex: 0,
-                        ),
-                    '/onboarding1': (context) => const OnBoarding1(),
-                    '/onboarding2': (context) => const OnBoarding2(),
-                    '/onboarding3': (context) => const OnBoarding3(),
-                    '/onboarding4': (context) => const OnBoarding4(),
-                    '/addFolder': (context) => const AddFolderView(),
-                    '/addNote': (context) => const AddNoteView(),
-                    '/settings': (contex) => const SettingsScreen(),
-                    '/clipboard': (contex) => const ClipBoard(),
-                  },
-                  title: 'Notes',
-                  home: const SplashScreen(),
+                return DynamicTheme(
+                  themeCollection: themeCollection,
+                  defaultThemeId: AppThemes.regular,
+                  builder: (context, theme) => GetMaterialApp(
+                    debugShowCheckedModeBanner: kDebugMode,
+                    theme: theme,
+                    routes: {
+                      '/splash': (context) => const SplashScreen(),
+                      '/mainScreen': (context) => const MainScreen(
+                            selectedIndex: 0,
+                          ),
+                      '/onboarding1': (context) => const OnBoarding1(),
+                      '/onboarding2': (context) => const OnBoarding2(),
+                      '/onboarding3': (context) => const OnBoarding3(),
+                      '/onboarding4': (context) => const OnBoarding4(),
+                      '/addFolder': (context) => const AddFolderView(),
+                      '/addNote': (context) => const AddNoteView(),
+                      '/settings': (contex) => const SettingsScreen(),
+                      '/clipboard': (contex) => const ClipBoard(),
+                    },
+                    title: 'Notes',
+                    home: const SplashScreen(),
+                  ),
                 );
               }
             });

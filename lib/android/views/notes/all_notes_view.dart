@@ -440,13 +440,17 @@ class _AllNotesViewState extends State<AllNotesView> {
                       ),
                       onPressed: () {
                         DatabaseService().backUpSingleNote(
-                            user.uid,
-                            notesData.data![noteIndex].id,
-                            notesData.data![noteIndex].data["title"].toString(),
-                            notesData.data![noteIndex].data["body"].toString(),
-                            notesData.data![noteIndex].data["creationTime"]
-                                .toString(),
-                            notesData.data![noteIndex].data["pinned"] ?? false);
+                          user.uid,
+                          notesData.data![noteIndex].id,
+                          notesData.data![noteIndex].data["title"].toString(),
+                          notesData.data![noteIndex].data["body"].toString(),
+                          notesData.data![noteIndex].data["creationTime"]
+                              .toString(),
+                          notesData.data![noteIndex].data["pinned"] ?? false,
+                          notesData.data![noteIndex].data["isList"] ?? false,
+                          notesData.data![noteIndex].data["isExpense"] ?? false,
+                          notesData.data![noteIndex].data["totalItem"] ?? 0,
+                        );
                       },
                     ),
                   FocusedMenuItem(

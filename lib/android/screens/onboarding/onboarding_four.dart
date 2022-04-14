@@ -8,6 +8,7 @@ import 'package:notes/android/data/data.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../services/theme/android_app_themes.dart';
 
@@ -30,21 +31,36 @@ class _OnBoarding4State extends State<OnBoarding4> {
     super.initState();
   }
 
-  getTheme() {
-    var primary = palette.primary.toString();
-    if (primary.isNotEmpty) {
-      setState(() {
-        material3Available = true;
-      });
+  getTheme() async {
+    if (m3YouAvail) {
+      var primary = palette.primary.toString();
+      if (primary.isNotEmpty) {
+        setState(() {
+          material3Available = true;
+        });
+      }
     }
-    var themeID = DynamicTheme.of(context)!.themeId;
-    setState(() {
-      selectedThemeId = themeID;
-      selectedTheme = AppThemes().getThemeName(themeID);
-    });
+    try {
+      var themeID = DynamicTheme.of(context)!.themeId;
+      setState(() {
+        selectedThemeId = themeID;
+        selectedTheme = AppThemes().getThemeName(themeID);
+      });
 
-    if (kDebugMode) {
-      print("SELECTED THEME: " + selectedTheme);
+      if (kDebugMode) {
+        print("SELECTED THEME: " + selectedTheme);
+      }
+    } catch (e) {
+      var _pref = await SharedPreferences.getInstance();
+      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      if (kDebugMode) {
+        print("Selected Theme: " + selectedThemeId.toString());
+      }
+      if (selectedTheme.isEmpty) {
+        setState(() {
+          selectedTheme = AppThemes().getThemeName(selectedThemeId);
+        });
+      }
     }
   }
 
