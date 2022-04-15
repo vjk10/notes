@@ -6,6 +6,7 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:notes/android/data/data.dart';
@@ -30,6 +31,7 @@ import 'android/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
@@ -69,34 +71,67 @@ class MyApp extends StatelessWidget {
                 m3Light = DynamicColorScheme.generate(_palette, dark: false);
                 m3Dark = DynamicColorScheme.generate(_palette, dark: true);
                 if (notifier.material3) {
-                  return GetMaterialApp(
-                    themeMode: ThemeMode.system,
-                    debugShowCheckedModeBanner: kDebugMode,
-                    theme: androidThemeDark.copyWith(colorScheme: m3Light),
-                    darkTheme:
-                        androidThemeRegular.copyWith(colorScheme: m3Dark),
-                    routes: {
-                      '/splash': (context) => const SplashScreen(),
-                      '/mainScreen': (context) => const MainScreen(
-                            selectedIndex: 0,
-                          ),
-                      '/onboarding1': (context) => const OnBoarding1(),
-                      '/onboarding2': (context) => const OnBoarding2(),
-                      '/onboarding3': (context) => const OnBoarding3(),
-                      '/onboarding4': (context) => const OnBoarding4(),
-                      '/addFolder': (context) => const AddFolderView(),
-                      '/addNote': (context) => const AddNoteView(),
-                      '/settings': (contex) => const SettingsScreen(),
-                      '/clipboard': (contex) => const ClipBoard(),
-                    },
-                    title: 'Notes',
-                    home: const SplashScreen(),
+                  return ScreenUtilInit(
+                    builder: (_) => GetMaterialApp(
+                      themeMode: ThemeMode.system,
+                      debugShowCheckedModeBanner: kDebugMode,
+                      theme: androidThemeDark.copyWith(colorScheme: m3Light),
+                      darkTheme:
+                          androidThemeRegular.copyWith(colorScheme: m3Dark),
+                      routes: {
+                        '/splash': (context) => const SplashScreen(),
+                        '/mainScreen': (context) => const MainScreen(
+                              selectedIndex: 0,
+                            ),
+                        '/onboarding1': (context) => const OnBoarding1(),
+                        '/onboarding2': (context) => const OnBoarding2(),
+                        '/onboarding3': (context) => const OnBoarding3(),
+                        '/onboarding4': (context) => const OnBoarding4(),
+                        '/addFolder': (context) => const AddFolderView(),
+                        '/addNote': (context) => const AddNoteView(),
+                        '/settings': (contex) => const SettingsScreen(),
+                        '/clipboard': (contex) => const ClipBoard(),
+                      },
+                      title: 'Notes',
+                      home: const SplashScreen(),
+                    ),
+                    designSize: const Size(360, 800),
                   );
                 } else {
                   return DynamicTheme(
                     themeCollection: themeCollection,
                     defaultThemeId: AppThemes.regular,
-                    builder: (context, theme) => GetMaterialApp(
+                    builder: (context, theme) => ScreenUtilInit(
+                      builder: (_) => GetMaterialApp(
+                        debugShowCheckedModeBanner: kDebugMode,
+                        theme: theme,
+                        routes: {
+                          '/splash': (context) => const SplashScreen(),
+                          '/mainScreen': (context) => const MainScreen(
+                                selectedIndex: 0,
+                              ),
+                          '/onboarding1': (context) => const OnBoarding1(),
+                          '/onboarding2': (context) => const OnBoarding2(),
+                          '/onboarding3': (context) => const OnBoarding3(),
+                          '/onboarding4': (context) => const OnBoarding4(),
+                          '/addFolder': (context) => const AddFolderView(),
+                          '/addNote': (context) => const AddNoteView(),
+                          '/settings': (contex) => const SettingsScreen(),
+                          '/clipboard': (contex) => const ClipBoard(),
+                        },
+                        title: 'Notes',
+                        home: const SplashScreen(),
+                      ),
+                      designSize: const Size(360, 800),
+                    ),
+                  );
+                }
+              } else {
+                return DynamicTheme(
+                  themeCollection: themeCollection,
+                  defaultThemeId: AppThemes.regular,
+                  builder: (context, theme) => ScreenUtilInit(
+                    builder: (_) => GetMaterialApp(
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: theme,
                       routes: {
@@ -116,31 +151,8 @@ class MyApp extends StatelessWidget {
                       title: 'Notes',
                       home: const SplashScreen(),
                     ),
-                  );
-                }
-              } else {
-                return DynamicTheme(
-                  themeCollection: themeCollection,
-                  defaultThemeId: AppThemes.regular,
-                  builder: (context, theme) => GetMaterialApp(
-                    debugShowCheckedModeBanner: kDebugMode,
-                    theme: theme,
-                    routes: {
-                      '/splash': (context) => const SplashScreen(),
-                      '/mainScreen': (context) => const MainScreen(
-                            selectedIndex: 0,
-                          ),
-                      '/onboarding1': (context) => const OnBoarding1(),
-                      '/onboarding2': (context) => const OnBoarding2(),
-                      '/onboarding3': (context) => const OnBoarding3(),
-                      '/onboarding4': (context) => const OnBoarding4(),
-                      '/addFolder': (context) => const AddFolderView(),
-                      '/addNote': (context) => const AddNoteView(),
-                      '/settings': (contex) => const SettingsScreen(),
-                      '/clipboard': (contex) => const ClipBoard(),
-                    },
-                    title: 'Notes',
-                    home: const SplashScreen(),
+                    minTextAdapt: true,
+                    designSize: const Size(360, 800),
                   ),
                 );
               }

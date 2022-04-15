@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -38,12 +39,12 @@ class _OnBoarding3State extends State<OnBoarding3> {
             alignment: Alignment.center,
             child: Image.asset(
               "assets/images/onboarding3.png",
-              width: Get.width,
+              width: Get.width.w,
               fit: BoxFit.fitWidth,
             ),
           ),
           Positioned(
-            top: Get.height / 8,
+            top: Get.height / 8.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -62,7 +63,7 @@ class _OnBoarding3State extends State<OnBoarding3> {
                   child: Text(
                     onBoarding3Message,
                     style: t.textTheme.bodyText1?.copyWith(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                     ),
                   ),
                 ),
@@ -84,8 +85,8 @@ class _OnBoarding3State extends State<OnBoarding3> {
                   ),
                   inactiveTextColor: c.onSecondary,
                   inactiveToggleColor: c.error,
-                  width: 150,
-                  height: 70,
+                  width: 150.w,
+                  height: 70.h,
                   valueFontSize: 18.0,
                   toggleSize: 35.0,
                   value: _autoSave,
@@ -99,12 +100,12 @@ class _OnBoarding3State extends State<OnBoarding3> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 30,
+                SizedBox(
+                  height: 30.h,
                 ),
                 SizedBox(
-                  width: 150,
-                  height: 70,
+                  width: 150.w,
+                  height: 70.h,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: c.primary,
@@ -121,7 +122,7 @@ class _OnBoarding3State extends State<OnBoarding3> {
                     child: Text(
                       "Next",
                       style: t.textTheme.button?.copyWith(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         color: c.onPrimary,
                       ),
                     ),

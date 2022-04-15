@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
@@ -47,7 +48,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
             alignment: Alignment.bottomCenter,
             child: Image.asset(
               "assets/images/onboarding1.png",
-              width: Get.width,
+              width: Get.width.w,
               fit: BoxFit.fitWidth,
             ),
           ),
@@ -56,8 +57,8 @@ class _OnBoarding1State extends State<OnBoarding1> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                width: 150,
-                height: 70,
+                width: 150.w,
+                height: 70.h,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: c.primary,
@@ -73,7 +74,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                   child: Text(
                     "Get Started",
                     style: t.textTheme.button?.copyWith(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: c.onPrimary,
                     ),
                   ),
@@ -82,11 +83,11 @@ class _OnBoarding1State extends State<OnBoarding1> {
             ),
           ),
           Positioned(
-            top: Get.height / 8,
+            top: Get.height / 8.h,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                color: (Get.statusBarHeight - 100).isNegative
+                color: (Get.statusBarHeight - (Get.height / 2)).isNegative
                     ? c.surface
                     : Colors.transparent,
               ),
@@ -96,10 +97,10 @@ class _OnBoarding1State extends State<OnBoarding1> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (!(Get.statusBarHeight - 100).isNegative)
-                      SizedBox(
-                        height: Get.statusBarHeight - 100,
-                      ),
+                    // if (!(Get.statusBarHeight - 100).isNegative)
+                    //   SizedBox(
+                    //     height: Get.statusBarHeight - 100,
+                    //   ),
                     Text(
                       "notes",
                       style: t.textTheme.headline4,
@@ -108,14 +109,15 @@ class _OnBoarding1State extends State<OnBoarding1> {
                       height: 30,
                     ),
                     SizedBox(
-                      width: Get.width - 30,
+                      width: Get.width - 30.w,
                       child: Text(
                         onBoarding1Message,
                         style: t.textTheme.bodyText1?.copyWith(
-                          fontSize: 18,
-                          color: (Get.statusBarHeight - 100).isNegative
-                              ? c.onSurface
-                              : c.onBackground,
+                          fontSize: 18.sp,
+                          // color: (Get.statusBarHeight - 100).isNegative
+                          //     ? c.onSurface
+                          //     : c.onBackground,
+                          color: c.onBackground,
                         ),
                         textAlign: TextAlign.center,
                       ),

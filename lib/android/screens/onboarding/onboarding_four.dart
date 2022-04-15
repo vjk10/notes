@@ -2,6 +2,7 @@ import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
@@ -89,8 +90,8 @@ class _OnBoarding4State extends State<OnBoarding4> {
         alignment: Alignment.center,
         children: [
           Container(
-              width: Get.width,
-              height: Get.height,
+              width: Get.width.w,
+              height: Get.height.h,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/onboarding4.png"),
@@ -108,7 +109,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: Get.statusBarHeight,
+                        height: (Get.statusBarHeight).h,
                       ),
                       Text(
                         "hey! your device supports dynamic color :)",
@@ -138,13 +139,13 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           ),
                           inactiveTextColor: c.onSecondary,
                           inactiveToggleColor: c.error,
-                          width: 150,
-                          height: 70,
-                          valueFontSize: 18.0,
+                          width: 150.w,
+                          height: 70.h,
+                          valueFontSize: 18.0.sp,
                           toggleSize: 35.0,
                           value: notifier.material3,
                           borderRadius: 50.0,
-                          padding: 8.0,
+                          padding: 8.0.w,
                           showOnOff: true,
                           onToggle: (val) {
                             HapticFeedback.heavyImpact();
@@ -181,8 +182,8 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           height: 20,
                         ),
                         SizedBox(
-                          width: Get.width,
-                          height: Get.bottomBarHeight + 250,
+                          width: Get.width.w,
+                          height: (Get.bottomBarHeight + 200).h,
                           child: Center(
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -190,8 +191,8 @@ class _OnBoarding4State extends State<OnBoarding4> {
                               itemCount: themesList.length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 50.0),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 20.0.w),
                                   child: GestureDetector(
                                     onTap: () {
                                       changeTheme(index, context);
@@ -204,12 +205,12 @@ class _OnBoarding4State extends State<OnBoarding4> {
                                       children: [
                                         Center(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
+                                            padding: EdgeInsets.all(5.0.w),
                                             child: Image.asset(
                                               themesList[index]["url"]
                                                   .toString(),
-                                              width: 80,
-                                              height: 80,
+                                              width: 60.w,
+                                              height: 60.h,
                                             ),
                                           ),
                                         ),
@@ -254,8 +255,8 @@ class _OnBoarding4State extends State<OnBoarding4> {
                   height: 30,
                 ),
                 SizedBox(
-                  width: 150,
-                  height: 70,
+                  width: 150.w,
+                  height: 70.h,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: c.primary,
@@ -280,7 +281,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                     child: Text(
                       "Continue",
                       style: t.textTheme.button?.copyWith(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         color: c.onPrimary,
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
@@ -34,7 +35,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
             alignment: Alignment.bottomCenter,
             child: Image.asset(
               "assets/images/onboarding2.png",
-              width: Get.width,
+              width: Get.width.w,
               fit: BoxFit.fitWidth,
             ),
           ),
@@ -43,8 +44,8 @@ class _OnBoarding2State extends State<OnBoarding2> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                width: 150,
-                height: 70,
+                width: 150.w,
+                height: 70.h,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: c.primary,
@@ -90,7 +91,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                   child: Text(
                     "Next",
                     style: t.textTheme.button?.copyWith(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       color: c.onPrimary,
                     ),
                   ),
@@ -99,49 +100,41 @@ class _OnBoarding2State extends State<OnBoarding2> {
             ),
           ),
           Positioned(
-            top: Get.height / 8,
+            top: (Get.height / 8).h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: (Get.statusBarHeight - 100).isNegative
-                        ? c.surface
-                        : Colors.transparent,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (!(Get.statusBarHeight - 100).isNegative)
-                          SizedBox(
-                            height: Get.statusBarHeight - 100,
-                          ),
-                        Text(
-                          "enter your name",
-                          style: t.textTheme.headline4?.copyWith(
-                            fontFamily: 'Theme Black',
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (!(Get.statusBarHeight - 100).isNegative)
                         SizedBox(
-                          width: Get.width - 30,
-                          child: Text(
-                            onBoarding2Message,
-                            style: t.textTheme.bodyText1?.copyWith(
-                              fontSize: 18,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
+                          height: (Get.statusBarHeight - 100).h,
                         ),
-                      ],
-                    ),
+                      Text(
+                        "enter your name",
+                        style: t.textTheme.headline4?.copyWith(
+                          fontFamily: 'Theme Black',
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        width: Get.width - 30,
+                        child: Text(
+                          onBoarding2Message,
+                          style: t.textTheme.bodyText1?.copyWith(
+                            fontSize: 18.sp,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -149,7 +142,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                 ),
                 Center(
                   child: SizedBox(
-                    width: Get.width - 40,
+                    width: (Get.width - 40),
                     child: TextFormField(
                       controller: _nameController,
                       textInputAction: TextInputAction.done,
@@ -190,8 +183,8 @@ class _OnBoarding2State extends State<OnBoarding2> {
                         ),
                         filled: true,
                         fillColor: c.surface,
-                        contentPadding: const EdgeInsets.all(
-                          20.0,
+                        contentPadding: EdgeInsets.all(
+                          20.0.w,
                         ),
                       ),
                     ),
