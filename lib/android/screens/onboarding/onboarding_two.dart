@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -143,48 +144,52 @@ class _OnBoarding2State extends State<OnBoarding2> {
                 Center(
                   child: SizedBox(
                     width: (Get.width - 40),
-                    child: TextFormField(
-                      controller: _nameController,
-                      textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.name,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
+                    child: Semantics(
+                      textField: true,
+                      attributedHint: AttributedString("name text field"),
+                      child: TextFormField(
+                        controller: _nameController,
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
+                            borderSide: BorderSide(
+                              color: c.surface,
+                            ),
                           ),
-                          borderSide: BorderSide(
-                            color: c.surface,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
+                            borderSide: BorderSide(
+                              color: c.surface,
+                            ),
                           ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
+                            borderSide: BorderSide(
+                              color: c.surface,
+                            ),
                           ),
-                          borderSide: BorderSide(
-                            color: c.surface,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              10,
+                            ),
+                            borderSide: BorderSide(
+                              color: c.surface,
+                            ),
                           ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
+                          filled: true,
+                          fillColor: c.surface,
+                          contentPadding: EdgeInsets.all(
+                            20.0.w,
                           ),
-                          borderSide: BorderSide(
-                            color: c.surface,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ),
-                          borderSide: BorderSide(
-                            color: c.surface,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: c.surface,
-                        contentPadding: EdgeInsets.all(
-                          20.0.w,
                         ),
                       ),
                     ),

@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  open_document
   permission_handler_windows
   url_launcher_windows
 )

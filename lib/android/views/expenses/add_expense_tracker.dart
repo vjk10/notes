@@ -341,9 +341,19 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  ExpenseServices()
-                      .downloadExcel(titleController.text, expenses);
+                onTap: () async {
+                  await ExpenseServices().checkStoragePermission().then(
+                    (value) async {
+                      if (value == true) {
+                        bool directoryStatus =
+                            await ExpenseServices().checkDirectory();
+                        if (directoryStatus) {
+                          ExpenseServices()
+                              .downloadExcel(titleController.text, expenses);
+                        }
+                      }
+                    },
+                  );
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
