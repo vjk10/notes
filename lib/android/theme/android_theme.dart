@@ -77,7 +77,7 @@ ThemeData androidThemeRegular = ThemeData(
   primaryColor: black,
   scaffoldBackgroundColor: black,
   colorScheme: ColorScheme(
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     primary: purple,
     primaryContainer: purple,
     onPrimary: white,

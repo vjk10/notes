@@ -3,11 +3,11 @@ import 'package:notes/services/imports.dart';
 class DataTableServices {
   initColumns(ColorScheme c, ThemeData t, List<DataColumn> columns) {
     return columns = [
-      DataColumn(
-          label: Text(
-        "#",
-        style: t.textTheme.subtitle1?.copyWith(color: c.onPrimaryContainer),
-      )),
+      // DataColumn(
+      //     label: Text(
+      //   "#",
+      //   style: t.textTheme.subtitle1?.copyWith(color: c.onPrimaryContainer),
+      // )),
       DataColumn(
         label: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

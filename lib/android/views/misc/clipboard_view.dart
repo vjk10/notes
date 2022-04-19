@@ -1,9 +1,10 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as chat_types;
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -118,14 +119,20 @@ class _ClipBoardState extends State<ClipBoard> {
                               return GestureDetector(
                                 onLongPress: () async {
                                   HapticFeedback.heavyImpact();
-                                  await FirebaseFirestore.instance
-                                      .collection("users")
-                                      .doc(user.uid)
-                                      .collection("clipboards")
-                                      .doc(e.id)
-                                      .delete();
+                                  if (kDebugMode) {
+                                    print("SELECTED ID: " + e.id);
+                                  }
+                                  // await FirebaseFirestore.instance
+                                  //     .collection("users")
+                                  //     .doc(user.uid)
+                                  //     .collection("clipboards")
+                                  //     .doc(e.id)
+                                  //     .delete();
                                 },
                                 onTap: () {
+                                  if (kDebugMode) {
+                                    print("TAPPED");
+                                  }
                                   FlutterClipboard.copy(e.get("text"))
                                       .whenComplete(() {
                                     HapticFeedback.heavyImpact();
@@ -166,8 +173,8 @@ class _ClipBoardState extends State<ClipBoard> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: LinkPreview(
-                                          openOnPreviewImageTap: true,
-                                          openOnPreviewTitleTap: true,
+                                          openOnPreviewImageTap: false,
+                                          openOnPreviewTitleTap: false,
                                           enableAnimation: true,
                                           onPreviewDataFetched: (data) {
                                             setState(() {

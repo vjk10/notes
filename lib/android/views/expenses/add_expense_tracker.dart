@@ -50,7 +50,6 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
   List<DataRow> getRows(List<ExpenseModel> expenses) =>
       expenses.map((ExpenseModel expense) {
         final cells = [
-          expense.index,
           expense.type,
           expense.amount,
           expense.description,
@@ -190,9 +189,12 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           if (_autosave) {
             await NotesDatabase().saveExpenseSheet(
                 titleController, bodyController, false, expenses);
+            Get.offAllNamed('/mainScreen');
           }
         }
-        Get.offAllNamed('/mainScreen');
+        if (titleController.text.isEmpty) {
+          Utils().confirmationForSave(context, t, c);
+        }
         return true;
       },
       child: Scaffold(
@@ -213,7 +215,11 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
                 if (_autosave) {
                   NotesDatabase().saveExpenseSheet(
                       titleController, bodyController, false, expenses);
+                  Get.offAllNamed('/mainScreen');
                 }
+              }
+              if (titleController.text.isEmpty) {
+                Utils().confirmationForSave(context, t, c);
               } else {
                 Get.offAllNamed('/mainScreen');
               }
@@ -236,6 +242,9 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
                       Get.offAllNamed('/mainScreen');
                     });
                   }
+                  if (titleController.text.isEmpty) {
+                    Utils().confirmationForSave(context, t, c);
+                  }
                 },
                 icon: Icon(
                   Icons.save_outlined,
@@ -255,20 +264,23 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
-            child: DataTable(
-              headingRowColor: MaterialStateProperty.all(c.inversePrimary),
-              decoration: BoxDecoration(
-                color: c.surface,
+            child: SizedBox(
+              width: Get.width,
+              child: DataTable(
+                headingRowColor: MaterialStateProperty.all(c.inversePrimary),
+                decoration: BoxDecoration(
+                  color: c.surface,
+                ),
+                dividerThickness: 0,
+                dataTextStyle: t.textTheme.bodyMedium,
+                border: TableBorder(
+                  verticalInside: BorderSide(color: c.outline, width: 1),
+                  horizontalInside: BorderSide(color: c.outline, width: 1),
+                ),
+                showBottomBorder: true,
+                columns: columns,
+                rows: getRows(expenses),
               ),
-              dividerThickness: 0,
-              dataTextStyle: t.textTheme.bodyMedium,
-              border: TableBorder(
-                verticalInside: BorderSide(color: c.outline, width: 1),
-                horizontalInside: BorderSide(color: c.outline, width: 1),
-              ),
-              showBottomBorder: true,
-              columns: columns,
-              rows: getRows(expenses),
             ),
           ),
         ),

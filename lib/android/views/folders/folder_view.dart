@@ -171,13 +171,13 @@ class _FolderViewState extends State<FolderView> {
                         title: Text(
                           "Back Up",
                           style: t.textTheme.button?.copyWith(
-                            color: c.tertiary,
+                            color: c.onSecondaryContainer,
                             fontSize: 12,
                           ),
                         ),
                         trailingIcon: Icon(
                           Icons.cloud_upload,
-                          color: c.tertiary,
+                          color: c.onSecondaryContainer,
                         ),
                         onPressed: () {},
                       ),
@@ -186,13 +186,13 @@ class _FolderViewState extends State<FolderView> {
                       title: Text(
                         "Share",
                         style: t.textTheme.button?.copyWith(
-                          color: c.tertiary,
+                          color: c.onSecondaryContainer,
                           fontSize: 12,
                         ),
                       ),
                       trailingIcon: Icon(
                         Icons.share,
-                        color: c.tertiary,
+                        color: c.onSecondaryContainer,
                       ),
                       onPressed: () {
                         Share.share(
@@ -211,13 +211,13 @@ class _FolderViewState extends State<FolderView> {
                       title: Text(
                         "Delete from Folder",
                         style: t.textTheme.button?.copyWith(
-                          color: c.tertiary,
+                          color: c.onSecondaryContainer,
                           fontSize: 12,
                         ),
                       ),
                       trailingIcon: Icon(
                         Icons.delete,
-                        color: c.tertiary,
+                        color: c.onSecondaryContainer,
                       ),
                       onPressed: () {
                         NotesDatabase().deleteFromFolder(widget.folderName,

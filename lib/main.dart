@@ -72,9 +72,16 @@ class MyApp extends StatelessWidget {
                     builder: (_) => GetMaterialApp(
                       themeMode: ThemeMode.system,
                       debugShowCheckedModeBanner: kDebugMode,
-                      theme: androidThemeDark.copyWith(colorScheme: m3Light),
-                      darkTheme:
-                          androidThemeRegular.copyWith(colorScheme: m3Dark),
+                      theme: androidThemeDark.copyWith(
+                        colorScheme: m3Light,
+                        useMaterial3: true,
+                        brightness: Brightness.light,
+                      ),
+                      darkTheme: androidThemeRegular.copyWith(
+                        colorScheme: m3Dark,
+                        useMaterial3: true,
+                        brightness: Brightness.dark,
+                      ),
                       routes: {
                         '/splash': (context) => const SplashScreen(),
                         '/mainScreen': (context) => const MainScreen(

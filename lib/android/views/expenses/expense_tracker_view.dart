@@ -95,7 +95,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
   List<DataRow> getRows(List<ExpenseModel> expenses) =>
       expenses.map((ExpenseModel expense) {
         final cells = [
-          expense.index,
+          // expense.index,
           expense.type,
           expense.amount,
           expense.description,
@@ -241,7 +241,6 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
               widget.noteId,
             );
           }
-          // Get.offAllNamed('/mainScreen');
           return true;
         },
         child: Scaffold(
@@ -320,20 +319,23 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
             scrollDirection: Axis.horizontal,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
-              child: DataTable(
-                headingRowColor: MaterialStateProperty.all(c.inversePrimary),
-                decoration: BoxDecoration(
-                  color: c.surface,
+              child: SizedBox(
+                width: Get.width,
+                child: DataTable(
+                  headingRowColor: MaterialStateProperty.all(c.inversePrimary),
+                  decoration: BoxDecoration(
+                    color: c.surface,
+                  ),
+                  dividerThickness: 0,
+                  dataTextStyle: t.textTheme.bodyMedium,
+                  border: TableBorder(
+                    verticalInside: BorderSide(color: c.outline, width: 1),
+                    horizontalInside: BorderSide(color: c.outline, width: 1),
+                  ),
+                  showBottomBorder: true,
+                  columns: columns,
+                  rows: getRows(expenses),
                 ),
-                dividerThickness: 0,
-                dataTextStyle: t.textTheme.bodyMedium,
-                border: TableBorder(
-                  verticalInside: BorderSide(color: c.outline, width: 1),
-                  horizontalInside: BorderSide(color: c.outline, width: 1),
-                ),
-                showBottomBorder: true,
-                columns: columns,
-                rows: getRows(expenses),
               ),
             ),
           ),

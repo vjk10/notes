@@ -5,6 +5,7 @@ import 'package:notes/android/data/data.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_list_model.dart';
 import 'package:notes/services/db/notes_model.dart';
+import 'package:notes/services/utils.dart';
 
 class AddListView extends StatefulWidget {
   const AddListView({Key? key}) : super(key: key);
@@ -57,9 +58,16 @@ class _AddListViewState extends State<AddListView> {
           if (noteListItems.isNotEmpty && titleController.text.isNotEmpty) {
             await NotesDatabase()
                 .saveList(titleController, controllers, false, noteListItems);
+            Get.offAllNamed('/mainScreen');
           }
+          if (titleController.text.isEmpty) {
+            Utils().confirmationForSave(context, t, c);
+          } else {
+            Get.offAllNamed('/mainScreen');
+          }
+        } else {
+          Get.offAllNamed('/mainScreen');
         }
-        Get.offAllNamed('/mainScreen');
         return false;
       },
       child: Scaffold(
@@ -77,9 +85,16 @@ class _AddListViewState extends State<AddListView> {
                       titleController.text.isNotEmpty) {
                     await NotesDatabase().saveList(
                         titleController, controllers, false, noteListItems);
+                    Get.toNamed('/mainScreen');
                   }
+                  if (titleController.text.isEmpty) {
+                    Utils().confirmationForSave(context, t, c);
+                  } else {
+                    Get.offAllNamed('/mainScreen');
+                  }
+                } else {
+                  Get.offAllNamed('/mainScreen');
                 }
-                Get.offAllNamed('/mainScreen');
               },
               icon: Icon(
                 Icons.arrow_back,
