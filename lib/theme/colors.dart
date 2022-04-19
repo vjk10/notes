@@ -30,3 +30,6 @@ MaterialColor darkYellowBackground = MaterialColor(0xFF261C00, color);
 MaterialColor darkYellowSurface = MaterialColor(0xFF2D2100, color);
 MaterialColor darkYellowTeritiary = MaterialColor(0xFF3F2D00, color);
 MaterialColor kindaWhiteSurface = MaterialColor(0xFFF3F3F3, color);
+MaterialColor kindaRedCaption = MaterialColor(0xFF874646, color);
+MaterialColor darkYellowCaption = MaterialColor(0xFF755600, color);
+MaterialColor kindaWhiteCaption = MaterialColor(0xFFB2B2B2, color);

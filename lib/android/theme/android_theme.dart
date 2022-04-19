@@ -1,5 +1,7 @@
 //ANDROID THEME SECTION//
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:notes/services/imports.dart';
 import 'package:notes/theme/colors.dart';
 
 ThemeData androidThemeDark = ThemeData(
@@ -36,18 +38,35 @@ ThemeData androidThemeDark = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline2: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline3: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline4: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline5: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline6: TextStyle(color: black, fontFamily: 'Theme Font'),
-    subtitle1: TextStyle(color: black, fontFamily: 'Theme Regular'),
-    subtitle2: TextStyle(color: black, fontFamily: 'Theme Regular'),
-    bodyText1: TextStyle(color: black, fontFamily: 'Theme Regular'),
-    bodyText2: TextStyle(color: black, fontFamily: 'Theme Regular'),
-    caption: TextStyle(color: black, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: black, fontFamily: 'Theme Font'),
+    headline1:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline2:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline3:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline4:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline5:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline6:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    subtitle1: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    subtitle2: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    bodyText1: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    bodyText2: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    caption: GoogleFonts.sourceSansPro(
+      color: darkGrey,
+    ),
+    button: GoogleFonts.sourceSansPro(
+        color: black, fontWeight: FontWeight.w600, fontSize: 18),
   ),
 );
 
@@ -87,18 +106,35 @@ ThemeData androidThemeRegular = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline2: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline3: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline4: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline5: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline6: TextStyle(color: white, fontFamily: 'Theme Font'),
-    subtitle1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    subtitle2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    caption: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: white, fontFamily: 'Theme Font'),
+    headline1:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline2:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline3:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline4:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline5:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline6:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    subtitle1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    subtitle2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    caption: GoogleFonts.sourceSansPro(
+      color: darkGrey,
+    ),
+    button: GoogleFonts.sourceSansPro(
+        color: white, fontWeight: FontWeight.w600, fontSize: 18),
   ),
 );
 
@@ -120,7 +156,7 @@ ThemeData androidThemePitchBlack = ThemeData(
     onSecondaryContainer: lightGrey,
     tertiary: red,
     onTertiary: black,
-    tertiaryContainer: darkGrey,
+    tertiaryContainer: black,
     onTertiaryContainer: white,
     errorContainer: red,
     onErrorContainer: white,
@@ -138,18 +174,35 @@ ThemeData androidThemePitchBlack = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline2: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline3: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline4: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline5: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline6: TextStyle(color: white, fontFamily: 'Theme Font'),
-    subtitle1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    subtitle2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    caption: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: white, fontFamily: 'Theme Font'),
+    headline1:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline2:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline3:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline4:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline5:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline6:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    subtitle1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    subtitle2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    caption: GoogleFonts.sourceSansPro(
+      color: darkGrey,
+    ),
+    button: GoogleFonts.sourceSansPro(
+        color: white, fontWeight: FontWeight.w600, fontSize: 18),
   ),
 );
 
@@ -189,18 +242,35 @@ ThemeData androidThemeKindaRed = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline2: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline3: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline4: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline5: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline6: TextStyle(color: white, fontFamily: 'Theme Font'),
-    subtitle1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    subtitle2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    caption: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: white, fontFamily: 'Theme Font'),
+    headline1:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline2:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline3:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline4:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline5:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline6:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    subtitle1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    subtitle2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    caption: GoogleFonts.sourceSansPro(
+      color: kindaRedCaption,
+    ),
+    button: GoogleFonts.sourceSansPro(
+        color: white, fontWeight: FontWeight.w600, fontSize: 18),
   ),
 );
 
@@ -240,18 +310,35 @@ ThemeData androidThemeDarkYellow = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline2: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline3: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline4: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline5: TextStyle(color: white, fontFamily: 'Theme Font'),
-    headline6: TextStyle(color: white, fontFamily: 'Theme Font'),
-    subtitle1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    subtitle2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText1: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    bodyText2: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    caption: TextStyle(color: grey, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: white, fontFamily: 'Theme Font'),
+    headline1:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline2:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline3:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline4:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline5:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    headline6:
+        GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
+    subtitle1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    subtitle2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText1: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    bodyText2: GoogleFonts.sourceSansPro(
+      color: grey,
+    ),
+    caption: GoogleFonts.sourceSansPro(
+      color: darkYellowCaption,
+    ),
+    button: GoogleFonts.sourceSansPro(
+        color: white, fontWeight: FontWeight.w600, fontSize: 18),
   ),
 );
 
@@ -273,7 +360,7 @@ ThemeData androidThemeKindaWhite = ThemeData(
     onSecondaryContainer: pitchblack,
     tertiary: black,
     onTertiary: white,
-    tertiaryContainer: grey,
+    tertiaryContainer: lightGrey,
     onTertiaryContainer: black,
     errorContainer: red,
     onErrorContainer: white,
@@ -291,17 +378,34 @@ ThemeData androidThemeKindaWhite = ThemeData(
     elevation: 0,
   ),
   textTheme: TextTheme(
-    headline1: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline2: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline3: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline4: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline5: TextStyle(color: black, fontFamily: 'Theme Font'),
-    headline6: TextStyle(color: black, fontFamily: 'Theme Font'),
-    subtitle1: TextStyle(color: lightBlack, fontFamily: 'Theme Regular'),
-    subtitle2: TextStyle(color: lightBlack, fontFamily: 'Theme Regular'),
-    bodyText1: TextStyle(color: lightBlack, fontFamily: 'Theme Regular'),
-    bodyText2: TextStyle(color: lightBlack, fontFamily: 'Theme Regular'),
-    caption: TextStyle(color: lightBlack, fontFamily: 'Theme Regular'),
-    button: TextStyle(color: black, fontFamily: 'Theme Font'),
+    headline1:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline2:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline3:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline4:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline5:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    headline6:
+        GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
+    subtitle1: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    subtitle2: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    bodyText1: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    bodyText2: GoogleFonts.sourceSansPro(
+      color: lightBlack,
+    ),
+    caption: GoogleFonts.sourceSansPro(
+      color: kindaWhiteCaption,
+    ),
+    button: GoogleFonts.sourceSansPro(
+        color: black, fontWeight: FontWeight.w600, fontSize: 18),
   ),
 );

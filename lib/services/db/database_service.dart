@@ -12,7 +12,8 @@ class DatabaseService {
       bool pinned,
       bool isList,
       bool isExpense,
-      int totalItems) async {
+      int totalItems,
+      String type) async {
     await FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
@@ -24,7 +25,11 @@ class DatabaseService {
         "title": title,
         "body": body,
         "creationDate": creationDate,
-        "pinned": pinned
+        "pinned": pinned,
+        "isList": isList,
+        "isExpense": isExpense,
+        "totalItems": totalItems,
+        "type": type,
       },
     ).whenComplete(() {
       HapticFeedback.heavyImpact();
@@ -94,6 +99,7 @@ class DatabaseService {
           isList: element.get("isList") as bool,
           isExpense: element.get("isExpense") as bool,
           totalItems: element.get("totalItems") as int,
+          type: element.get("type").toString(),
         );
         await ScientISSTdb.instance
             .collection("notes")
@@ -103,9 +109,10 @@ class DatabaseService {
           "body": note.body,
           "creationTime": note.creationTime,
           "pinned": note.pinned,
-          "isList": note.isList,
-          "isExpense": note.isExpense,
-          "totalItems": note.totalItems,
+          "isList": note.isList ?? false,
+          "isExpense": note.isExpense ?? false,
+          "totalItems": note.totalItems ?? 0,
+          "type": note.type,
         });
       }
       Get.back();

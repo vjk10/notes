@@ -76,20 +76,24 @@ class _NotePageState extends State<NotePage> {
                     noteSnapshot.data["body"].toString() !=
                         bodyController.text) {
                   note = Note(
-                      body: bodyController.text.toString(),
-                      creationTime:
-                          DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                      title: titleController.text.toString(),
-                      pinned: pinned,
-                      isList: false,
-                      isExpense: false,
-                      totalItems: 0);
-                  NotesDatabase().updateNote(note, widget.noteId, true);
+                    body: bodyController.text.toString(),
+                    creationTime: DateFormat.yMMMMEEEEd()
+                        .format(DateTime.now())
+                        .toString(),
+                    title: titleController.text.toString(),
+                    pinned: pinned,
+                    isList: false,
+                    isExpense: false,
+                    totalItems: 0,
+                    type: "Note",
+                  );
+                  await NotesDatabase().updateNote(note, widget.noteId, true);
+                  Get.back();
                 } else {
-                  Get.offAllNamed('/mainScreen');
+                  Get.back();
                 }
               } else {
-                Get.offAllNamed('/mainScreen');
+                Get.back();
               }
               return false;
             },
@@ -112,19 +116,23 @@ class _NotePageState extends State<NotePage> {
                           noteSnapshot.data["body"].toString() !=
                               bodyController.text) {
                         note = Note(
-                          body: bodyController.text.toString(),
-                          creationTime:
-                              DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                          title: titleController.text.toString(),
-                          pinned: pinned,
-                          isList: false,
-                        );
-                        NotesDatabase().updateNote(note, widget.noteId, true);
+                            body: bodyController.text.toString(),
+                            creationTime: DateFormat.yMMMMEEEEd()
+                                .format(DateTime.now())
+                                .toString(),
+                            title: titleController.text.toString(),
+                            pinned: pinned,
+                            isList: false,
+                            isExpense: false,
+                            type: "Note");
+                        await NotesDatabase()
+                            .updateNote(note, widget.noteId, true);
+                        Get.back();
                       } else {
-                        Get.offAllNamed('/mainScreen');
+                        Get.back();
                       }
                     } else {
-                      Get.offAllNamed('/mainScreen');
+                      Get.back();
                     }
                   },
                   icon: Icon(
@@ -138,12 +146,16 @@ class _NotePageState extends State<NotePage> {
                     child: IconButton(
                       onPressed: () async {
                         note = Note(
-                            body: bodyController.text.toString(),
-                            creationTime:
-                                DateFormat('yyyy-MM-dd').format(DateTime.now()),
-                            title: titleController.text.toString(),
-                            pinned: pinned,
-                            isList: false);
+                          body: bodyController.text.toString(),
+                          creationTime: DateFormat.yMMMMEEEEd()
+                              .format(DateTime.now())
+                              .toString(),
+                          title: titleController.text.toString(),
+                          pinned: pinned,
+                          isList: false,
+                          isExpense: false,
+                          type: "Note",
+                        );
                         NotesDatabase()
                             .updateNote(note, noteSnapshot.id, false);
                       },

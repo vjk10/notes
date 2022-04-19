@@ -64,6 +64,24 @@ class _NumberTextFieldState extends State<NumberTextField> {
           counterText: '',
           isDense: true,
           filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           fillColor: Theme.of(context).colorScheme.surface,
           contentPadding: widget.contentPadding.copyWith(right: 0),
           suffixIconConstraints: BoxConstraints(

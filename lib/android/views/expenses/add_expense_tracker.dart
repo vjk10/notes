@@ -8,7 +8,9 @@ import 'package:notes/services/data_table_services.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_expense_model.dart';
 import 'package:notes/services/expense_services.dart';
+import 'package:notes/services/notifier.dart';
 import 'package:notes/services/utils.dart';
+import 'package:provider/provider.dart';
 
 class AddExpenseTrackerView extends StatefulWidget {
   const AddExpenseTrackerView({Key? key}) : super(key: key);
@@ -37,8 +39,8 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
   }
 
   addRow(int index) {
-    ExpenseModel expense = ExpenseModel(
-        index: index, type: 'Select Type...', description: " ", amount: 0.00);
+    ExpenseModel expense =
+        ExpenseModel(index: index, type: '', description: " ", amount: 0.00);
     setState(() {
       expenses.insert(index, expense);
     });
@@ -279,105 +281,99 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
       visible: true,
       child: SizedBox(
         height: 65,
-        child: BottomAppBar(
-          elevation: 0,
-          color: c.secondaryContainer.withAlpha(50),
-          shape: const CircularNotchedRectangle(),
-          clipBehavior: Clip.none,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  addRow(currentIndex);
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.post_add_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Add Row",
-                      style: t.textTheme.bodySmall?.copyWith(
+        child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+          return BottomAppBar(
+            elevation: 0,
+            color: notifier.material3
+                ? c.secondaryContainer.withAlpha(50)
+                : c.secondaryContainer,
+            shape: const CircularNotchedRectangle(),
+            clipBehavior: Clip.none,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    addRow(currentIndex);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.post_add_outlined,
                         color: c.onSecondaryContainer,
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Add Row",
+                        style: t.textTheme.bodySmall?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    expenses.clear();
-                    currentIndex = 0;
-                  });
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.delete_sweep_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Delete Rows",
-                      style: t.textTheme.bodySmall?.copyWith(
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      expenses.clear();
+                      currentIndex = 0;
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.delete_sweep_outlined,
                         color: c.onSecondaryContainer,
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Delete Rows",
+                        style: t.textTheme.bodySmall?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  await ExpenseServices().checkStoragePermission().then(
-                    (value) async {
-                      if (value == true) {
-                        bool directoryStatus =
-                            await ExpenseServices().checkDirectory();
-                        if (directoryStatus) {
-                          ExpenseServices()
-                              .downloadExcel(titleController.text, expenses);
-                        }
-                      }
-                    },
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.file_download_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Export",
-                      style: t.textTheme.bodySmall?.copyWith(
+                GestureDetector(
+                  onTap: () {
+                    ExpenseServices()
+                        .downloadExcel(titleController.text, expenses);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.file_download_outlined,
                         color: c.onSecondaryContainer,
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Export",
+                        style: t.textTheme.bodySmall?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }

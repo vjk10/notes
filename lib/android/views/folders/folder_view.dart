@@ -6,11 +6,14 @@ import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/screens/main_screen.dart';
+import 'package:notes/android/views/expenses/expense_tracker_view.dart';
 import 'package:notes/android/views/list/list_view.dart';
 import 'package:notes/android/views/notes/note_page.dart';
 import 'package:notes/android/widgets/no_notes_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:notes/services/notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -47,72 +50,77 @@ class _FolderViewState extends State<FolderView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Get.offAll(() => const MainScreen(selectedIndex: 1));
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: c.background,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: c.secondaryContainer.withAlpha(50),
-          title: Text(
-            "/ " + widget.folderName,
-            style: t.textTheme.headline5,
-          ),
-          leading: IconButton(
-            onPressed: () async {
-              Get.offAll(() => const MainScreen(selectedIndex: 1));
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: c.onBackground,
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+      return WillPopScope(
+        onWillPop: () async {
+          Get.offAll(() => const MainScreen(selectedIndex: 1));
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: c.background,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: notifier.material3
+                ? c.secondaryContainer.withAlpha(50)
+                : c.secondaryContainer,
+            title: Text(
+              "/ " + widget.folderName,
+              style: t.textTheme.headline5,
             ),
+            leading: IconButton(
+              onPressed: () async {
+                Get.offAll(() => const MainScreen(selectedIndex: 1));
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: c.onBackground,
+              ),
+            ),
+            automaticallyImplyLeading: true,
           ),
-          automaticallyImplyLeading: true,
-        ),
-        body: FutureBuilder(
-          future: folderNotesFuture,
-          builder:
-              (context, AsyncSnapshot<List<DocumentSnapshot>> folderNotesData) {
-            switch (folderNotesData.connectionState) {
-              case ConnectionState.waiting:
-                {
-                  return const Center(
-                    child: NotesLoadingAndroid(),
-                  );
-                }
-              case ConnectionState.done:
-                {
-                  if (kDebugMode) {
-                    print("LENGTH: " + folderNotesData.data!.length.toString());
+          body: FutureBuilder(
+            future: folderNotesFuture,
+            builder: (context,
+                AsyncSnapshot<List<DocumentSnapshot>> folderNotesData) {
+              switch (folderNotesData.connectionState) {
+                case ConnectionState.waiting:
+                  {
+                    return const Center(
+                      child: NotesLoadingAndroid(),
+                    );
                   }
-                  switch (folderNotesData.data!.length) {
-                    case 0:
-                      {
-                        return const NoNotesFound();
-                      }
-                    default:
-                      {
-                        return notesGrid(folderNotesData);
-                      }
+                case ConnectionState.done:
+                  {
+                    if (kDebugMode) {
+                      print(
+                          "LENGTH: " + folderNotesData.data!.length.toString());
+                    }
+                    switch (folderNotesData.data!.length) {
+                      case 0:
+                        {
+                          return const NoNotesFound();
+                        }
+                      default:
+                        {
+                          return notesGrid(folderNotesData);
+                        }
+                    }
                   }
-                }
-              default:
-                {
-                  return Center(
-                    child: CircularProgressIndicator.adaptive(
-                      backgroundColor: c.onBackground.withOpacity(0.2),
-                      valueColor: AlwaysStoppedAnimation(c.onBackground),
-                    ),
-                  );
-                }
-            }
-          },
+                default:
+                  {
+                    return Center(
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: c.onBackground.withOpacity(0.2),
+                        valueColor: AlwaysStoppedAnimation(c.onBackground),
+                      ),
+                    );
+                  }
+              }
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Padding notesGrid(AsyncSnapshot<List<DocumentSnapshot>> folderNotesData) {
@@ -133,148 +141,234 @@ class _FolderViewState extends State<FolderView> {
                 horizontal: 5.0,
                 vertical: 5.0,
               ),
-              child: FocusedMenuHolder(
-                onPressed: () {
-                  // Get.to(
-                  //   () => NotePage(noteId: folderNotesData.data![noteIndex].id),
-                  // );
-                  if (kDebugMode) {
-                    print(folderNotesData.data![noteIndex].data["isList"] ==
-                        true);
-                  }
-                  if (folderNotesData.data![noteIndex].data["isList"] == true) {
-                    Get.to(
-                      () => ListviewView(
-                          noteId: folderNotesData.data![noteIndex].id),
-                    );
-                  } else {
-                    Get.to(
-                      () =>
-                          NotePage(noteId: folderNotesData.data![noteIndex].id),
-                    );
-                  }
-                },
-                menuWidth: Get.width * 0.50,
-                blurSize: 5.0,
-                menuItemExtent: 45,
-                menuBoxDecoration: const BoxDecoration(
-                  color: Colors.transparent,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: c.secondaryContainer,
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                duration: const Duration(milliseconds: 400),
-                animateMenuItems: true,
-                blurBackgroundColor: c.background.withOpacity(0.2),
-                openWithTap:
-                    false, // Open Focused-Menu on Tap rather than Long Press
-                menuOffset:
-                    10.0, // Offset value to show menuItem from the selected item
-                bottomOffsetHeight:
-                    80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-                menuItems: <FocusedMenuItem>[
-                  // Add Each FocusedMenuItem  for Menu Options
-                  if (_accountsLinked)
+                child: FocusedMenuHolder(
+                  onPressed: () {},
+                  menuWidth: Get.width * 0.50,
+                  blurSize: 5.0,
+                  menuItemExtent: 45,
+                  menuBoxDecoration: const BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  duration: const Duration(milliseconds: 400),
+                  animateMenuItems: true,
+                  blurBackgroundColor: c.background.withOpacity(0.2),
+                  openWithTap:
+                      false, // Open Focused-Menu on Tap rather than Long Press
+                  menuOffset:
+                      10.0, // Offset value to show menuItem from the selected item
+                  bottomOffsetHeight:
+                      80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                  menuItems: <FocusedMenuItem>[
+                    // Add Each FocusedMenuItem  for Menu Options
+                    if (_accountsLinked)
+                      FocusedMenuItem(
+                        backgroundColor: c.secondaryContainer,
+                        title: Text(
+                          "Back Up",
+                          style: t.textTheme.button?.copyWith(
+                            color: c.tertiary,
+                            fontSize: 12,
+                          ),
+                        ),
+                        trailingIcon: Icon(
+                          Icons.cloud_upload,
+                          color: c.tertiary,
+                        ),
+                        onPressed: () {},
+                      ),
                     FocusedMenuItem(
-                      backgroundColor: c.surface,
+                      backgroundColor: c.secondaryContainer,
                       title: Text(
-                        "Back Up",
+                        "Share",
                         style: t.textTheme.button?.copyWith(
                           color: c.tertiary,
                           fontSize: 12,
                         ),
                       ),
                       trailingIcon: Icon(
-                        Icons.cloud_upload,
+                        Icons.share,
                         color: c.tertiary,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Share.share(
+                          "*" +
+                              folderNotesData.data![noteIndex].data["title"]
+                                  .toString() +
+                              "*" +
+                              "\n\n" +
+                              folderNotesData.data![noteIndex].data["body"]
+                                  .toString(),
+                        );
+                      },
                     ),
-                  FocusedMenuItem(
-                    backgroundColor: c.surface,
-                    title: Text(
-                      "Share",
-                      style: t.textTheme.button?.copyWith(
-                        color: c.tertiary,
-                        fontSize: 12,
+                    FocusedMenuItem(
+                      backgroundColor: c.secondaryContainer,
+                      title: Text(
+                        "Delete from Folder",
+                        style: t.textTheme.button?.copyWith(
+                          color: c.tertiary,
+                          fontSize: 12,
+                        ),
                       ),
+                      trailingIcon: Icon(
+                        Icons.delete,
+                        color: c.tertiary,
+                      ),
+                      onPressed: () {
+                        NotesDatabase().deleteFromFolder(widget.folderName,
+                            folderNotesData.data![noteIndex].id);
+                      },
                     ),
-                    trailingIcon: Icon(
-                      Icons.share,
-                      color: c.tertiary,
-                    ),
-                    onPressed: () {
-                      Share.share(
-                        "*" +
-                            folderNotesData.data![noteIndex].data["title"]
-                                .toString() +
-                            "*" +
-                            "\n\n" +
-                            folderNotesData.data![noteIndex].data["body"]
-                                .toString(),
-                      );
+                  ],
+                  child: GestureDetector(
+                    onTap: () {
+                      if (folderNotesData.data![noteIndex].data["isList"] ==
+                          true) {
+                        Get.to(
+                          () => ListviewView(
+                              noteId: folderNotesData.data![noteIndex].id),
+                        );
+                      }
+                      if (folderNotesData.data![noteIndex].data["isExpense"] ==
+                          true) {
+                        Get.to(
+                          () => ExpenseTrackerView(
+                              noteId: folderNotesData.data![noteIndex].id),
+                        );
+                      }
+                      if (folderNotesData.data![noteIndex].data["isList"] ==
+                              false &&
+                          folderNotesData.data![noteIndex].data["isExpense"] ==
+                              false) {
+                        Get.to(
+                          () => NotePage(
+                              noteId: folderNotesData.data![noteIndex].id),
+                        );
+                      }
                     },
-                  ),
-                  FocusedMenuItem(
-                    backgroundColor: c.surface,
-                    title: Text(
-                      "Delete from Folder",
-                      style: t.textTheme.button?.copyWith(
-                        color: c.tertiary,
-                        fontSize: 12,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
-                    trailingIcon: Icon(
-                      Icons.delete,
-                      color: c.tertiary,
-                    ),
-                    onPressed: () {
-                      NotesDatabase().deleteFromFolder(widget.folderName,
-                          folderNotesData.data![noteIndex].id);
-                    },
-                  ),
-                ],
-                child: GestureDetector(
-                  onTap: () {
-                    // Get.to(
-                    //   () =>
-                    //       NotePage(noteId: folderNotesData.data![noteIndex].id),
-                    // );
-                    if (kDebugMode) {
-                      print(folderNotesData.data![noteIndex].data["isList"] ==
-                          true);
-                    }
-                    if (folderNotesData.data![noteIndex].data["isList"] ==
-                        true) {
-                      Get.to(
-                        () => ListviewView(
-                            noteId: folderNotesData.data![noteIndex].id),
-                      );
-                    } else {
-                      Get.to(
-                        () => NotePage(
-                            noteId: folderNotesData.data![noteIndex].id),
-                      );
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: c.secondaryContainer,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            folderNotesData.data![noteIndex].data["title"]
-                                .toString(),
-                            style: t.textTheme.headline6,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(folderNotesData.data![noteIndex].data["body"]
-                              .toString())
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              folderNotesData.data![noteIndex].data["title"]
+                                  .toString(),
+                              style: t.textTheme.headline6,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // LIST ITEMS
+                            if (folderNotesData
+                                    .data![noteIndex].data["isList"] ==
+                                true)
+                              for (var i = 0;
+                                  i <=
+                                      folderNotesData
+                                          .data![noteIndex].data["totalItems"];
+                                  i++)
+                                FutureBuilder<DocumentSnapshot>(
+                                  future: ScientISSTdb.instance
+                                      .collection("notes")
+                                      .document(
+                                          folderNotesData.data![noteIndex].id)
+                                      .collection(i.toString())
+                                      .document(i.toString())
+                                      .get(),
+                                  builder: (context,
+                                      AsyncSnapshot<DocumentSnapshot>
+                                          snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              snapshot.data!.data["checked"]
+                                                  ? Icons.check_circle
+                                                  : Icons.circle_outlined,
+                                              color: c.onSecondaryContainer,
+                                              size: 12,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              snapshot.data!.data["text"]
+                                                  .toString(),
+                                              maxLines: 15,
+                                              softWrap: true,
+                                              overflow: TextOverflow.fade,
+                                              style: t.textTheme.bodyText1,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  },
+                                ),
+                            // NOTES BODY
+                            if (folderNotesData
+                                    .data![noteIndex].data["isList"] ==
+                                false)
+                              Text(
+                                folderNotesData.data![noteIndex].data["body"]
+                                    .toString(),
+                                maxLines: 15,
+                                softWrap: true,
+                                overflow: TextOverflow.fade,
+                              ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) {
+                                  return Text(
+                                    folderNotesData
+                                        .data![noteIndex].data["creationTime"]
+                                        .toString(),
+                                    style: notifier.material3
+                                        ? t.textTheme.caption?.copyWith(
+                                            color: c.onSecondaryContainer,
+                                          )
+                                        : t.textTheme.caption,
+                                  );
+                                }),
+                                Consumer<ThemeNotifier>(
+                                    builder: (context, notifier, child) {
+                                  return Text(
+                                    folderNotesData
+                                        .data![noteIndex].data["type"]
+                                        .toString(),
+                                    style: notifier.material3
+                                        ? t.textTheme.caption?.copyWith(
+                                            color: c.onSecondaryContainer,
+                                          )
+                                        : t.textTheme.caption,
+                                  );
+                                }),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),

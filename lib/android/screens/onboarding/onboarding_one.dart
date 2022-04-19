@@ -87,7 +87,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                color: (Get.statusBarHeight - (Get.height / 2)).isNegative
+                color: (Get.statusBarHeight - 100).isNegative
                     ? c.surface
                     : Colors.transparent,
               ),

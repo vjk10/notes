@@ -64,14 +64,43 @@ class _TextDialogWidgetState extends State<TextDialogWidget> {
         ),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  25,
-                ),
-              ),
-            ),
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: c.onBackground,
+                  width: 1,
+                )),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: c.onBackground,
+                  width: 1,
+                )),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: c.onBackground,
+                  width: 1,
+                )),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: c.onBackground,
+                  width: 1,
+                )),
+            disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: c.onBackground,
+                  width: 1,
+                )),
+            focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                  color: c.onBackground,
+                  width: 1,
+                )),
           ),
         ),
         actions: [

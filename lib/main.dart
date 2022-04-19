@@ -24,7 +24,6 @@ import 'package:notes/services/notifier.dart';
 import 'package:notes/services/theme/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
-import 'package:notes/windows/screens/theme/windows_theme.dart';
 import 'package:provider/provider.dart';
 
 import 'android/screens/splash_screen.dart';
@@ -48,8 +47,6 @@ class MyApp extends StatelessWidget {
       // Windows Application
       return fluent_ui.FluentApp(
         debugShowCheckedModeBanner: kDebugMode,
-        theme: windowsThemeLight,
-        darkTheme: windowsThemeDark,
         themeMode: fluent_ui.ThemeMode.system,
         routes: {
           '/splash': (context) => const SplashScreenWin(),

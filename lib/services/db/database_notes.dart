@@ -56,14 +56,19 @@ class NotesDatabase {
     if (kDebugMode) {
       print(note.title);
     }
+    var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
+    if (kDebugMode) {
+      print("CREATION TIME: " + creationTime);
+    }
     await ScientISSTdb.instance.collection("notes").add({
       "title": note.title,
       "body": note.body,
-      "creationTime": note.creationTime,
+      "creationTime": creationTime,
       "pinned": note.pinned,
       "isList": note.isList,
       "isExpense": note.isExpense,
-      "totalItems": note.totalItems
+      "totalItems": note.totalItems,
+      "type": note.type,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (!importing) {
@@ -89,22 +94,27 @@ class NotesDatabase {
     });
   }
 
-  updateNote(Note note, String noteId, bool goBack) async {
+  Future updateNote(Note note, String noteId, bool goBack) async {
     if (kDebugMode) {
       print(note.title);
     }
+    var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
+    if (kDebugMode) {
+      print("CREATION TIME: " + creationTime);
+    }
+
     await ScientISSTdb.instance.collection("notes").document(noteId).update({
       "title": note.title,
       "body": note.body,
-      "creationTime": note.creationTime,
+      "creationTime": creationTime,
       "pinned": note.pinned,
       "isList": note.isList,
       "isExpense": note.isExpense,
-      "totalItems": note.totalItems
+      "totalItems": note.totalItems,
+      "type": note.type,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
       if (goBack) {
-        // Get.offAllNamed('/mainScreen');
         Get.back();
       }
       Get.showSnackbar(GetSnackBar(
@@ -133,7 +143,7 @@ class NotesDatabase {
         .delete()
         .whenComplete(() {
       HapticFeedback.heavyImpact();
-      // Get.offAllNamed('/mainScreen');
+      Get.offAllNamed('/mainScreen');
       Get.back();
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
@@ -183,14 +193,18 @@ class NotesDatabase {
 
   //FOLDER SECTION
 
-  createFolder(Folder folder) async {
+  Future createFolder(Folder folder) async {
+    var creationTime = DateFormat.yMMMMd().format(DateTime.now()).toString();
+    if (kDebugMode) {
+      print("CREATION TIME: " + creationTime);
+    }
+
     await ScientISSTdb.instance.collection("folders").add({
       "title": folder.title,
       "description": folder.description,
-      "creationTime": folder.creationTime,
+      "creationTime": creationTime,
     }).whenComplete(() {
       HapticFeedback.heavyImpact();
-      // Get.offAll(() => const MainScreen(selectedIndex: 1));
       Get.to(() => const MainScreen(selectedIndex: 1));
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
@@ -221,7 +235,6 @@ class NotesDatabase {
     ).whenComplete(
       () {
         HapticFeedback.heavyImpact();
-        // Get.offAllNamed('/mainScreen');
         Get.back();
         Get.showSnackbar(
           GetSnackBar(
@@ -284,9 +297,12 @@ class NotesDatabase {
           .collection("notes")
           .document(element.id)
           .get();
+      if (kDebugMode) {
+        print("NOTE SNAPSHOT");
+        print(noteSnapshot.data['isExpense']);
+      }
       folderNotesSnapshot.add(noteSnapshot);
     }
-    // folderNotesSnapshot = _folderNotes;
     return folderNotesSnapshot;
   }
 
@@ -297,8 +313,7 @@ class NotesDatabase {
         .delete()
         .whenComplete(() {
       HapticFeedback.heavyImpact();
-      // Get.offAll(() => FolderView(folderName: folderName));
-      Get.to(() => FolderView(folderName: folderName));
+      Get.offAll(() => FolderView(folderName: folderName));
       Get.showSnackbar(GetSnackBar(
         shouldIconPulse: false,
         backgroundColor: Get.theme.colorScheme.surface,
@@ -326,35 +341,29 @@ class NotesDatabase {
   ) async {
     if (controllers.isNotEmpty) {
       if (titleController.text.isNotEmpty && noteList.isNotEmpty) {
+        var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
+        if (kDebugMode) {
+          print("CREATION TIME: " + creationTime);
+        }
         var note = Note(
             title: titleController.text,
             body: noteList.first.text,
-            creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+            creationTime: creationTime,
             pinned: pinned,
             isList: true,
             isExpense: false,
-            totalItems: noteList.length);
+            totalItems: noteList.length,
+            type: "List");
         await ScientISSTdb.instance.collection("notes").add({
           "title": note.title,
           "body": note.body,
-          "creationTime": note.creationTime,
+          "creationTime": creationTime,
           "pinned": note.pinned,
           "isList": note.isList,
           "isExpense": note.isExpense,
-          "totalItems": note.totalItems
+          "totalItems": note.totalItems,
+          "type": note.type,
         }).then((value) {
-          // ScientISSTdb.instance
-          //     .collection("notes")
-          //     .document(titleController.text)
-          //     .set({
-          //   "title": titleController.text,
-          //   "body": noteList.first.text,
-          //   "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          //   "pinned": pinned,
-          //   "isList": true,
-          //   "isExpense": false,
-          //   "totalItems": noteList.length
-          // });
           for (var c = 0; c < noteList.length; c++) {
             if (kDebugMode) {
               print(noteList[c].text.toString());
@@ -438,6 +447,11 @@ class NotesDatabase {
     if (controllers.isNotEmpty) {
       if (titleController.text.isNotEmpty &&
           controllers.first.text.isNotEmpty) {
+        var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
+        if (kDebugMode) {
+          print("CREATION TIME: " + creationTime);
+        }
+
         if (kDebugMode) {
           print(noteId);
         }
@@ -447,11 +461,12 @@ class NotesDatabase {
             .update({
           "title": titleController.text,
           "body": noteList.first.text,
-          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          "creationTime": creationTime,
           "pinned": pinned,
           "isList": true,
           "isExpense": false,
-          "totalItems": noteList.length
+          "totalItems": noteList.length,
+          "type": "List",
         });
         for (var c = 0; c < noteList.length; c++) {
           if (kDebugMode) {
@@ -514,14 +529,20 @@ class NotesDatabase {
   ) async {
     if (titleController.text.isNotEmpty) {
       if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
+        var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
+        if (kDebugMode) {
+          print("CREATION TIME: " + creationTime);
+        }
+
         var note = Note(
           title: titleController.text,
           body: bodyController.text,
-          creationTime: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          creationTime: creationTime,
           pinned: pinned,
           isList: false,
           isExpense: true,
           totalItems: expenses.length,
+          type: "Expense",
         );
         await ScientISSTdb.instance.collection("notes").add({
           "title": note.title,
@@ -530,7 +551,8 @@ class NotesDatabase {
           "pinned": note.pinned,
           "isList": note.isList,
           "isExpense": note.isExpense,
-          "totalItems": note.totalItems
+          "totalItems": note.totalItems,
+          "type": note.type,
         }).then((value) async {
           for (var c = 0; c < expenses.length; c++) {
             if (kDebugMode) {
@@ -549,18 +571,6 @@ class NotesDatabase {
             });
           }
         });
-        // ScientISSTdb.instance
-        //     .collection("notes")
-        //     .document(titleController.text)
-        //     .set({
-        //   "title": titleController.text,
-        //   "body": bodyController.text,
-        //   "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
-        //   "pinned": pinned,
-        //   "isList": false,
-        //   "isExpense": true,
-        //   "totalItems": expenses.length
-        // });
       } else {
         Get.showSnackbar(GetSnackBar(
           shouldIconPulse: false,
@@ -608,17 +618,22 @@ class NotesDatabase {
   ) async {
     if (titleController.text.isNotEmpty) {
       if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
+        var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
+        if (kDebugMode) {
+          print("CREATION TIME: " + creationTime);
+        }
         await ScientISSTdb.instance
             .collection("notes")
             .document(noteId)
             .update({
           "title": titleController.text,
           "body": bodyController.text,
-          "creationTime": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          "creationTime": creationTime,
           "pinned": pinned,
           "isList": false,
           "isExpense": true,
-          "totalItems": expenses.length
+          "totalItems": expenses.length,
+          "type": "Expense",
         });
         for (var c = 0; c < expenses.length; c++) {
           if (kDebugMode) {

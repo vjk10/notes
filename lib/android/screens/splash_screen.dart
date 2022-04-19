@@ -91,11 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Center(
                   child: Text(
                     "Loading your notes",
-                    style: TextStyle(
-                      color: c.onBackground,
-                      fontFamily: 'Theme Black',
-                      fontSize: 18,
-                    ),
+                    style: t.textTheme.headline6,
                   ),
                 )
               ],

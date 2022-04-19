@@ -109,7 +109,8 @@ class _ListviewViewState extends State<ListviewView> {
             );
           }
         }
-        Get.offAllNamed('/mainScreen');
+        Get.back();
+
         return false;
       },
       child: Scaffold(
@@ -133,7 +134,7 @@ class _ListviewViewState extends State<ListviewView> {
                     );
                   }
                 }
-                Get.offAllNamed('/mainScreen');
+                Get.back();
               },
               icon: Icon(
                 Icons.arrow_back,
@@ -286,9 +287,7 @@ class _ListviewViewState extends State<ListviewView> {
               });
             },
             child: Icon(
-              item.checked
-                  ? Icons.check_box
-                  : Icons.check_box_outline_blank_outlined,
+              item.checked ? Icons.check_circle : Icons.circle_outlined,
               color: item.checked ? c.primary : c.outline,
             ),
           ),

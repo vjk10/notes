@@ -12,6 +12,5 @@ export 'package:notes/services/db/note_expense_model.dart';
 export 'package:notes/services/db/note_list_model.dart';
 export 'package:notes/services/db/notes_model.dart';
 export 'package:notes/android/widgets/notes_loading.dart';
-export 'package:shared_storage/shared_storage.dart';
 export 'package:path/path.dart';
 export 'dart:async';

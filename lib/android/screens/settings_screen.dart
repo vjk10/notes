@@ -184,113 +184,115 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Get.offAllNamed('/mainScreen');
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: c.background,
-        appBar: AppBar(
-          backgroundColor: c.secondaryContainer.withAlpha(50),
-          title: Text(
-            "settings",
-            style: t.textTheme.headline5,
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+      return WillPopScope(
+        onWillPop: () async {
+          Get.offAllNamed('/mainScreen');
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: c.background,
+          appBar: AppBar(
+            backgroundColor: notifier.material3
+                ? c.secondaryContainer.withAlpha(50)
+                : c.secondaryContainer,
+            title: Text(
+              "settings",
+              style: t.textTheme.headline5,
+            ),
+            leading: IconButton(
+                onPressed: () {
+                  Get.offAllNamed('/mainScreen');
+                },
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: c.onBackground,
+                )),
+            toolbarHeight: 80,
           ),
-          leading: IconButton(
-              onPressed: () {
-                Get.offAllNamed('/mainScreen');
-              },
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: c.onBackground,
-              )),
-          toolbarHeight: 80,
-        ),
-        body: _isLoading
-            ? const Center(
-                child: NotesLoadingAndroid(),
-              )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 20.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      UserDetails(
-                        userName: userName,
-                        profileUrl: profileUrl,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: Visibility(
-                          visible: !_accountLinked,
-                          child: SignInButton(
-                            Buttons.Google,
-                            onPressed: () async {
-                              await signInWithGoogle(context).whenComplete(() {
-                                setState(() {
-                                  _accountLinked = !_accountLinked;
-                                });
-                                getUserStatus();
-                              });
-                            },
-                            padding: const EdgeInsets.all(8),
-                            text: "  Sign in to backup notes",
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadiusDirectional.circular(25),
-                            ),
-                          ),
+          body: _isLoading
+              ? const Center(
+                  child: NotesLoadingAndroid(),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 20.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        UserDetails(
+                          userName: userName,
+                          profileUrl: profileUrl,
                         ),
-                      ),
-                      SizedBox(
-                        height: _accountLinked ? 0 : 50,
-                      ),
-                      userDataSection(),
-                      deciveDataSection(),
-                      Center(
-                        child: Visibility(
-                          visible: _accountLinked,
-                          child: SizedBox(
-                            width: Get.width,
-                            height: 75,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                              ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: Visibility(
+                            visible: !_accountLinked,
+                            child: SignInButton(
+                              Buttons.Google,
                               onPressed: () async {
-                                await signOutGoogle(context).whenComplete(() {
-                                  setState(() {
-                                    profileUrl = "";
-                                    _accountLinked = !_accountLinked;
-                                  });
+                                await signInWithGoogle(context)
+                                    .whenComplete(() {
+                                  getUserStatus();
                                 });
                               },
-                              child: Text(
-                                "Logout",
-                                style: t.textTheme.button?.copyWith(
-                                  color: c.onPrimary,
-                                ),
+                              padding: const EdgeInsets.all(8),
+                              text: "  Sign in to backup notes",
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadiusDirectional.circular(25),
                               ),
                             ),
                           ),
                         ),
-                      )
-                    ],
+                        SizedBox(
+                          height: _accountLinked ? 0 : 50,
+                        ),
+                        userDataSection(),
+                        deciveDataSection(),
+                        Center(
+                          child: Visibility(
+                            visible: _accountLinked,
+                            child: SizedBox(
+                              width: Get.width,
+                              height: 75,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await signOutGoogle(context).whenComplete(() {
+                                    setState(() {
+                                      profileUrl = "";
+                                      _accountLinked = !_accountLinked;
+                                    });
+                                  });
+                                },
+                                child: Text(
+                                  "Logout",
+                                  style: t.textTheme.button?.copyWith(
+                                    color: c.onPrimary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Padding deciveDataSection() {
@@ -298,7 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Container(
         decoration: BoxDecoration(
-          color: c.surface,
+          color: c.secondaryContainer,
           borderRadius: BorderRadius.circular(25),
         ),
         child: Padding(
@@ -333,7 +335,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Container(
         decoration: BoxDecoration(
-          color: c.surface,
+          color: c.secondaryContainer,
           borderRadius: BorderRadius.circular(25),
         ),
         child: Padding(
@@ -378,7 +380,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         width: Get.width - 20,
         height: 80,
         decoration: BoxDecoration(
-          color: c.surface,
+          color: c.secondaryContainer,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
@@ -427,7 +429,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       width: Get.width - 20,
       height: 80,
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.secondaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -468,7 +470,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       width: Get.width - 20,
       height: 80,
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.secondaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -514,7 +516,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       width: Get.width - 20,
       height: 80,
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.secondaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -547,7 +549,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       width: Get.width - 20,
       height: 80,
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.secondaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -588,7 +590,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       width: Get.width - 20,
       height: 80,
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.secondaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -619,7 +621,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           width: Get.width - 50,
                           height: Get.height / 2,
                           decoration: BoxDecoration(
-                            color: c.secondaryContainer,
+                            color: c.background,
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Column(
@@ -713,42 +715,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                     },
                   ),
                 );
-                // Get.to(() => Theme(
-                //       data: t.copyWith(
-                //         colorScheme: c,
-                //         cardColor: c.background,
-                //         backgroundColor: c.background,
-                //         appBarTheme: AppBarTheme(
-                //           iconTheme: IconThemeData(
-                //             color: c.onBackground,
-                //           ),
-                //           color: c.background,
-                //           elevation: 0,
-                //           toolbarHeight: 80,
-                //           titleTextStyle: t.textTheme.headline5,
-                //         ),
-                //       ),
-                //       child: LicensePage(
-                //         applicationIcon: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.center,
-                //           mainAxisAlignment: MainAxisAlignment.center,
-                //           children: [
-                //             Text(
-                //               "notes",
-                //               style:
-                //                   t.textTheme.headline6?.copyWith(fontSize: 24),
-                //             ),
-                //             const SizedBox(
-                //               height: 10,
-                //             ),
-                //           ],
-                //         ),
-                //         applicationLegalese: "Simple notes taking app",
-                //         applicationName: " ",
-                //         applicationVersion:
-                //             "v" + version + " (build v" + buildNumber + ")",
-                //       ),
-                //     ));
               },
               child: Text(
                 "v" + version + " (build v" + buildNumber + ")",
@@ -806,7 +772,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       width: Get.width - 20,
       height: 80,
       decoration: BoxDecoration(
-        color: c.surface,
+        color: c.secondaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -848,7 +814,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: BottomSheet(
           animationController: _bottomSheetController,
           enableDrag: true,
-          backgroundColor: c.surface,
+          backgroundColor: c.background,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25),

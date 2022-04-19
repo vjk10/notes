@@ -1,3 +1,4 @@
+import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -109,6 +110,7 @@ class _PickFolderState extends State<PickFolder> {
               child: Text(
                 "Add to Folder",
                 style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
                   color: selectedIndex.isNegative ? grey : c.onPrimary,
                 ),
               ),
@@ -128,6 +130,7 @@ class _PickFolderState extends State<PickFolder> {
               child: Text(
                 "Cancel",
                 style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
                   color: c.onBackground,
                 ),
               ),
@@ -149,7 +152,7 @@ class _PickFolderState extends State<PickFolder> {
       ),
       child: MasonryGridView.count(
           shrinkWrap: true,
-          crossAxisCount: 2,
+          crossAxisCount: 1,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           itemCount: foldersData.data?.length,
@@ -161,18 +164,18 @@ class _PickFolderState extends State<PickFolder> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  if (selectedIndex == -1) {
-                    setState(() {
-                      selectedIndex = folderIndex;
-                      folderName = foldersData.data![folderIndex].data["title"]
-                          .toString();
-                    });
-                  } else {
-                    setState(() {
-                      selectedIndex = -1;
-                      folderName = "";
-                    });
-                  }
+                  // if (selectedIndex == -1) {
+                  setState(() {
+                    selectedIndex = folderIndex;
+                    folderName =
+                        foldersData.data![folderIndex].data["title"].toString();
+                  });
+                  // } else {
+                  //   setState(() {
+                  //     selectedIndex = -1;
+                  //     folderName = "";
+                  //   });
+                  // }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -180,62 +183,73 @@ class _PickFolderState extends State<PickFolder> {
                         color: folderIndex == selectedIndex
                             ? c.primary
                             : c.surface,
-                        width: folderIndex == selectedIndex ? 2 : 0,
+                        width: 2,
                       ),
                       color: c.secondaryContainer,
                       borderRadius: BorderRadius.circular(15)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.folder,
-                          color: c.tertiary,
-                          size: 80,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          foldersData.data![folderIndex].data["title"]
-                              .toString(),
-                          textAlign: TextAlign.center,
-                          style: t.textTheme.headline6,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        if (foldersData.data![folderIndex].data["description"]
-                            .toString()
-                            .isNotEmpty)
-                          Text(foldersData
-                              .data![folderIndex].data["description"]
-                              .toString()),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 5,
-                          children: [
-                            Icon(
-                              Icons.schedule_rounded,
-                              color: c.secondary,
-                              size: 10,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        selectedIndex != folderIndex
+                            ? Icons.circle_outlined
+                            : Icons.check_circle_rounded,
+                        color: c.onBackground,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: Get.width - 90,
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 10.0,
+                          ),
+                          leading: Text(
+                            Emojis.fileFolder,
+                            style: t.textTheme.headline4,
+                          ),
+                          title: Text(
+                            foldersData.data![folderIndex].data["title"]
+                                .toString(),
+                            textAlign: TextAlign.start,
+                            style: t.textTheme.headline6,
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(foldersData
+                                .data![folderIndex].data["description"]
+                                .toString()),
+                          ),
+                          trailing: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 5,
+                              children: [
+                                Icon(
+                                  Icons.schedule_outlined,
+                                  color: c.secondary,
+                                  size: 10,
+                                ),
+                                Text(
+                                  foldersData
+                                      .data![folderIndex].data["creationTime"]
+                                      .toString(),
+                                  style: t.textTheme.caption?.copyWith(
+                                      color: c.secondary, fontSize: 10),
+                                ),
+                              ],
                             ),
-                            Text(
-                              foldersData
-                                  .data![folderIndex].data["creationTime"]
-                                  .toString(),
-                              style: t.textTheme.caption
-                                  ?.copyWith(color: c.secondary, fontSize: 10),
-                            ),
-                          ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -221,14 +221,12 @@ class _AddListViewState extends State<AddListView> {
               });
             },
             child: Icon(
-              item.checked
-                  ? Icons.check_box
-                  : Icons.check_box_outline_blank_outlined,
-              color: item.checked ? c.primary : c.outline,
+              item.checked ? Icons.check_circle : Icons.circle_outlined,
+              color: item.checked ? c.primary : c.onBackground,
             ),
           ),
           const SizedBox(
-            width: 5,
+            width: 10,
           ),
           Expanded(
             child: TextFormField(

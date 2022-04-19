@@ -125,14 +125,22 @@ class _OnBoarding2State extends State<OnBoarding2> {
                       const SizedBox(
                         height: 30,
                       ),
-                      SizedBox(
-                        width: Get.width - 30,
-                        child: Text(
-                          onBoarding2Message,
-                          style: t.textTheme.bodyText1?.copyWith(
-                            fontSize: 18.sp,
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: (Get.statusBarHeight - 100).isNegative
+                              ? c.surface
+                              : Colors.transparent,
+                        ),
+                        child: SizedBox(
+                          width: Get.width - 30,
+                          child: Text(
+                            onBoarding2Message,
+                            style: t.textTheme.bodyText1?.copyWith(
+                              fontSize: 18.sp,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],

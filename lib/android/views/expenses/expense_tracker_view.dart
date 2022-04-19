@@ -8,7 +8,9 @@ import 'package:notes/services/data_table_services.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_expense_model.dart';
 import 'package:notes/services/expense_services.dart';
+import 'package:notes/services/notifier.dart';
 import 'package:notes/services/utils.dart';
+import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 class ExpenseTrackerView extends StatefulWidget {
@@ -82,8 +84,8 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
   }
 
   addRow(int index) {
-    ExpenseModel expense = ExpenseModel(
-        index: index, type: 'Select Type...', description: " ", amount: 0.00);
+    ExpenseModel expense =
+        ExpenseModel(index: index, type: '', description: " ", amount: 0.00);
     setState(() {
       expenses.insert(index, expense);
     });
@@ -153,7 +155,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       context,
       t: t,
       c: c,
-      title: 'Change Type',
+      title: 'Label',
       value: editExpense.type,
     );
     setState(() => expenses = expenses.map((expense) {
@@ -172,7 +174,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       context,
       t: t,
       c: c,
-      title: 'Change Description',
+      title: 'Description',
       value: editExpense.description,
     );
     setState(() => expenses = expenses.map((expense) {
@@ -192,7 +194,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       context,
       t: t,
       c: c,
-      title: 'Change Description',
+      title: 'Amount',
       value: editExpense.amount.toString(),
     );
     setState(() => expenses = expenses.map((expense) {
@@ -226,115 +228,118 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        bool _autosave = await NotesDatabase().checkAutoSave();
-        if (_autosave) {
-          NotesDatabase().updateExpenseSheet(
-            titleController,
-            bodyController,
-            pinned,
-            expenses,
-            widget.noteId,
-          );
-        }
-        // Get.offAllNamed('/mainScreen');
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: c.background,
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          elevation: 0,
-          iconTheme: IconThemeData(color: c.onBackground),
-          backgroundColor: c.secondaryContainer.withAlpha(50),
-          title: Text(
-            "expense",
-            style: t.textTheme.headline5,
-          ),
-          leading: IconButton(
-            onPressed: () async {
-              bool _autosave = await NotesDatabase().checkAutoSave();
-              if (_autosave) {
-                NotesDatabase().updateExpenseSheet(
-                  titleController,
-                  bodyController,
-                  false,
-                  expenses,
-                  widget.noteId,
-                );
-                Get.offAllNamed('/mainScreen');
-              } else {
-                Get.offAllNamed('/mainScreen');
-              }
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: c.onBackground,
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+      return WillPopScope(
+        onWillPop: () async {
+          bool _autosave = await NotesDatabase().checkAutoSave();
+          if (_autosave) {
+            NotesDatabase().updateExpenseSheet(
+              titleController,
+              bodyController,
+              pinned,
+              expenses,
+              widget.noteId,
+            );
+          }
+          // Get.offAllNamed('/mainScreen');
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: c.background,
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            elevation: 0,
+            iconTheme: IconThemeData(color: c.onBackground),
+            backgroundColor: c.secondaryContainer.withAlpha(50),
+            title: Text(
+              "expense",
+              style: t.textTheme.headline5,
             ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: IconButton(
-                onPressed: () async {
+            leading: IconButton(
+              onPressed: () async {
+                bool _autosave = await NotesDatabase().checkAutoSave();
+                if (_autosave) {
                   NotesDatabase().updateExpenseSheet(
                     titleController,
                     bodyController,
-                    pinned,
+                    false,
                     expenses,
                     widget.noteId,
                   );
-                },
-                icon: Icon(
-                  Icons.save_outlined,
-                  color: c.primary,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () async {
-                if (kDebugMode) {
-                  print("DOC ID: " + noteSnapshot.id.toString());
+                  // Get.offAllNamed('/mainScreen');
+                  Get.back();
+                } else {
+                  Get.back();
                 }
-                NotesDatabase().deleteNote(noteSnapshot.id);
               },
               icon: Icon(
-                Icons.delete_outline,
-                color: c.error,
+                Icons.arrow_back,
+                color: c.onBackground,
               ),
             ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size(Get.width, 100),
-            child: bottomTextFields(),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: IconButton(
+                  onPressed: () async {
+                    NotesDatabase().updateExpenseSheet(
+                      titleController,
+                      bodyController,
+                      pinned,
+                      expenses,
+                      widget.noteId,
+                    );
+                  },
+                  icon: Icon(
+                    Icons.save_outlined,
+                    color: c.primary,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () async {
+                  if (kDebugMode) {
+                    print("DOC ID: " + noteSnapshot.id.toString());
+                  }
+                  NotesDatabase().deleteNote(noteSnapshot.id);
+                },
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: c.error,
+                ),
+              ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size(Get.width, 100),
+              child: bottomTextFields(),
+            ),
+            toolbarHeight: 80,
           ),
-          toolbarHeight: 80,
-        ),
-        bottomNavigationBar: expenseBottomBar(),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: DataTable(
-              headingRowColor: MaterialStateProperty.all(c.inversePrimary),
-              decoration: BoxDecoration(
-                color: c.surface,
+          bottomNavigationBar: expenseBottomBar(),
+          body: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: DataTable(
+                headingRowColor: MaterialStateProperty.all(c.inversePrimary),
+                decoration: BoxDecoration(
+                  color: c.surface,
+                ),
+                dividerThickness: 0,
+                dataTextStyle: t.textTheme.bodyMedium,
+                border: TableBorder(
+                  verticalInside: BorderSide(color: c.outline, width: 1),
+                  horizontalInside: BorderSide(color: c.outline, width: 1),
+                ),
+                showBottomBorder: true,
+                columns: columns,
+                rows: getRows(expenses),
               ),
-              dividerThickness: 0,
-              dataTextStyle: t.textTheme.bodyMedium,
-              border: TableBorder(
-                verticalInside: BorderSide(color: c.outline, width: 1),
-                horizontalInside: BorderSide(color: c.outline, width: 1),
-              ),
-              showBottomBorder: true,
-              columns: columns,
-              rows: getRows(expenses),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Visibility expenseBottomBar() {
@@ -342,95 +347,99 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       visible: true,
       child: SizedBox(
         height: 65,
-        child: BottomAppBar(
-          elevation: 0,
-          color: c.secondaryContainer.withAlpha(50),
-          shape: const CircularNotchedRectangle(),
-          clipBehavior: Clip.none,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  addRow(currentIndex);
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.post_add_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Add Row",
-                      style: t.textTheme.bodySmall?.copyWith(
+        child: Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+          return BottomAppBar(
+            elevation: 0,
+            color: notifier.material3
+                ? c.secondaryContainer.withAlpha(50)
+                : c.secondaryContainer,
+            shape: const CircularNotchedRectangle(),
+            clipBehavior: Clip.none,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    addRow(currentIndex);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.post_add_outlined,
                         color: c.onSecondaryContainer,
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Add Row",
+                        style: t.textTheme.bodySmall?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    expenses.clear();
-                    currentIndex = 0;
-                  });
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.delete_sweep_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Delete Rows",
-                      style: t.textTheme.bodySmall?.copyWith(
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      expenses.clear();
+                      currentIndex = 0;
+                    });
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.delete_sweep_outlined,
                         color: c.onSecondaryContainer,
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Delete Rows",
+                        style: t.textTheme.bodySmall?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  ExpenseServices()
-                      .downloadExcel(titleController.text, expenses);
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.file_download_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Export",
-                      style: t.textTheme.bodySmall?.copyWith(
+                GestureDetector(
+                  onTap: () {
+                    ExpenseServices()
+                        .downloadExcel(titleController.text, expenses);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.file_download_outlined,
                         color: c.onSecondaryContainer,
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Export",
+                        style: t.textTheme.bodySmall?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }

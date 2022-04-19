@@ -61,28 +61,16 @@ class _ComboBoxDialogWidgetState extends State<ComboBoxDialogWidget> {
           borderRadius: BorderRadius.circular(30),
         ),
         contentPadding: const EdgeInsets.all(15),
-        backgroundColor: widget.c.background,
+        backgroundColor: widget.c.secondaryContainer,
         title: Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(
             widget.title,
             style: t.textTheme.headline6?.copyWith(
-              color: c.onBackground,
+              color: c.onSecondaryContainer,
             ),
           ),
         ),
-        // content: TextField(
-        //   controller: controller,
-        //   decoration: const InputDecoration(
-        //     border: OutlineInputBorder(
-        //       borderRadius: BorderRadius.all(
-        //         Radius.circular(
-        //           25,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         content: NumberTextField(
           step: 1,
           contentPadding: const EdgeInsets.symmetric(
@@ -99,7 +87,7 @@ class _ComboBoxDialogWidgetState extends State<ComboBoxDialogWidget> {
             padding: const EdgeInsets.all(10.0),
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: widget.c.background,
+                backgroundColor: widget.c.secondaryContainer,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),

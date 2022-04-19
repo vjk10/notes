@@ -8,6 +8,8 @@ import 'package:notes/android/data/data.dart';
 import 'package:notes/android/views/notes/all_notes_view.dart';
 import 'package:notes/android/views/folders/all_folder_view.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:notes/services/notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 class MainScreen extends StatefulWidget {
@@ -99,40 +101,43 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: c.background,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: c.secondaryContainer.withAlpha(50),
-        title: Text(
-          "notes",
-          style: t.textTheme.headline6,
-        ),
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Get.toNamed('/settings');
-            },
-            icon: Icon(
-              Icons.settings_outlined,
-              color: c.onBackground,
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+      return Scaffold(
+          backgroundColor: c.background,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: notifier.material3
+                ? c.secondaryContainer.withAlpha(50)
+                : c.secondaryContainer,
+            title: Text(
+              "notes",
+              style: t.textTheme.headline6,
             ),
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Get.toNamed('/settings');
+                },
+                icon: Icon(
+                  Icons.settings_outlined,
+                  color: c.onBackground,
+                ),
+              ),
+            ],
+            bottom: _tabBar,
           ),
-        ],
-        bottom: _tabBar,
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          AllNotesView(
-            pinnedNotesFuture: NotesDatabase().getPinnedNotes(),
-            notesFuture: NotesDatabase().getNotes(),
-            foldersFuture: NotesDatabase().getFolders(),
-          ),
-          AllFoldersView(foldersFuture: NotesDatabase().getFolders()),
-        ],
-      ),
-    );
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              AllNotesView(
+                pinnedNotesFuture: NotesDatabase().getPinnedNotes(),
+                notesFuture: NotesDatabase().getNotes(),
+                foldersFuture: NotesDatabase().getFolders(),
+              ),
+              AllFoldersView(foldersFuture: NotesDatabase().getFolders()),
+            ],
+          ));
+    });
   }
 }

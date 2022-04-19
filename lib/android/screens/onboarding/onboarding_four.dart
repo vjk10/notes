@@ -94,7 +94,9 @@ class _OnBoarding4State extends State<OnBoarding4> {
               height: Get.height.h,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/onboarding4.png"),
+                  image: AssetImage(
+                    "assets/images/onboarding4.png",
+                  ),
                   fit: BoxFit.cover,
                 ),
               )),

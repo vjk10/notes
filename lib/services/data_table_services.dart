@@ -22,7 +22,7 @@ class DataTableServices {
               width: 5,
             ),
             Text(
-              "Type",
+              "Label",
               style:
                   t.textTheme.subtitle1?.copyWith(color: c.onPrimaryContainer),
             )

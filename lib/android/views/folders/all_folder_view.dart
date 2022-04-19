@@ -1,3 +1,4 @@
+import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -8,6 +9,8 @@ import 'package:notes/android/views/folders/folder_view.dart';
 import 'package:notes/android/widgets/no_folders_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:notes/services/notifier.dart';
+import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 import '../../data/data.dart';
@@ -31,58 +34,77 @@ class _AllFoldersViewState extends State<AllFoldersView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: c.background,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton.large(
-        heroTag: "folderTag",
-        onPressed: () {
-          Get.to(() => const AddFolderView());
-        },
-        backgroundColor: c.primaryContainer,
-        child: Center(
-          child: Icon(
-            Icons.create_new_folder_outlined,
-            color: c.onPrimaryContainer,
+    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: c.background,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton.large(
+          heroTag: "folderTag",
+          onPressed: () {
+            // Get.to(() => const AddFolderView());
+            Get.bottomSheet(
+              SizedBox(
+                width: Get.width - 30,
+                height: Get.height / 2,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                  child: AddFolderView(),
+                ),
+              ),
+              elevation: 10,
+            );
+          },
+          backgroundColor: c.primaryContainer,
+          child: Center(
+            child: Icon(
+              Icons.create_new_folder_outlined,
+              color: c.onPrimaryContainer,
+            ),
           ),
         ),
-      ),
-      body: FutureBuilder(
-        future: widget.foldersFuture,
-        builder: (context, AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
-          switch (foldersData.connectionState) {
-            case ConnectionState.waiting:
-              {
-                return const Center(
-                  child: NotesLoadingAndroid(),
-                );
-              }
-            case ConnectionState.done:
-              {
-                switch (foldersData.data!.length) {
-                  case 0:
-                    {
-                      return const NoFoldersFound();
-                    }
-                  default:
-                    {
-                      return foldersGrid(foldersData);
-                    }
+        body: StreamBuilder<List<DocumentSnapshot>>(
+          stream: ScientISSTdb.instance.collection("folders").watchDocuments(),
+          builder:
+              ((context, AsyncSnapshot<List<DocumentSnapshot>> folderSnapshot) {
+            switch (folderSnapshot.connectionState) {
+              case ConnectionState.waiting:
+                {
+                  return const Center(
+                    child: NotesLoadingAndroid(),
+                  );
                 }
-              }
-            default:
-              {
-                return Center(
-                  child: CircularProgressIndicator.adaptive(
-                    backgroundColor: c.onBackground.withOpacity(0.2),
-                    valueColor: AlwaysStoppedAnimation(c.onBackground),
-                  ),
-                );
-              }
-          }
-        },
-      ),
-    );
+              case ConnectionState.done:
+                {
+                  switch (folderSnapshot.data!.length) {
+                    case 0:
+                      {
+                        return const Center(child: NoFoldersFound());
+                      }
+                    default:
+                      {
+                        return foldersGrid(folderSnapshot);
+                      }
+                  }
+                }
+              default:
+                {
+                  switch (folderSnapshot.data!.length) {
+                    case 0:
+                      {
+                        return const Center(child: NoFoldersFound());
+                      }
+                    default:
+                      {
+                        return foldersGrid(folderSnapshot);
+                      }
+                  }
+                }
+            }
+          }),
+        ),
+      );
+    });
   }
 
   Padding foldersGrid(AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
@@ -93,7 +115,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
       ),
       child: MasonryGridView.count(
           shrinkWrap: true,
-          crossAxisCount: 2,
+          crossAxisCount: 1,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           itemCount: foldersData.data?.length,
@@ -165,59 +187,46 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                       ),
                     );
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: c.secondaryContainer,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                  child: ListTile(
+                    tileColor: c.secondaryContainer,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 15.0,
+                      horizontal: 15.0,
+                    ),
+                    leading: Text(
+                      Emojis.fileFolder,
+                      style: t.textTheme.headline4,
+                    ),
+                    title: Text(
+                      foldersData.data![folderIndex].data["title"].toString(),
+                      textAlign: TextAlign.start,
+                      style: t.textTheme.headline6,
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(foldersData
+                          .data![folderIndex].data["description"]
+                          .toString()),
+                    ),
+                    trailing: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 5,
                         children: [
                           Icon(
-                            Icons.folder_outlined,
-                            color: c.tertiary,
-                            size: 80,
-                          ),
-                          const SizedBox(
-                            height: 20,
+                            Icons.schedule_outlined,
+                            color: c.secondary,
+                            size: 10,
                           ),
                           Text(
-                            foldersData.data![folderIndex].data["title"]
+                            foldersData.data![folderIndex].data["creationTime"]
                                 .toString(),
-                            textAlign: TextAlign.center,
-                            style: t.textTheme.headline6,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          if (foldersData.data![folderIndex].data["description"]
-                              .toString()
-                              .isNotEmpty)
-                            Text(foldersData
-                                .data![folderIndex].data["description"]
-                                .toString()),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 5,
-                            children: [
-                              Icon(
-                                Icons.schedule_outlined,
-                                color: c.secondary,
-                                size: 10,
-                              ),
-                              Text(
-                                foldersData
-                                    .data![folderIndex].data["creationTime"]
-                                    .toString(),
-                                style: t.textTheme.caption?.copyWith(
-                                    color: c.secondary, fontSize: 10),
-                              ),
-                            ],
+                            style: t.textTheme.caption
+                                ?.copyWith(color: c.secondary, fontSize: 10),
                           ),
                         ],
                       ),
