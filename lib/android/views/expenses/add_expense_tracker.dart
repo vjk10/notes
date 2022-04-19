@@ -88,13 +88,13 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
               },
               onTap: () {
                 switch (index) {
-                  case 1:
+                  case 0:
                     editType(expense, index);
                     break;
-                  case 2:
+                  case 1:
                     editAmount(expense, index);
                     break;
-                  case 3:
+                  case 2:
                     editDescription(expense, index);
                     break;
                 }
@@ -109,7 +109,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
       context,
       t: t,
       c: c,
-      title: 'Change Type',
+      title: 'Label',
       value: editExpense.type,
     );
     setState(() => expenses = expenses.map((expense) {
@@ -128,7 +128,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
       context,
       t: t,
       c: c,
-      title: 'Change Description',
+      title: 'Description',
       value: editExpense.description,
     );
     setState(() => expenses = expenses.map((expense) {
@@ -148,7 +148,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
       context,
       t: t,
       c: c,
-      title: 'Change Description',
+      title: 'Amount',
       value: editExpense.amount.toString(),
     );
     setState(() => expenses = expenses.map((expense) {

@@ -134,13 +134,13 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
               },
               onTap: () {
                 switch (index) {
-                  case 1:
+                  case 0:
                     editType(expense, index);
                     break;
-                  case 2:
+                  case 1:
                     editAmount(expense, index);
                     break;
-                  case 3:
+                  case 2:
                     editDescription(expense, index);
                     break;
                 }
