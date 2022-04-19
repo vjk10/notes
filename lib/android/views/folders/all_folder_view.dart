@@ -207,9 +207,13 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                     ),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(foldersData
-                          .data![folderIndex].data["description"]
-                          .toString()),
+                      child: Text(
+                        foldersData.data![folderIndex].data["description"]
+                            .toString(),
+                        style: t.textTheme.subtitle1?.copyWith(
+                          color: c.onSecondaryContainer,
+                        ),
+                      ),
                     ),
                     trailing: Padding(
                       padding: const EdgeInsets.only(right: 8.0),

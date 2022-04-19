@@ -18,46 +18,28 @@ class Utils {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
-        backgroundColor: c.secondaryContainer,
-        title: Text(
+        backgroundColor: c.surface,
+        title: const Text(
           "Error Saving",
-          style: t.textTheme.headline6?.copyWith(
-            color: c.onSecondaryContainer,
-          ),
         ),
-        content: Text(
+        content: const Text(
           "Do you wish to continue without saving the note?",
-          style: t.textTheme.button?.copyWith(
-            color: c.onSecondaryContainer,
-          ),
         ),
         actions: [
           TextButton(
             onPressed: () {
               Get.offAllNamed('/mainScreen');
             },
-            child: Text(
-              "Exit",
-              style: t.textTheme.button?.copyWith(
-                color: c.onSurface,
-              ),
+            child: const Text(
+              "Leave",
             ),
           ),
           TextButton(
-            style: TextButton.styleFrom(
-                backgroundColor: c.primary,
-                primary: c.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                )),
             onPressed: () {
               Get.back();
             },
-            child: Text(
-              "Edit",
-              style: t.textTheme.button?.copyWith(
-                color: c.onPrimary,
-              ),
+            child: const Text(
+              "Continue Editing",
             ),
           ),
           const SizedBox(
