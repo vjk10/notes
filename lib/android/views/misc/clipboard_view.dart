@@ -220,7 +220,7 @@ class _ClipBoardState extends State<ClipBoard> {
                           width: Get.width - 70,
                           child: TextField(
                             style: t.textTheme.bodySmall
-                                ?.copyWith(color: c.onSecondary),
+                                ?.copyWith(color: c.onSecondaryContainer),
                             controller: clipboardController,
                             textCapitalization: TextCapitalization.none,
                             textInputAction: TextInputAction.done,
