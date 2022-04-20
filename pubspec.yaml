@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none' 
 
-version: 1.0.8+9
+version: 1.0.9+10
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -31,7 +31,6 @@ dependencies:
   package_info_plus: ^1.4.0
   package_info_plus_web: ^1.0.4
   package_info_plus_windows: ^1.0.4
-  dropdown_button2: ^1.2.0
   google_sign_in: ^5.2.4
   google_sign_in_web: ^0.10.0+5
   firebase_auth: ^3.3.9

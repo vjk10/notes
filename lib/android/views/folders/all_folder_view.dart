@@ -6,7 +6,6 @@ import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/views/folders/add_folders_view.dart';
 import 'package:notes/android/views/folders/folder_view.dart';
-import 'package:notes/android/widgets/no_folders_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/notifier.dart';
@@ -79,7 +78,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                   switch (folderSnapshot.data!.length) {
                     case 0:
                       {
-                        return const Center(child: NoFoldersFound());
+                        return const SizedBox();
                       }
                     default:
                       {
@@ -92,7 +91,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                   switch (folderSnapshot.data!.length) {
                     case 0:
                       {
-                        return const Center(child: NoFoldersFound());
+                        return const SizedBox();
                       }
                     default:
                       {

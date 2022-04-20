@@ -14,7 +14,6 @@ import 'package:notes/android/views/list/add_list_view.dart';
 import 'package:notes/android/views/list/list_view.dart';
 import 'package:notes/android/views/notes/note_page.dart';
 import 'package:notes/android/views/folders/pick_folder.dart';
-import 'package:notes/android/widgets/no_notes_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
@@ -245,7 +244,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                         switch (otherSnapshot.data!.length) {
                           case 0:
                             {
-                              return const Center(child: NoNotesFound());
+                              return const SizedBox();
                             }
                           default:
                             {
@@ -258,7 +257,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                         switch (otherSnapshot.data!.length) {
                           case 0:
                             {
-                              return const Center(child: NoNotesFound());
+                              return const SizedBox();
                             }
                           default:
                             {

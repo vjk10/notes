@@ -107,7 +107,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
           cells: Utils.modelBuilder(cells, (index, cell) {
             return DataCell(
               Text(
-                index == 2 ? '$currency$cell' : '$cell',
+                index == 1 ? '$currency$cell' : '$cell',
                 style: t.textTheme.bodySmall?.copyWith(
                   color: expense.index.isEven
                       ? c.onSecondaryContainer
@@ -496,7 +496,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
             focusedBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             hintText: "Description",
-            hintStyle: t.textTheme.bodySmall,
+            hintStyle: t.textTheme.bodySmall?.copyWith(color: c.onBackground),
           ),
         ),
       ],

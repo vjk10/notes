@@ -9,7 +9,6 @@ import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/views/expenses/expense_tracker_view.dart';
 import 'package:notes/android/views/list/list_view.dart';
 import 'package:notes/android/views/notes/note_page.dart';
-import 'package:notes/android/widgets/no_notes_found.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/notifier.dart';
@@ -98,7 +97,7 @@ class _FolderViewState extends State<FolderView> {
                     switch (folderNotesData.data!.length) {
                       case 0:
                         {
-                          return const NoNotesFound();
+                          return const SizedBox();
                         }
                       default:
                         {
