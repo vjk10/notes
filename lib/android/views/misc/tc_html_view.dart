@@ -36,7 +36,7 @@ class _TCHtmlViewState extends State<TCHtmlView> {
         iconTheme: IconThemeData(color: c.onBackground),
         backgroundColor: c.background,
         title: Text(
-          "Terms & Conditions",
+          "terms & conditions",
           style: t.textTheme.headline5,
         ),
       ),

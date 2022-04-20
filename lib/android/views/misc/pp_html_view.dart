@@ -36,7 +36,7 @@ class _PPHtmlViewState extends State<PPHtmlView> {
         iconTheme: IconThemeData(color: c.onBackground),
         backgroundColor: c.background,
         title: Text(
-          "Privacy Policy",
+          "privacy policy",
           style: t.textTheme.headline5,
         ),
       ),

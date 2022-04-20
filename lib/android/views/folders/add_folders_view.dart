@@ -70,7 +70,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                     keyboardType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
-                      hintText: "Folder Name",
+                      hintText: "folder name",
                       hintStyle: t.textTheme.button,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
@@ -131,7 +131,7 @@ class _AddFolderViewState extends State<AddFolderView> {
                     keyboardType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
-                      hintText: "Folder Description",
+                      hintText: "folder description",
                       hintStyle: t.textTheme.button,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(

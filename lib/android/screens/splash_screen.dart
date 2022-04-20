@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 Center(
                   child: Text(
-                    "Loading your notes",
+                    "loading your notes",
                     style: t.textTheme.headline6,
                   ),
                 )

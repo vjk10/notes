@@ -69,8 +69,8 @@ class _MainScreenState extends State<MainScreen>
   }
 
   final myTabs = [
-    const Tab(text: "All"),
-    const Tab(text: "Folders"),
+    const Tab(text: "all"),
+    const Tab(text: "folders"),
   ];
   TabBar get _tabBar => TabBar(
       isScrollable: true,

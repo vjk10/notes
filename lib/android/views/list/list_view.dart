@@ -167,7 +167,7 @@ class _ListviewViewState extends State<ListviewView> {
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
-                hintText: "Title",
+                hintText: "title",
                 hintStyle: t.textTheme.headline4,
               ),
             ),
@@ -305,7 +305,7 @@ class _ListviewViewState extends State<ListviewView> {
               },
               style: t.textTheme.bodyMedium,
               decoration: InputDecoration(
-                  hintText: "List Item",
+                  hintText: "list item",
                   hintStyle: t.textTheme.bodyMedium?.copyWith(
                     color: c.outline,
                   ),

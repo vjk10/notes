@@ -27,6 +27,9 @@ class _ClipBoardState extends State<ClipBoard> {
   Map<String, chat_types.PreviewData> datas = {};
   late ScrollController _hideButtonController;
   bool _isVisible = true;
+  bool appBarControl = false;
+  String selectedText = "";
+  String selectedID = "";
 
   @override
   void initState() {
@@ -92,18 +95,111 @@ class _ClipBoardState extends State<ClipBoard> {
         child: Scaffold(
           backgroundColor: c.background,
           resizeToAvoidBottomInset: true,
-          appBar: AppBar(
-            elevation: 0,
-            iconTheme: IconThemeData(color: c.onBackground),
-            backgroundColor: notifier.material3
-                ? c.secondaryContainer.withAlpha(50)
-                : c.secondaryContainer,
-            title: Text(
-              "clipboard",
-              style: t.textTheme.headline5,
-            ),
-            toolbarHeight: 80,
-          ),
+          appBar: appBarControl
+              ? AppBar(
+                  elevation: 0,
+                  iconTheme: IconThemeData(color: c.onBackground),
+                  backgroundColor: notifier.material3
+                      ? c.secondaryContainer.withAlpha(50)
+                      : c.secondaryContainer,
+                  title: Text(
+                    "",
+                    style: t.textTheme.headline5,
+                  ),
+                  leading: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        HapticFeedback.heavyImpact();
+                        selectedText = "";
+                        selectedID = "";
+                        appBarControl = !appBarControl;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.deselect_outlined,
+                      color: c.onSecondaryContainer,
+                    ),
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        if (kDebugMode) {
+                          print(selectedText);
+                        }
+                        FlutterClipboard.copy(selectedText).whenComplete(() {
+                          HapticFeedback.heavyImpact();
+                          setState(() {
+                            HapticFeedback.heavyImpact();
+                            selectedText = "";
+                            selectedID = "";
+                            appBarControl = !appBarControl;
+                          });
+                          Get.showSnackbar(GetSnackBar(
+                            shouldIconPulse: false,
+                            backgroundColor: c.surface,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
+                            borderRadius: 10,
+                            icon: Icon(
+                              Icons.content_paste_rounded,
+                              color: c.primary,
+                            ),
+                            duration: const Duration(seconds: 2),
+                            messageText: Text(
+                              "Copied to clipboard",
+                              style: t.textTheme.caption
+                                  ?.copyWith(color: c.onSurface),
+                            ),
+                          ));
+                        });
+                      },
+                      icon: Icon(
+                        Icons.copy_outlined,
+                        color: c.onSecondaryContainer,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        if (kDebugMode) {
+                          print(selectedText);
+                          print(selectedID);
+                        }
+                        await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(user.uid)
+                            .collection("clipboards")
+                            .doc(selectedID)
+                            .delete()
+                            .whenComplete(() {
+                          HapticFeedback.heavyImpact();
+                          setState(() {
+                            HapticFeedback.heavyImpact();
+                            selectedText = "";
+                            selectedID = "";
+                            appBarControl = !appBarControl;
+                          });
+                        });
+                      },
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: c.onSecondaryContainer,
+                      ),
+                    ),
+                  ],
+                  toolbarHeight: 80,
+                )
+              : AppBar(
+                  elevation: 0,
+                  iconTheme: IconThemeData(color: c.onSecondaryContainer),
+                  backgroundColor: notifier.material3
+                      ? c.secondaryContainer.withAlpha(50)
+                      : c.secondaryContainer,
+                  title: Text(
+                    "clipboard",
+                    style: t.textTheme.headline5,
+                  ),
+                  toolbarHeight: 80,
+                ),
           body: Stack(
             children: [
               StreamBuilder<QuerySnapshot>(
@@ -118,43 +214,41 @@ class _ClipBoardState extends State<ClipBoard> {
                             (e) {
                               return GestureDetector(
                                 onLongPress: () async {
-                                  HapticFeedback.heavyImpact();
-                                  if (kDebugMode) {
-                                    print("SELECTED ID: " + e.id);
-                                  }
-                                  // await FirebaseFirestore.instance
-                                  //     .collection("users")
-                                  //     .doc(user.uid)
-                                  //     .collection("clipboards")
-                                  //     .doc(e.id)
-                                  //     .delete();
-                                },
-                                onTap: () {
-                                  if (kDebugMode) {
-                                    print("TAPPED");
-                                  }
-                                  FlutterClipboard.copy(e.get("text"))
-                                      .whenComplete(() {
+                                  if (!appBarControl) {
                                     HapticFeedback.heavyImpact();
-                                    Get.showSnackbar(GetSnackBar(
-                                      shouldIconPulse: false,
-                                      backgroundColor: c.surface,
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 16, horizontal: 16),
-                                      borderRadius: 10,
-                                      icon: Icon(
-                                        Icons.content_paste_rounded,
-                                        color: c.primary,
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                      messageText: Text(
-                                        "Copied to clipboard",
-                                        style: t.textTheme.caption
-                                            ?.copyWith(color: c.onSurface),
-                                      ),
-                                    ));
-                                  });
+                                    setState(() {
+                                      appBarControl = !appBarControl;
+                                      selectedText = e.get('text');
+                                      selectedID = e.id;
+                                    });
+                                  }
                                 },
+                                // onTap: () {
+                                //   if (kDebugMode) {
+                                //     print("TAPPED");
+                                //   }
+                                //   FlutterClipboard.copy(e.get("text"))
+                                //       .whenComplete(() {
+                                //     HapticFeedback.heavyImpact();
+                                //     Get.showSnackbar(GetSnackBar(
+                                //       shouldIconPulse: false,
+                                //       backgroundColor: c.surface,
+                                //       margin: const EdgeInsets.symmetric(
+                                //           vertical: 16, horizontal: 16),
+                                //       borderRadius: 10,
+                                //       icon: Icon(
+                                //         Icons.content_paste_rounded,
+                                //         color: c.primary,
+                                //       ),
+                                //       duration: const Duration(seconds: 2),
+                                //       messageText: Text(
+                                //         "Copied to clipboard",
+                                //         style: t.textTheme.caption
+                                //             ?.copyWith(color: c.onSurface),
+                                //       ),
+                                //     ));
+                                //   });
+                                // },
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Container(
