@@ -421,7 +421,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
         ),
         TextFormField(
           controller: bodyController,
-          style: t.textTheme.bodySmall,
+          style: t.textTheme.bodySmall?.copyWith(color: c.onBackground),
           onChanged: (value) {
             setState(() {
               body = value.toString();
