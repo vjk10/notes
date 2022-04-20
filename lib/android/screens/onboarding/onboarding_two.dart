@@ -196,6 +196,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                               color: c.surface,
                             ),
                           ),
+                          hintText: 'your name here...',
                           filled: true,
                           fillColor: c.surface,
                           contentPadding: EdgeInsets.all(
