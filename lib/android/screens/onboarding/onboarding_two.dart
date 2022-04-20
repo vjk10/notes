@@ -196,7 +196,10 @@ class _OnBoarding2State extends State<OnBoarding2> {
                               color: c.surface,
                             ),
                           ),
-                          hintText: 'your name here...',
+                          hintText: 'Your name here...',
+                          hintStyle: t.textTheme.bodyText1?.copyWith(
+                            color: c.onSurface,
+                          ),
                           filled: true,
                           fillColor: c.surface,
                           contentPadding: EdgeInsets.all(
