@@ -39,7 +39,6 @@ class _AllFoldersViewState extends State<AllFoldersView> {
         floatingActionButton: FloatingActionButton.large(
           heroTag: "folderTag",
           onPressed: () {
-            // Get.to(() => const AddFolderView());
             Get.bottomSheet(
               SizedBox(
                 width: Get.width - 30,

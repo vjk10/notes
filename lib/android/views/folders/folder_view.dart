@@ -107,11 +107,8 @@ class _FolderViewState extends State<FolderView> {
                   }
                 default:
                   {
-                    return Center(
-                      child: CircularProgressIndicator.adaptive(
-                        backgroundColor: c.onBackground.withOpacity(0.2),
-                        valueColor: AlwaysStoppedAnimation(c.onBackground),
-                      ),
+                    return const Center(
+                      child: NotesLoadingAndroid(),
                     );
                   }
               }

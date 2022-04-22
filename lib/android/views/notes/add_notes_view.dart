@@ -54,7 +54,7 @@ class _AddNoteViewState extends State<AddNoteView> {
               totalItems: 0,
               type: "Note",
             );
-            NotesDatabase().addNote(note, false);
+            await NotesDatabase().addNote(note, false);
           } else {
             Get.offAllNamed('/mainScreen');
           }

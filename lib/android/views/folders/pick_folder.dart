@@ -48,8 +48,45 @@ class _PickFolderState extends State<PickFolder> {
           style: t.textTheme.headline5,
         ),
       ),
-      body: FutureBuilder(
-        future: widget.foldersFuture,
+      // body: FutureBuilder(
+      //   future: widget.foldersFuture,
+      //   builder: (context, AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
+      //     switch (foldersData.connectionState) {
+      //       case ConnectionState.waiting:
+      //         {
+      //           return const NotesLoadingAndroid();
+      //         }
+      //       case ConnectionState.done:
+      //         {
+      //           switch (foldersData.data?.length) {
+      //             case 0:
+      //               {
+      //                 return Center(
+      //                   child: Text(
+      //                     "No folders",
+      //                     textAlign: TextAlign.center,
+      //                     style: t.textTheme.bodyText1?.copyWith(
+      //                       color: c.onSurface,
+      //                     ),
+      //                   ),
+      //                 );
+      //               }
+
+      //             default:
+      //               {
+      //                 return foldersGrid(foldersData);
+      //               }
+      //           }
+      //         }
+      //       default:
+      //         {
+      //           return const NotesLoadingAndroid();
+      //         }
+      //     }
+      //   },
+      // ),
+      body: StreamBuilder(
+        stream: ScientISSTdb.instance.collection("folders").watchDocuments(),
         builder: (context, AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
           switch (foldersData.connectionState) {
             case ConnectionState.waiting:
@@ -71,7 +108,6 @@ class _PickFolderState extends State<PickFolder> {
                         ),
                       );
                     }
-
                   default:
                     {
                       return foldersGrid(foldersData);
@@ -80,7 +116,24 @@ class _PickFolderState extends State<PickFolder> {
               }
             default:
               {
-                return const NotesLoadingAndroid();
+                switch (foldersData.data?.length) {
+                  case 0:
+                    {
+                      return Center(
+                        child: Text(
+                          "No folders",
+                          textAlign: TextAlign.center,
+                          style: t.textTheme.bodyText1?.copyWith(
+                            color: c.onSurface,
+                          ),
+                        ),
+                      );
+                    }
+                  default:
+                    {
+                      return foldersGrid(foldersData);
+                    }
+                }
               }
           }
         },
@@ -170,12 +223,6 @@ class _PickFolderState extends State<PickFolder> {
                     folderName =
                         foldersData.data![folderIndex].data["title"].toString();
                   });
-                  // } else {
-                  //   setState(() {
-                  //     selectedIndex = -1;
-                  //     folderName = "";
-                  //   });
-                  // }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -222,9 +269,13 @@ class _PickFolderState extends State<PickFolder> {
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(foldersData
-                                .data![folderIndex].data["description"]
-                                .toString()),
+                            child: Text(
+                              foldersData.data![folderIndex].data["description"]
+                                  .toString(),
+                              style: t.textTheme.bodyMedium?.copyWith(
+                                color: c.onSecondaryContainer,
+                              ),
+                            ),
                           ),
                           trailing: Padding(
                             padding: const EdgeInsets.only(right: 8.0),
