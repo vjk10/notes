@@ -217,19 +217,25 @@ class _PickFolderState extends State<PickFolder> {
               ),
               child: GestureDetector(
                 onTap: () {
-                  // if (selectedIndex == -1) {
-                  setState(() {
-                    selectedIndex = folderIndex;
-                    folderName =
-                        foldersData.data![folderIndex].data["title"].toString();
-                  });
+                  if (selectedIndex == folderIndex) {
+                    setState(() {
+                      selectedIndex = -1;
+                      folderName = " ";
+                    });
+                  } else {
+                    setState(() {
+                      selectedIndex = folderIndex;
+                      folderName = foldersData.data![folderIndex].data["title"]
+                          .toString();
+                    });
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(
                         color: folderIndex == selectedIndex
                             ? c.primary
-                            : c.surface,
+                            : c.secondaryContainer,
                         width: 2,
                       ),
                       color: c.secondaryContainer,
@@ -242,7 +248,9 @@ class _PickFolderState extends State<PickFolder> {
                         selectedIndex != folderIndex
                             ? Icons.circle_outlined
                             : Icons.check_circle_rounded,
-                        color: c.onBackground,
+                        color: selectedIndex != folderIndex
+                            ? c.onSecondaryContainer
+                            : c.primary,
                       ),
                       const SizedBox(
                         width: 10,
