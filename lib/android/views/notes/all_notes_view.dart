@@ -26,13 +26,9 @@ import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 import '../../../services/db/notes_model.dart';
 
 class AllNotesView extends StatefulWidget {
-  final Future<List<DocumentSnapshot>> notesFuture;
-  final Future<List<DocumentSnapshot>> pinnedNotesFuture;
   final Future<List<DocumentSnapshot>> foldersFuture;
   const AllNotesView({
     Key? key,
-    required this.notesFuture,
-    required this.pinnedNotesFuture,
     required this.foldersFuture,
   }) : super(key: key);
 

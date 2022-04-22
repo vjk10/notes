@@ -15,9 +15,7 @@ import 'package:scientisst_db/scientisst_db.dart';
 import '../../data/data.dart';
 
 class AllFoldersView extends StatefulWidget {
-  final Future<List<DocumentSnapshot>> foldersFuture;
-  const AllFoldersView({Key? key, required this.foldersFuture})
-      : super(key: key);
+  const AllFoldersView({Key? key}) : super(key: key);
 
   @override
   State<AllFoldersView> createState() => _AllFoldersViewState();

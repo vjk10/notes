@@ -275,9 +275,9 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           .set(
                         {
                           "completed": true,
+                          "conditions": true,
                         },
                       );
-                      // Get.offNamedUntil('/mainScreen', (route) => false);
                       Get.offAllNamed('/mainScreen');
                     },
                     child: Text(

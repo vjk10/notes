@@ -10,6 +10,7 @@ import 'package:notes/android/views/notes/all_notes_view.dart';
 import 'package:notes/android/views/folders/all_folder_view.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/notifier.dart';
+import 'package:notes/services/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
@@ -55,11 +56,19 @@ class _MainScreenState extends State<MainScreen>
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
+    checkTerms();
     if (kDebugMode) {
       print("MAIN SCREEN INIT STATE");
       print("SELECTED INDEX: " + widget.selectedIndex.toString());
     }
     super.initState();
+  }
+
+  checkTerms() async {
+    bool _conditions = await Utils().checkTerms();
+    if (_conditions == false) {
+      Utils().licenseDialog(context, t, c, false);
+    }
   }
 
   @override
@@ -132,11 +141,9 @@ class _MainScreenState extends State<MainScreen>
             controller: _tabController,
             children: [
               AllNotesView(
-                pinnedNotesFuture: NotesDatabase().getPinnedNotes(),
-                notesFuture: NotesDatabase().getNotes(),
                 foldersFuture: NotesDatabase().getFolders(),
               ),
-              AllFoldersView(foldersFuture: NotesDatabase().getFolders()),
+              const AllFoldersView(),
             ],
           ));
     });
