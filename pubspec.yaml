@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none' 
 
-version: 1.1.0+13
+version: 1.1.1+14
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -62,6 +62,7 @@ dependencies:
   open_document: ^1.0.4
   google_fonts: ^2.3.1
   emojis: ^0.9.9
+  currency_picker: ^2.0.9
 
 dev_dependencies:
   flutter_test:

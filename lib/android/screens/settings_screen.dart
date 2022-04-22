@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:filesize/filesize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -366,6 +367,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ),
               ),
               autoSaveTile(),
+              currencyTile(),
             ],
           ),
         ),
@@ -387,8 +389,8 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: Center(
             child: ListTile(
               leading: Icon(
-                Icons.palette_outlined,
-                color: c.primary,
+                Icons.colorize_outlined,
+                color: c.onSecondaryContainer,
                 size: 24,
               ),
               title: Text(
@@ -437,7 +439,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.save,
-              color: c.primary,
+              color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
@@ -464,6 +466,58 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
+  Container currencyTile() {
+    return Container(
+        width: Get.width - 20,
+        height: 80,
+        decoration: BoxDecoration(
+          color: c.secondaryContainer,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: ListTile(
+              leading: Icon(
+                Icons.money,
+                color: c.onSecondaryContainer,
+                size: 24,
+              ),
+              title: Text(
+                "Choose Currency",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                ),
+              ),
+              trailing: GestureDetector(
+                onTap: () {
+                  showCurrencyPicker(
+                      context: context,
+                      theme: CurrencyPickerThemeData(
+                          flagSize: 24,
+                          backgroundColor: c.secondaryContainer,
+                          titleTextStyle: t.textTheme.button,
+                          subtitleTextStyle: t.textTheme.subtitle1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          )),
+                      onSelect: (value) {
+                        setState(() {
+                          currency = value.symbol;
+                          currencyFlag = value.flag;
+                        });
+                      });
+                },
+                child: Text(
+                  currency + " " + currencyFlag,
+                  style: t.textTheme.button,
+                ),
+              ),
+            ),
+          ),
+        ));
+  }
+
   Container cloudBackupTile() {
     return Container(
       width: Get.width - 20,
@@ -478,7 +532,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.backup_outlined,
-              color: c.primary,
+              color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
@@ -524,7 +578,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.folder_outlined,
-              color: c.primary,
+              color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
@@ -557,7 +611,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.delete_outline_rounded,
-              color: c.primary,
+              color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
@@ -598,7 +652,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.info_outline_rounded,
-              color: c.primary,
+              color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
@@ -615,103 +669,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                     onClosing: () {},
                     builder: (_) {
                       return const LicensesAndInfo();
-                      // return Padding(
-                      //   padding: const EdgeInsets.all(10.0),
-                      //   child: Container(
-                      //     width: Get.width - 50,
-                      //     height: Get.height / 2,
-                      //     decoration: BoxDecoration(
-                      //       color: c.background,
-                      //       borderRadius: BorderRadius.circular(25),
-                      //     ),
-                      //     child: Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.center,
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         SizedBox(
-                      //           width: Get.width - 70,
-                      //           height: 75,
-                      //           child: TextButton.icon(
-                      //             style: TextButton.styleFrom(
-                      //               backgroundColor: c.primary,
-                      //               shape: RoundedRectangleBorder(
-                      //                 borderRadius: BorderRadius.circular(25),
-                      //               ),
-                      //             ),
-                      //             onPressed: () {
-                      //               Get.to(() => const PPHtmlView());
-                      //             },
-                      //             icon: Icon(
-                      //               Icons.policy_outlined,
-                      //               color: c.onPrimary,
-                      //             ),
-                      //             label: Text(
-                      //               "Privacy Policy",
-                      //               style: t.textTheme.button?.copyWith(
-                      //                 color: c.onPrimary,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         const SizedBox(
-                      //           height: 20,
-                      //         ),
-                      //         SizedBox(
-                      //           width: Get.width - 70,
-                      //           height: 75,
-                      //           child: TextButton.icon(
-                      //             style: TextButton.styleFrom(
-                      //               backgroundColor: c.primary,
-                      //               shape: RoundedRectangleBorder(
-                      //                 borderRadius: BorderRadius.circular(25),
-                      //               ),
-                      //             ),
-                      //             onPressed: () {
-                      //               Get.to(() => const TCHtmlView());
-                      //             },
-                      //             icon: Icon(
-                      //               Icons.gavel_outlined,
-                      //               color: c.onPrimary,
-                      //             ),
-                      //             label: Text(
-                      //               "Terms & Conditions",
-                      //               style: t.textTheme.button?.copyWith(
-                      //                 color: c.onPrimary,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         const SizedBox(
-                      //           height: 20,
-                      //         ),
-                      //         SizedBox(
-                      //           width: Get.width - 70,
-                      //           height: 75,
-                      //           child: TextButton.icon(
-                      //               style: TextButton.styleFrom(
-                      //                 backgroundColor: c.primary,
-                      //                 shape: RoundedRectangleBorder(
-                      //                   borderRadius: BorderRadius.circular(25),
-                      //                 ),
-                      //               ),
-                      //               onPressed: () {
-                      //                 navToLicense();
-                      //               },
-                      //               icon: Icon(
-                      //                 Icons.lightbulb_outline,
-                      //                 color: c.onPrimary,
-                      //               ),
-                      //               label: Text(
-                      //                 "Licenses",
-                      //                 style: t.textTheme.button?.copyWith(
-                      //                   color: c.onPrimary,
-                      //                 ),
-                      //               )),
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // );
                     },
                   ),
                 );
@@ -730,43 +687,6 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-  // void navToLicense() {
-  //   Get.to(() => Theme(
-  //         data: t.copyWith(
-  //           colorScheme: c,
-  //           cardColor: c.background,
-  //           backgroundColor: c.background,
-  //           appBarTheme: AppBarTheme(
-  //             iconTheme: IconThemeData(
-  //               color: c.onBackground,
-  //             ),
-  //             color: c.background,
-  //             elevation: 0,
-  //             toolbarHeight: 80,
-  //             titleTextStyle: t.textTheme.headline5,
-  //           ),
-  //         ),
-  //         child: LicensePage(
-  //           applicationIcon: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               Text(
-  //                 "notes",
-  //                 style: t.textTheme.headline6?.copyWith(fontSize: 24),
-  //               ),
-  //               const SizedBox(
-  //                 height: 10,
-  //               ),
-  //             ],
-  //           ),
-  //           applicationLegalese: "Simple notes taking app",
-  //           applicationName: " ",
-  //           applicationVersion: "v" + version + " (build v" + buildNumber + ")",
-  //         ),
-  //       ));
-  // }
-
   Container themeDataTile() {
     return Container(
       width: Get.width - 20,
@@ -781,7 +701,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.palette,
-              color: c.primary,
+              color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
