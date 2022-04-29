@@ -301,13 +301,18 @@ class _FolderViewState extends State<FolderView> {
                                             const SizedBox(
                                               width: 5,
                                             ),
-                                            Text(
-                                              snapshot.data!.data["text"]
-                                                  .toString(),
-                                              maxLines: 15,
-                                              softWrap: true,
-                                              overflow: TextOverflow.fade,
-                                              style: t.textTheme.bodyText1,
+                                            SizedBox(
+                                              width: Get.width / 3.5,
+                                              child: Text(
+                                                snapshot.data!.data["text"]
+                                                    .toString(),
+                                                maxLines: 15,
+                                                textWidthBasis:
+                                                    TextWidthBasis.longestLine,
+                                                softWrap: true,
+                                                overflow: TextOverflow.fade,
+                                                style: t.textTheme.bodyText1,
+                                              ),
                                             ),
                                           ],
                                         ),
