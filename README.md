@@ -1,6 +1,6 @@
 # notes
 
-![Getting Started](./logo.png)
+![Getting Started](https://play-lh.googleusercontent.com/-Q4vLsL1VesT7IS4qVSpI07HCMYxmN9Q3dkG-izJ0LbTp_f7CIrYnLDR0CeAh8TJcQY=w2247-h1264-rw)
 
 <a href="https://play.google.com/store/apps/details?id=com.vlabs.notes"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=80px /></a>
 
