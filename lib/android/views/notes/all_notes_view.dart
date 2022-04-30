@@ -18,7 +18,9 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
 import 'package:notes/services/notifier.dart';
+import 'package:notes/services/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
@@ -44,10 +46,55 @@ class _AllNotesViewState extends State<AllNotesView> {
   late fire_store.DocumentSnapshot firebaseUserDetails;
   late User user;
 
+  final QuickActions quickActions = const QuickActions();
+  String shortcut = 'no action set';
+
   @override
   void initState() {
     initUser();
-
+    quickActions.initialize((String shortcutType) {
+      setState(() {
+        shortcut = shortcutType;
+      });
+      if (shortcutType == 'action_one') {
+        Get.to(
+          () => const AddNoteView(),
+        );
+      }
+      if (shortcutType == 'action_two') {
+        Get.to(
+          () => const AddListView(),
+        );
+      }
+      if (shortcutType == 'action_three') {
+        Get.to(
+          () => const AddExpenseTrackerView(),
+        );
+      }
+    });
+    quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(
+        type: 'action_one',
+        localizedTitle: 'Add Note',
+        icon: 'ic_add_note',
+      ),
+      const ShortcutItem(
+        type: 'action_two',
+        localizedTitle: 'Add List',
+        icon: 'ic_add_list',
+      ),
+      const ShortcutItem(
+        type: 'action_three',
+        localizedTitle: 'Add Expense',
+        icon: 'ic_add_expense',
+      ),
+    ]).then((value) {
+      setState(() {
+        if (shortcut == 'no action set') {
+          shortcut = 'actions ready';
+        }
+      });
+    });
     super.initState();
     if (kDebugMode) {
       print("ALL NOTES INIT STATE");
@@ -301,13 +348,18 @@ class _AllNotesViewState extends State<AllNotesView> {
                   const SizedBox(
                     width: 40,
                   ),
-                  // Icon(
-                  //   Icons.notification_add,
-                  //   color: c.onSecondaryContainer,
-                  // ),
-                  // const SizedBox(
-                  //   width: 40,
-                  // ),
+                  GestureDetector(
+                    onTap: () {
+                      Utils().createAlertDialog(context, t, c);
+                    },
+                    child: Icon(
+                      Icons.add_alert_outlined,
+                      color: c.onSecondaryContainer,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
                   GestureDetector(
                     onTap: () {
                       Get.to(() => const AddExpenseTrackerView());
@@ -363,8 +415,6 @@ class _AllNotesViewState extends State<AllNotesView> {
               print("PINNED" +
                   notesData.data![noteIndex].data["pinned"].toString());
             }
-            // if (notesData.data![noteIndex].data["isList"] == true) {
-            // LIST LAYOUT
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 5.0,
@@ -391,6 +441,54 @@ class _AllNotesViewState extends State<AllNotesView> {
                       10.0, // Offset value to show menuItem from the selected item
                   menuItems: <FocusedMenuItem>[
                     // Add Each FocusedMenuItem  for Menu Options
+                    FocusedMenuItem(
+                      backgroundColor: c.secondaryContainer,
+                      title: Text(
+                        "Add a Reminder",
+                        style: t.textTheme.button?.copyWith(
+                          color: c.onSecondaryContainer,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailingIcon: Icon(
+                        Icons.notification_add_outlined,
+                        color: c.onSecondaryContainer,
+                      ),
+                      onPressed: () {
+                        Utils().reminderDialog(
+                          notesData.data![noteIndex].data["title"],
+                          notesData.data![noteIndex].data["body"],
+                          notesData.data![noteIndex].id,
+                          context,
+                          t,
+                          c,
+                        );
+                      },
+                    ),
+                    FocusedMenuItem(
+                      backgroundColor: c.secondaryContainer,
+                      title: Text(
+                        "Add to Folder",
+                        style: t.textTheme.button?.copyWith(
+                          color: c.onSecondaryContainer,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailingIcon: Icon(
+                        Icons.create_new_folder_outlined,
+                        color: c.onSecondaryContainer,
+                      ),
+                      onPressed: () {
+                        Get.to(
+                          () => PickFolder(
+                            noteId: notesData.data![noteIndex].id,
+                            noteTitle: notesData.data![noteIndex].data["title"],
+                            noteBody: notesData.data![noteIndex].data["body"],
+                            foldersFuture: widget.foldersFuture,
+                          ),
+                        );
+                      },
+                    ),
                     if (_accountLinked &&
                         !notesData.data![noteIndex].data["isList"] &&
                         !notesData.data![noteIndex].data["isExpense"])
@@ -427,6 +525,24 @@ class _AllNotesViewState extends State<AllNotesView> {
                     FocusedMenuItem(
                       backgroundColor: c.secondaryContainer,
                       title: Text(
+                        "Delete",
+                        style: t.textTheme.button?.copyWith(
+                          color: c.onSecondaryContainer,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailingIcon: Icon(
+                        Icons.delete_outlined,
+                        color: c.onSecondaryContainer,
+                      ),
+                      onPressed: () {
+                        NotesDatabase()
+                            .deleteNote(notesData.data![noteIndex].id);
+                      },
+                    ),
+                    FocusedMenuItem(
+                      backgroundColor: c.secondaryContainer,
+                      title: Text(
                         notesData.data![noteIndex].data["pinned"] ?? false
                             ? "Unpin"
                             : "Pin",
@@ -443,65 +559,6 @@ class _AllNotesViewState extends State<AllNotesView> {
                       ),
                       onPressed: () async {
                         await pinNote(notesData, noteIndex);
-                      },
-                    ),
-                    FocusedMenuItem(
-                      backgroundColor: c.secondaryContainer,
-                      title: Text(
-                        "Add to Folder",
-                        style: t.textTheme.button?.copyWith(
-                          color: c.onSecondaryContainer,
-                          fontSize: 12,
-                        ),
-                      ),
-                      trailingIcon: Icon(
-                        Icons.create_new_folder_outlined,
-                        color: c.onSecondaryContainer,
-                      ),
-                      onPressed: () {
-                        Get.to(
-                          () => PickFolder(
-                            noteId: notesData.data![noteIndex].id,
-                            noteTitle: notesData.data![noteIndex].data["title"],
-                            noteBody: notesData.data![noteIndex].data["body"],
-                            foldersFuture: widget.foldersFuture,
-                          ),
-                        );
-                      },
-                    ),
-                    FocusedMenuItem(
-                      backgroundColor: c.secondaryContainer,
-                      title: Text(
-                        "Share",
-                        style: t.textTheme.button?.copyWith(
-                          color: c.onSecondaryContainer,
-                          fontSize: 12,
-                        ),
-                      ),
-                      trailingIcon: Icon(
-                        Icons.share_outlined,
-                        color: c.onSecondaryContainer,
-                      ),
-                      onPressed: () {
-                        shareNote(notesData, noteIndex);
-                      },
-                    ),
-                    FocusedMenuItem(
-                      backgroundColor: c.secondaryContainer,
-                      title: Text(
-                        "Delete",
-                        style: t.textTheme.button?.copyWith(
-                          color: c.onSecondaryContainer,
-                          fontSize: 12,
-                        ),
-                      ),
-                      trailingIcon: Icon(
-                        Icons.delete_outlined,
-                        color: c.onSecondaryContainer,
-                      ),
-                      onPressed: () {
-                        NotesDatabase()
-                            .deleteNote(notesData.data![noteIndex].id);
                       },
                     ),
                   ],

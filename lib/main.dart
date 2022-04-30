@@ -2,6 +2,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:dynamic_colorscheme/dynamic_colorscheme.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
@@ -20,6 +21,7 @@ import 'package:notes/android/theme/android_theme.dart';
 import 'package:notes/android/views/folders/add_folders_view.dart';
 import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/android/views/misc/clipboard_view.dart';
+import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/theme/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
@@ -32,6 +34,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp();
+  token = await FirebaseMessaging.instance.getToken();
+  await NotificationService().initialize();
   runApp(const MyApp());
 }
 
@@ -76,11 +80,17 @@ class MyApp extends StatelessWidget {
                         colorScheme: m3Light,
                         useMaterial3: true,
                         brightness: Brightness.light,
+                        dialogTheme: DialogTheme(
+                          backgroundColor: m3Light!.background,
+                        ),
                       ),
                       darkTheme: androidThemeRegular.copyWith(
                         colorScheme: m3Dark,
                         useMaterial3: true,
                         brightness: Brightness.dark,
+                        dialogTheme: DialogTheme(
+                          backgroundColor: m3Dark!.background,
+                        ),
                       ),
                       routes: {
                         '/splash': (context) => const SplashScreen(),

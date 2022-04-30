@@ -51,7 +51,7 @@ android {
 
     defaultConfig {
         applicationId 'com.vlabs.notes'
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
