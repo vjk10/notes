@@ -195,7 +195,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       t: t,
       c: c,
       title: 'Amount',
-      value: editExpense.amount.toString(),
+      value: '',
     );
     setState(() => expenses = expenses.map((expense) {
           final isEditedAmount = expense.index == editExpense.index;
