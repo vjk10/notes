@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -139,7 +141,6 @@ class Utils {
     ColorScheme c,
   ) async {
     TimeOfDay initTime = TimeOfDay.now();
-    late int intervalDuration;
     return showTimePicker(
       context: context,
       initialTime: initTime,
@@ -148,15 +149,21 @@ class Utils {
     ).then((value) {
       try {
         initTime = value!;
-        int nowInMinutes =
-            TimeOfDay.now().hour * 60 + TimeOfDay.now().minute * 60;
-        int selectedTimeMinutes = initTime.hour * 60 + initTime.minute * 60;
-
-        if (nowInMinutes > selectedTimeMinutes) {
-          intervalDuration = nowInMinutes - selectedTimeMinutes;
-        } else {
-          intervalDuration = selectedTimeMinutes - nowInMinutes;
+        if (kDebugMode) {
+          print("SELECTED HOUR: " + initTime.hour.toString());
         }
+        DateTime now = DateTime.now();
+        if (initTime.period == DayPeriod.am) {
+          now = DateTime.now().add(
+            const Duration(days: 1),
+          );
+        }
+        DateTime time = DateTime(
+            now.year, now.month, now.day, initTime.hour, initTime.minute);
+        String messageSnackBar = "You will reminded about $title at " +
+            DateFormat.jm().format(time) +
+            " on " +
+            DateFormat.yMMMd().format(time);
         if (kDebugMode) {
           print("TITLE:" + title);
           print("BODY:" + body);
@@ -164,12 +171,17 @@ class Utils {
           print(
             "CHOOSEN TIME: " + value.toString(),
           );
-          print("NOW IN MINUTES: " + nowInMinutes.toString());
-          print("SELECTED IN MINUTES: " + selectedTimeMinutes.toString());
-          print("INTERVAL DURATION: " + intervalDuration.toString());
+          print("MESSAGE: " + messageSnackBar);
         }
-        NotificationService()
-            .startReminder(title, selectedTimeMinutes, intervalDuration, false);
+        NotificationService().showNotification(
+          context,
+          noteID,
+          title,
+          '',
+          DateFormat.jm().format(time) + "," + DateFormat.yMMMd().format(time),
+          messageSnackBar,
+          time,
+        );
       } catch (e) {
         if (kDebugMode) {
           print(e);
@@ -183,35 +195,7 @@ class Utils {
     ThemeData t,
     ColorScheme c,
   ) async {
-    String? selectedValue;
-    List<String> items = [
-      'Every Day',
-      'Every Weekend',
-      'Every Monday',
-      'Pick a Date',
-    ];
-    // TimeOfDay initTime = TimeOfDay.now();
-    // late int intervalDuration;
-    // DateTime firstDate = DateTime.now();
-    // DateTime lastDate = DateTime.now().add(const Duration(days: 8000));
-    // return showDatePicker(
-    //   firstDate: firstDate,
-    //   lastDate: lastDate,
-    //   initialDate: firstDate,
-    //   currentDate: DateTime.now(),
-    //   locale: locale,
-    //   context: context,
-    // ).then((value) {
-    //   try {
-    //     if (kDebugMode) {
-    //       print("Selected Date Range: " + value.toString());
-    //     }
-    //   } catch (e) {
-    //     if (kDebugMode) {
-    //       print(e);
-    //     }
-    //   }
-    // });
+   
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -223,6 +207,7 @@ class Utils {
           "Create Alert",
           style: t.textTheme.button,
         ),
+        buttonPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         content: SizedBox(
           height: 150,
           width: Get.width - 50,
@@ -232,7 +217,7 @@ class Utils {
             children: [
               Container(
                 width: Get.width - 80,
-                height: 75,
+                height: 65,
                 decoration: BoxDecoration(
                   color: c.background,
                   border: Border.all(color: c.primary, width: 2),
@@ -244,49 +229,53 @@ class Utils {
                     child: DropdownButton(
                       alignment: Alignment.center,
                       icon: Icon(
-                        Icons.calendar_month_outlined,
+                        Icons.repeat,
                         color: c.primary,
                       ),
                       dropdownColor: c.background,
                       borderRadius: BorderRadius.circular(15),
                       isDense: true,
+                      style: t.textTheme.button,
                       hint: Text(
-                        'Select a Day',
+                        'Select Pattern',
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(context).hintColor,
                         ),
                       ),
                       items: items
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      item,
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
+                          .map(
+                            (item) => DropdownMenuItem<String>(
+                              value: item,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    item,
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                      fontSize: 14,
                                     ),
-                                    Icon(
-                                      item == "Pick a Date"
-                                          ? Icons.calendar_month_outlined
-                                          : Icons.repeat,
-                                      color: c.primary,
-                                    ),
-                                  ],
-                                ),
-                              ))
+                                  ),
+                                  Icon(
+                                    item == "Select Date and Time"
+                                        ? Icons.calendar_month_outlined
+                                        : Icons.repeat,
+                                    color: c.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                           .toList(),
-                      value: selectedValue,
+                      value: selectedAlertPattern,
                       onChanged: (value) {
-                        selectedValue = value as String;
+                        selectedAlertPattern = value as String;
                         if (kDebugMode) {
-                          print("SELECTED VALUE: " + selectedValue.toString());
+                          print("SELECTED VALUE: " +
+                              selectedAlertPattern.toString());
                         }
                       },
                     ),
@@ -296,6 +285,45 @@ class Utils {
             ],
           ),
         ),
+        actions: [
+          SizedBox(
+            width: 80,
+            height: 40,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: c.background,
+                side: BorderSide(color: c.outline, width: 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              onPressed: () {},
+              child: Text(
+                "Cancel",
+                style: t.textTheme.button
+                    ?.copyWith(color: c.onBackground, fontSize: 12),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            height: 40,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: c.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              onPressed: () {},
+              child: Text(
+                "Create",
+                style: t.textTheme.button
+                    ?.copyWith(color: c.onPrimary, fontSize: 12),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

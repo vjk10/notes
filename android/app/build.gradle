@@ -86,7 +86,15 @@ flutter {
 }
 
 dependencies {
+    implementation 'androidx.work:work-runtime:2.7.0'
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
+    implementation 'androidx.work:work-runtime:2.7.0-alpha04'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation platform('com.google.firebase:firebase-bom') // add this
+    // implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation 'com.google.firebase:firebase-iid:21.1.0' // add this
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    // implementation 'androidx.work:work-runtime:2.7.1'
+    compile  'com.android.support:multidex:1.0.3'
 }

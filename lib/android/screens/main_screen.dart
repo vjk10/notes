@@ -8,6 +8,7 @@ import 'package:notes/android/data/data.dart';
 import 'package:notes/android/views/notes/all_notes_view.dart';
 import 'package:notes/android/views/folders/all_folder_view.dart';
 import 'package:notes/services/db/database_notes.dart';
+import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/utils.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +56,7 @@ class _MainScreenState extends State<MainScreen>
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
+    NotificationService().initialize();
     checkTerms();
     if (kDebugMode) {
       print("MAIN SCREEN INIT STATE");

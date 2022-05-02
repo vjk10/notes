@@ -64,8 +64,10 @@ dependencies:
   emojis: ^0.9.9
   currency_picker: ^2.0.9
   quick_actions: ^0.6.0+10
-  awesome_notifications: ^0.6.21
   firebase_messaging: ^10.0.0
+  flutter_local_notifications: ^9.4.1
+  timezone: ^0.8.0
+  flutter_native_timezone: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

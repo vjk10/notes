@@ -7,6 +7,7 @@ import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/alerts/add_alert_view.dart';
 import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/android/views/expenses/add_expense_tracker.dart';
 import 'package:notes/android/views/expenses/expense_tracker_view.dart';
@@ -350,7 +351,18 @@ class _AllNotesViewState extends State<AllNotesView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Utils().createAlertDialog(context, t, c);
+                      Get.bottomSheet(
+                        SizedBox(
+                          width: Get.width - 30,
+                          height: Get.height / 1.5,
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10),
+                            child: AddAlertView(),
+                          ),
+                        ),
+                        elevation: 10,
+                      );
                     },
                     child: Icon(
                       Icons.add_alert_outlined,
