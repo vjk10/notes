@@ -185,9 +185,9 @@ class _AllFoldersViewState extends State<AllFoldersView> {
                   },
                   child: ListTile(
                     tileColor: c.secondaryContainer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(15),
+                    // ),
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 15.0,
                       horizontal: 15.0,

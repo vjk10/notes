@@ -8,6 +8,7 @@ class ExpenseServices {
   List<String> headers = ["Row", "Type", "Amount", "Description"];
 
   Future<bool> checkStoragePermission() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     var _storageAllowed = await Permission.storage.isGranted;
     if (_storageAllowed) {
       return true;
@@ -40,7 +41,7 @@ class ExpenseServices {
       final excel = Excel.createExcel();
       final sheet = excel[excel.getDefaultSheet()!];
       if (kDebugMode) {
-        print("Default Sheet: " + sheet.toString());
+        print("Default Sheet: $sheet");
       }
       // Adding Header
       for (var header = 0; header < headers.length; header++) {

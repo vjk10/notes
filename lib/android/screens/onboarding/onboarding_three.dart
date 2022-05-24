@@ -111,9 +111,9 @@ class _OnBoarding3State extends State<OnBoarding3> {
                       primary: c.primary,
                       elevation: 20,
                       shadowColor: c.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.circular(50),
+                      // ),
                     ),
                     onPressed: () async {
                       await NotesDatabase().setAutoSave(_autoSave);

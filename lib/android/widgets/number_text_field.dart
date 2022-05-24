@@ -64,24 +64,24 @@ class _NumberTextFieldState extends State<NumberTextField> {
           counterText: '',
           isDense: true,
           filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
+          // border: OutlineInputBorder(
+          // borderRadius: BorderRadius.circular(10),
+          // ),
+          // errorBorder: OutlineInputBorder(
+          // borderRadius: BorderRadius.circular(10),
+          // ),
+          // focusedBorder: OutlineInputBorder(
+          // borderRadius: BorderRadius.circular(10),
+          // ),
+          // enabledBorder: OutlineInputBorder(
+          // borderRadius: BorderRadius.circular(10),
+          // ),
+          // disabledBorder: OutlineInputBorder(
+          // borderRadius: BorderRadius.circular(10),
+          // ),
+          // focusedErrorBorder: OutlineInputBorder(
+          // borderRadius: BorderRadius.circular(10),
+          // ),
           fillColor: Theme.of(context).colorScheme.surface,
           contentPadding: widget.contentPadding.copyWith(right: 0),
           suffixIconConstraints: BoxConstraints(
@@ -106,19 +106,19 @@ class _NumberTextFieldState extends State<NumberTextField> {
                         child: Material(
                             type: MaterialType.transparency,
                             child: InkWell(
+                                onTap: _canGoUp ? () => _update(true) : null,
                                 child: Opacity(
                                     opacity: _canGoUp ? 1 : .5,
-                                    child: const Icon(Icons.arrow_drop_up)),
-                                onTap: _canGoUp ? () => _update(true) : null))),
+                                    child: const Icon(Icons.arrow_drop_up))))),
                     Expanded(
                         child: Material(
                             type: MaterialType.transparency,
                             child: InkWell(
+                                onTap: _canGoDown ? () => _update(false) : null,
                                 child: Opacity(
                                     opacity: _canGoDown ? 1 : .5,
-                                    child: const Icon(Icons.arrow_drop_down)),
-                                onTap:
-                                    _canGoDown ? () => _update(false) : null))),
+                                    child:
+                                        const Icon(Icons.arrow_drop_down))))),
                   ]))),
       maxLines: 1,
       onChanged: (value) {

@@ -1,4 +1,3 @@
-import 'package:emojis/emojis.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +13,7 @@ class AddAlertView extends StatefulWidget {
   const AddAlertView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddAlertViewState createState() => _AddAlertViewState();
 }
 
@@ -71,9 +71,9 @@ class _AddAlertViewState extends State<AddAlertView> {
                 height: 75,
                 decoration: BoxDecoration(
                   color: c.secondaryContainer,
-                  borderRadius: BorderRadius.circular(
-                    25,
-                  ),
+                  // borderRadius: BorderRadius.circular(
+                  //   25,
+                  // ),
                   border: Border.all(
                     color: c.secondaryContainer,
                   ),
@@ -84,7 +84,7 @@ class _AddAlertViewState extends State<AddAlertView> {
                     child: DropdownButton(
                       alignment: Alignment.center,
                       dropdownColor: c.background,
-                      borderRadius: BorderRadius.circular(15),
+                      // borderRadius: BorderRadius.circular(15),
                       isDense: true,
                       style: t.textTheme.button,
                       hint: const Text(
@@ -115,8 +115,7 @@ class _AddAlertViewState extends State<AddAlertView> {
                           selectedAlertPattern = value.toString();
                         });
                         if (kDebugMode) {
-                          print("SELECTED VALUE: " +
-                              selectedAlertPattern.toString());
+                          print("SELECTED VALUE: $selectedAlertPattern");
                         }
                       },
                     ),
@@ -144,33 +143,33 @@ class _AddAlertViewState extends State<AddAlertView> {
                       hintText: "alert name",
                       hintStyle: t.textTheme.button,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
@@ -205,33 +204,33 @@ class _AddAlertViewState extends State<AddAlertView> {
                       hintText: "alert description",
                       hintStyle: t.textTheme.button,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
@@ -255,9 +254,9 @@ class _AddAlertViewState extends State<AddAlertView> {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: c.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: BorderRadius.circular(25),
+                        // ),
                       ),
                       onPressed: () async {
                         if (titleController.text.isNotEmpty) {

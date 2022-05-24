@@ -30,6 +30,7 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -82,13 +83,13 @@ class _SettingsScreenState extends State<SettingsScreen>
       });
 
       if (kDebugMode) {
-        print("SELECTED THEME: " + selectedTheme);
+        print("SELECTED THEME: $selectedTheme");
       }
     } catch (e) {
-      var _pref = await SharedPreferences.getInstance();
-      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      var pref = await SharedPreferences.getInstance();
+      selectedThemeId = pref.getInt('selectedThemeId')!;
       if (kDebugMode) {
-        print("Selected Theme: " + selectedThemeId.toString());
+        print("Selected Theme: $selectedThemeId");
       }
       if (selectedTheme.isEmpty) {
         setState(() {
@@ -99,9 +100,9 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getSaveStatus() async {
-    bool _value = await NotesDatabase().checkAutoSave();
+    bool value = await NotesDatabase().checkAutoSave();
     setState(() {
-      _autoSave = _value;
+      _autoSave = value;
     });
   }
 
@@ -136,11 +137,11 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getCacheMemory() async {
-    Directory _tempDir = await getApplicationDocumentsDirectory();
+    Directory tempDir = await getApplicationDocumentsDirectory();
     if (kDebugMode) {
-      print("ApplicationDocumentsDirectory: " + _tempDir.toString());
+      print("ApplicationDocumentsDirectory: $tempDir");
     }
-    cacheDirStatSync(_tempDir.path);
+    cacheDirStatSync(tempDir.path);
   }
 
   Map<String, int> cacheDirStatSync(String dirPath) {
@@ -244,10 +245,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                               },
                               padding: const EdgeInsets.all(8),
                               text: "  Sign in to backup notes",
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadiusDirectional.circular(25),
-                              ),
+                              // shape: RoundedRectangleBorder(
+                              //   borderRadius:
+                              //       BorderRadiusDirectional.circular(25),
+                              // ),
                             ),
                           ),
                         ),
@@ -264,10 +265,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                               height: 75,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
+                                    // shape: RoundedRectangleBorder(
+                                    //   borderRadius: BorderRadius.circular(50),
+                                    // ),
+                                    ),
                                 onPressed: () async {
                                   await signOutGoogle(context).whenComplete(() {
                                     setState(() {
@@ -409,7 +410,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                     notifier.toggleTheme();
                     selectedThemeId = _pref.getInt('selectedThemeId')!;
                     if (kDebugMode) {
-                      print("Selected Theme: " + selectedThemeId.toString());
+                      print("Selected Theme: $selectedThemeId");
                     }
                     if (selectedTheme.isEmpty) {
                       setState(() {
@@ -504,12 +505,12 @@ class _SettingsScreenState extends State<SettingsScreen>
                       onSelect: (value) {
                         setState(() {
                           currency = value.symbol;
-                          currencyFlag = value.flag;
+                          currencyFlag = value.flag!;
                         });
                       });
                 },
                 child: Text(
-                  currency + " " + currencyFlag,
+                  "$currency $currencyFlag",
                   style: t.textTheme.button,
                 ),
               ),
@@ -543,10 +544,11 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             trailing: TextButton(
               style: TextButton.styleFrom(
-                  backgroundColor: c.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  )),
+                backgroundColor: c.primary,
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
+              ),
               onPressed: () async {
                 await DatabaseService().importNotes(user.uid);
               },
@@ -674,7 +676,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 );
               },
               child: Text(
-                "v" + version + " (build v" + buildNumber + ")",
+                "v$version (build v$buildNumber)",
                 style: t.textTheme.button?.copyWith(
                   fontSize: 14,
                   color: c.error,

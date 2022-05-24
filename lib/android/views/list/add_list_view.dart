@@ -53,14 +53,15 @@ class _AddListViewState extends State<AddListView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool _autosave = await NotesDatabase().checkAutoSave();
-        if (_autosave) {
+        bool autosave = await NotesDatabase().checkAutoSave();
+        if (autosave) {
           if (noteListItems.isNotEmpty && titleController.text.isNotEmpty) {
             await NotesDatabase()
                 .saveList(titleController, controllers, false, noteListItems);
             Get.offAllNamed('/mainScreen');
           }
           if (titleController.text.isEmpty) {
+            // ignore: use_build_context_synchronously
             Utils().confirmationForSave(context, t, c);
           } else {
             Get.offAllNamed('/mainScreen');
@@ -79,8 +80,8 @@ class _AddListViewState extends State<AddListView> {
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
-                bool _autosave = await NotesDatabase().checkAutoSave();
-                if (_autosave) {
+                bool autosave = await NotesDatabase().checkAutoSave();
+                if (autosave) {
                   if (noteListItems.isNotEmpty &&
                       titleController.text.isNotEmpty) {
                     await NotesDatabase().saveList(
@@ -88,6 +89,7 @@ class _AddListViewState extends State<AddListView> {
                     Get.toNamed('/mainScreen');
                   }
                   if (titleController.text.isEmpty) {
+                    // ignore: use_build_context_synchronously
                     Utils().confirmationForSave(context, t, c);
                   } else {
                     Get.offAllNamed('/mainScreen');
@@ -166,20 +168,19 @@ class _AddListViewState extends State<AddListView> {
                 onReorder: (int oldIndex, int newIndex) {
                   if (newIndex > oldIndex) newIndex--;
                   setState(() {
-                    final _index = newIndex;
-                    final _itemInDrag = noteListItems.removeAt(oldIndex);
-                    final _controllerDrag = controllers.removeAt(oldIndex);
-                    noteListItems.insert(_index, _itemInDrag);
-                    controllers.insert(_index, _controllerDrag);
+                    final index = newIndex;
+                    final itemInDrag = noteListItems.removeAt(oldIndex);
+                    final controllerDrag = controllers.removeAt(oldIndex);
+                    noteListItems.insert(index, itemInDrag);
+                    controllers.insert(index, controllerDrag);
                   });
                 },
                 shrinkWrap: true,
                 itemCount: noteListItems.length,
                 itemBuilder: (context, index) {
                   if (kDebugMode) {
-                    print("List Length : " + noteListItems.length.toString());
-                    print(
-                        "List Text : " + noteListItems[index].text.toString());
+                    print("List Length : ${noteListItems.length}");
+                    print("List Text : ${noteListItems[index].text}");
                   }
                   if (noteListItems.isNotEmpty) {
                     final item = noteListItems.elementAt(index);

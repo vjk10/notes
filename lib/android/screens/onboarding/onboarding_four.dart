@@ -49,13 +49,13 @@ class _OnBoarding4State extends State<OnBoarding4> {
       });
 
       if (kDebugMode) {
-        print("SELECTED THEME: " + selectedTheme);
+        print("SELECTED THEME: $selectedTheme");
       }
     } catch (e) {
-      var _pref = await SharedPreferences.getInstance();
-      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      var pref = await SharedPreferences.getInstance();
+      selectedThemeId = pref.getInt('selectedThemeId')!;
       if (kDebugMode) {
-        print("Selected Theme: " + selectedThemeId.toString());
+        print("Selected Theme: $selectedThemeId");
       }
       if (selectedTheme.isEmpty) {
         setState(() {
@@ -264,9 +264,9 @@ class _OnBoarding4State extends State<OnBoarding4> {
                       primary: c.primary,
                       elevation: 20,
                       shadowColor: c.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.circular(50),
+                      // ),
                     ),
                     onPressed: () async {
                       await ScientISSTdb.instance

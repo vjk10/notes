@@ -65,15 +65,15 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeNotifier(),
           child: Consumer<ThemeNotifier>(
               builder: (context, ThemeNotifier notifier, child) {
-            return DynamicColorBuilder(builder: (CorePalette? _palette) {
-              if (_palette != null) {
-                palette = _palette;
+            return DynamicColorBuilder(builder: (CorePalette? palette1) {
+              if (palette1 != null) {
+                palette = palette1;
                 m3YouAvail = true;
-                m3Light = DynamicColorScheme.generate(_palette, dark: false);
-                m3Dark = DynamicColorScheme.generate(_palette, dark: true);
+                m3Light = DynamicColorScheme.generate(palette1, dark: false);
+                m3Dark = DynamicColorScheme.generate(palette1, dark: true);
                 if (notifier.material3) {
                   return ScreenUtilInit(
-                    builder: (_) => GetMaterialApp(
+                    builder: (_, widget) => GetMaterialApp(
                       themeMode: ThemeMode.system,
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: androidThemeDark.copyWith(
@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
                     themeCollection: themeCollection,
                     defaultThemeId: AppThemes.regular,
                     builder: (context, theme) => ScreenUtilInit(
-                      builder: (_) => GetMaterialApp(
+                      builder: (_, widget) => GetMaterialApp(
                         debugShowCheckedModeBanner: kDebugMode,
                         theme: theme,
                         routes: {
@@ -145,7 +145,7 @@ class MyApp extends StatelessWidget {
                   themeCollection: themeCollection,
                   defaultThemeId: AppThemes.regular,
                   builder: (context, theme) => ScreenUtilInit(
-                    builder: (_) => GetMaterialApp(
+                    builder: (_, widget) => GetMaterialApp(
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: theme,
                       routes: {

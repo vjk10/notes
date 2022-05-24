@@ -139,7 +139,7 @@ class _ClipBoardState extends State<ClipBoard> {
                             backgroundColor: c.surface,
                             margin: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
-                            borderRadius: 10,
+                            // borderRadius: 10,
                             icon: Icon(
                               Icons.content_paste_rounded,
                               color: c.primary,
@@ -320,35 +320,35 @@ class _ClipBoardState extends State<ClipBoard> {
                             textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                // borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                // borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                // borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                // borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                // borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,

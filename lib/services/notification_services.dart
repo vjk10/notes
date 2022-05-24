@@ -19,7 +19,7 @@ class NotificationService {
     tz.initializeTimeZones();
     currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
     if (kDebugMode) {
-      print("CURRENT TIMEZONE: " + currentTimeZone);
+      print("CURRENT TIMEZONE: $currentTimeZone");
     }
   }
 
@@ -28,7 +28,7 @@ class NotificationService {
       time.hour.toString() + time.minute.toString() + time.second.toString(),
     );
     if (kDebugMode) {
-      print("CREATED NOTIFICATION ID: " + returnId.toString());
+      print("CREATED NOTIFICATION ID: $returnId");
     }
     return returnId;
   }
@@ -58,7 +58,7 @@ class NotificationService {
       iOS: iOS,
     );
     if (kDebugMode) {
-      print("NOTIFICATION TIME: " + notificationTime.toString());
+      print("NOTIFICATION TIME: $notificationTime");
     }
     if (message.isEmpty) {
       finalNotificationBody = messageTime;

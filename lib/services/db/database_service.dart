@@ -45,7 +45,7 @@ class DatabaseService {
           ),
           duration: const Duration(seconds: 2),
           messageText: Text(
-            title + " backed up",
+            "$title backed up",
             style: t.textTheme.caption?.copyWith(color: c.onSurface),
           ),
         ),
@@ -89,6 +89,7 @@ class DatabaseService {
     if (importSnapshot.docs.isNotEmpty) {
       for (var element in importSnapshot.docs) {
         if (kDebugMode) {
+          // ignore: prefer_interpolation_to_compose_strings
           print("Note Title: " + element.get("title"));
         }
         var note = Note(

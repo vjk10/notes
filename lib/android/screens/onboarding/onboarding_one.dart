@@ -95,13 +95,14 @@ class _OnBoarding1State extends State<OnBoarding1> {
                         primary: c.primary,
                         elevation: 20,
                         shadowColor: c.background,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: BorderRadius.circular(50),
+                        // ),
                       ),
                       onPressed: () async {
-                        bool _conditions = await Utils().checkTerms();
-                        if (_conditions == false) {
+                        bool conditions = await Utils().checkTerms();
+                        if (conditions == false) {
+                          // ignore: use_build_context_synchronously
                           Utils().licenseDialog(context, t, c, true);
                         } else {
                           Get.toNamed('/onboarding2');
