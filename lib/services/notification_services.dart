@@ -19,7 +19,7 @@ class NotificationService {
     tz.initializeTimeZones();
     currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
     if (kDebugMode) {
-      print("CURRENT TIMEZONE: " + currentTimeZone);
+      print("CURRENT TIMEZONE: $currentTimeZone");
     }
   }
 
@@ -28,7 +28,7 @@ class NotificationService {
       time.hour.toString() + time.minute.toString() + time.second.toString(),
     );
     if (kDebugMode) {
-      print("CREATED NOTIFICATION ID: " + returnId.toString());
+      print("CREATED NOTIFICATION ID: $returnId");
     }
     return returnId;
   }
@@ -58,7 +58,7 @@ class NotificationService {
       iOS: iOS,
     );
     if (kDebugMode) {
-      print("NOTIFICATION TIME: " + notificationTime.toString());
+      print("NOTIFICATION TIME: $notificationTime");
     }
     if (message.isEmpty) {
       finalNotificationBody = messageTime;
@@ -126,7 +126,7 @@ class NotificationService {
     String id,
     String title,
     String message,
-    String messageTime,
+    RepeatInterval repeatIntervalReceived,
     String messageSnackbar,
     DateTime time,
   ) async {
@@ -136,26 +136,33 @@ class NotificationService {
       channelDescription: 'Notification channel for reminders',
     );
     int notificationId = createNotificationId(id, time);
-    String finalNotificationBody = "";
+    String finalNotificationBody = message;
     var iOS = const IOSNotificationDetails();
-    RepeatInterval repeatInterval = RepeatInterval.daily;
+    RepeatInterval repeatInterval = repeatIntervalReceived;
     NotificationDetails notificationDetails = NotificationDetails(
       android: android,
       iOS: iOS,
     );
-    await FlutterLocalNotificationsPlugin().periodicallyShow(
+    await FlutterLocalNotificationsPlugin()
+        .periodicallyShow(
       notificationId,
       title,
       finalNotificationBody,
       repeatInterval,
       notificationDetails,
       androidAllowWhileIdle: true,
-    );
+    )
+        .whenComplete(() {
+      if (kDebugMode) {
+        print("Alert Scheduled!");
+      }
+    });
   }
 
-  endReminder(String messageID) async {
+  endAllReminder() async {
     if (kDebugMode) {
       print("Schedule Cancelled");
     }
+    FlutterLocalNotificationsPlugin().cancelAll();
   }
 }

@@ -16,6 +16,7 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
+import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,12 +25,13 @@ import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../services/theme/android_app_themes.dart';
+import '../../services/providers/android_app_themes.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -82,13 +84,13 @@ class _SettingsScreenState extends State<SettingsScreen>
       });
 
       if (kDebugMode) {
-        print("SELECTED THEME: " + selectedTheme);
+        print("SELECTED THEME: $selectedTheme");
       }
     } catch (e) {
-      var _pref = await SharedPreferences.getInstance();
-      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      var pref = await SharedPreferences.getInstance();
+      selectedThemeId = pref.getInt('selectedThemeId')!;
       if (kDebugMode) {
-        print("Selected Theme: " + selectedThemeId.toString());
+        print("Selected Theme: $selectedThemeId");
       }
       if (selectedTheme.isEmpty) {
         setState(() {
@@ -99,9 +101,9 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getSaveStatus() async {
-    bool _value = await NotesDatabase().checkAutoSave();
+    bool value = await NotesDatabase().checkAutoSave();
     setState(() {
-      _autoSave = _value;
+      _autoSave = value;
     });
   }
 
@@ -136,11 +138,11 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getCacheMemory() async {
-    Directory _tempDir = await getApplicationDocumentsDirectory();
+    Directory tempDir = await getApplicationDocumentsDirectory();
     if (kDebugMode) {
-      print("ApplicationDocumentsDirectory: " + _tempDir.toString());
+      print("ApplicationDocumentsDirectory: $tempDir");
     }
-    cacheDirStatSync(_tempDir.path);
+    cacheDirStatSync(tempDir.path);
   }
 
   Map<String, int> cacheDirStatSync(String dirPath) {
@@ -193,9 +195,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Scaffold(
           backgroundColor: c.background,
           appBar: AppBar(
-            backgroundColor: notifier.material3
-                ? c.secondaryContainer.withAlpha(50)
-                : c.secondaryContainer,
+            backgroundColor: c.background,
             title: Text(
               "settings",
               style: t.textTheme.headline5,
@@ -264,9 +264,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                               height: 75,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
+                                  primary: c.primary,
                                 ),
                                 onPressed: () async {
                                   await signOutGoogle(context).whenComplete(() {
@@ -322,6 +320,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               usedStorageTile(),
               clearNotesTile(),
+              cancelRemindersTile(),
               appDetailsTile(),
             ],
           ),
@@ -409,7 +408,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                     notifier.toggleTheme();
                     selectedThemeId = _pref.getInt('selectedThemeId')!;
                     if (kDebugMode) {
-                      print("Selected Theme: " + selectedThemeId.toString());
+                      print("Selected Theme: $selectedThemeId");
                     }
                     if (selectedTheme.isEmpty) {
                       setState(() {
@@ -509,7 +508,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                       });
                 },
                 child: Text(
-                  currency + " " + currencyFlag,
+                  "$currency $currencyFlag",
                   style: t.textTheme.button,
                 ),
               ),
@@ -543,10 +542,11 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             trailing: TextButton(
               style: TextButton.styleFrom(
-                  backgroundColor: c.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  )),
+                backgroundColor: c.primary,
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
+              ),
               onPressed: () async {
                 await DatabaseService().importNotes(user.uid);
               },
@@ -638,6 +638,47 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
+  Container cancelRemindersTile() {
+    return Container(
+      width: Get.width - 20,
+      height: 80,
+      decoration: BoxDecoration(
+        color: c.secondaryContainer,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.notifications_off_outlined,
+              color: c.onSecondaryContainer,
+              size: 24,
+            ),
+            title: Text(
+              "Cancel All Reminders",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+              ),
+            ),
+            trailing: GestureDetector(
+              onTap: () {
+                NotificationService().endAllReminder();
+              },
+              child: Text(
+                "Cancel",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                  color: c.error,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Container appDetailsTile() {
     return Container(
       width: Get.width - 20,
@@ -674,7 +715,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 );
               },
               child: Text(
-                "v" + version + " (build v" + buildNumber + ")",
+                "v$version (build v$buildNumber)",
                 style: t.textTheme.button?.copyWith(
                   fontSize: 14,
                   color: c.error,

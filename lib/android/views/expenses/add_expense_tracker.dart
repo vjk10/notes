@@ -72,13 +72,13 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
                 switch (index) {
                   case 0:
                     setState(() {
-                      var _deleteIndex = expenses.indexWhere(
+                      var deleteIndex = expenses.indexWhere(
                           ((element) => element.index == expense.index));
                       if (kDebugMode) {
-                        print(_deleteIndex);
+                        print(deleteIndex);
                       }
                       setState(() {
-                        expenses.removeAt(_deleteIndex);
+                        expenses.removeAt(deleteIndex);
                         currentIndex = expenses.length;
                       });
                     });
@@ -155,9 +155,9 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           final isEditedAmount = expense.index == editExpense.index;
 
           if (isEditedAmount) {
-            double _amount = double.parse(amount);
-            if (!_amount.isNaN) {
-              return expense.copy(amount: _amount, index: editExpense.index);
+            double amount1 = double.parse(amount);
+            if (!amount1.isNaN) {
+              return expense.copy(amount: amount1, index: editExpense.index);
             } else {
               return expense;
             }
@@ -185,14 +185,15 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
     return WillPopScope(
       onWillPop: () async {
         if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
-          bool _autosave = await NotesDatabase().checkAutoSave();
-          if (_autosave) {
+          bool autosave = await NotesDatabase().checkAutoSave();
+          if (autosave) {
             await NotesDatabase().saveExpenseSheet(
                 titleController, bodyController, false, expenses);
             Get.offAllNamed('/mainScreen');
           }
         }
         if (titleController.text.isEmpty) {
+          // ignore: use_build_context_synchronously
           Utils().confirmationForSave(context, t, c);
         }
         return true;
@@ -211,14 +212,15 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           leading: IconButton(
             onPressed: () async {
               if (expenses.isNotEmpty && titleController.text.isNotEmpty) {
-                bool _autosave = await NotesDatabase().checkAutoSave();
-                if (_autosave) {
+                bool autosave = await NotesDatabase().checkAutoSave();
+                if (autosave) {
                   NotesDatabase().saveExpenseSheet(
                       titleController, bodyController, false, expenses);
                   Get.offAllNamed('/mainScreen');
                 }
               }
               if (titleController.text.isEmpty) {
+                // ignore: use_build_context_synchronously
                 Utils().confirmationForSave(context, t, c);
               } else {
                 Get.offAllNamed('/mainScreen');
@@ -243,6 +245,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
                     });
                   }
                   if (titleController.text.isEmpty) {
+                    // ignore: use_build_context_synchronously
                     Utils().confirmationForSave(context, t, c);
                   }
                 },

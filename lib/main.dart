@@ -23,7 +23,7 @@ import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/android/views/misc/clipboard_view.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
-import 'package:notes/services/theme/android_app_themes.dart';
+import 'package:notes/services/providers/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
 import 'package:provider/provider.dart';
@@ -65,12 +65,12 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeNotifier(),
           child: Consumer<ThemeNotifier>(
               builder: (context, ThemeNotifier notifier, child) {
-            return DynamicColorBuilder(builder: (CorePalette? _palette) {
-              if (_palette != null) {
-                palette = _palette;
+            return DynamicColorBuilder(builder: (CorePalette? palette1) {
+              if (palette1 != null) {
+                palette = palette1;
                 m3YouAvail = true;
-                m3Light = DynamicColorScheme.generate(_palette, dark: false);
-                m3Dark = DynamicColorScheme.generate(_palette, dark: true);
+                m3Light = DynamicColorScheme.generate(palette1, dark: false);
+                m3Dark = DynamicColorScheme.generate(palette1, dark: true);
                 if (notifier.material3) {
                   return ScreenUtilInit(
                     builder: (_) => GetMaterialApp(

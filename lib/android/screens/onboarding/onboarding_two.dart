@@ -98,33 +98,33 @@ class _OnBoarding2State extends State<OnBoarding2> {
                             textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
+                                // borderRadius: BorderRadius.circular(
+                                //   10,
+                                // ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
+                                // borderRadius: BorderRadius.circular(
+                                //   10,
+                                // ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
+                                // borderRadius: BorderRadius.circular(
+                                //   10,
+                                // ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
+                                // borderRadius: BorderRadius.circular(
+                                //   10,
+                                // ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
@@ -153,9 +153,9 @@ class _OnBoarding2State extends State<OnBoarding2> {
                             primary: c.primary,
                             elevation: 20,
                             shadowColor: c.background,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(50),
+                            // ),
                           ),
                           onPressed: () async {
                             if (_nameController.text.isNotEmpty) {
@@ -176,7 +176,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                                 backgroundColor: Get.theme.colorScheme.surface,
                                 margin: const EdgeInsets.symmetric(
                                     vertical: 10, horizontal: 10),
-                                borderRadius: 10,
+                                // borderRadius: 10,
                                 icon: Icon(
                                   Icons.account_circle_rounded,
                                   color: c.error,

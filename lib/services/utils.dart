@@ -29,9 +29,9 @@ class Utils {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(30),
+        // ),
         backgroundColor: c.surface,
         title: const Text(
           "Error Saving",
@@ -69,9 +69,9 @@ class Utils {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(30),
+        // ),
         backgroundColor: c.surface,
         title: const Text(
           "Policies",
@@ -141,6 +141,7 @@ class Utils {
     ColorScheme c,
   ) async {
     TimeOfDay initTime = TimeOfDay.now();
+    TimeOfDay nowTime = TimeOfDay.now();
     return showTimePicker(
       context: context,
       initialTime: initTime,
@@ -150,35 +151,33 @@ class Utils {
       try {
         initTime = value!;
         if (kDebugMode) {
-          print("SELECTED HOUR: " + initTime.hour.toString());
+          print("SELECTED HOUR: ${initTime.hour}");
         }
         DateTime now = DateTime.now();
-        if (initTime.period == DayPeriod.am) {
+        if (nowTime.period != DayPeriod.am && initTime.period == DayPeriod.am) {
           now = DateTime.now().add(
             const Duration(days: 1),
           );
         }
         DateTime time = DateTime(
             now.year, now.month, now.day, initTime.hour, initTime.minute);
-        String messageSnackBar = "You will reminded about $title at " +
-            DateFormat.jm().format(time) +
-            " on " +
-            DateFormat.yMMMd().format(time);
+        String messageSnackBar =
+            "You will reminded about $title at ${DateFormat.jm().format(time)} on ${DateFormat.yMMMd().format(time)}";
         if (kDebugMode) {
-          print("TITLE:" + title);
-          print("BODY:" + body);
-          print("ID:" + noteID);
+          print("TITLE:$title");
+          print("BODY:$body");
+          print("ID:$noteID");
           print(
-            "CHOOSEN TIME: " + value.toString(),
+            "CHOOSEN TIME: $value",
           );
-          print("MESSAGE: " + messageSnackBar);
+          print("MESSAGE: $messageSnackBar");
         }
         NotificationService().showNotification(
           context,
           noteID,
           title,
           '',
-          DateFormat.jm().format(time) + "," + DateFormat.yMMMd().format(time),
+          "${DateFormat.jm().format(time)},${DateFormat.yMMMd().format(time)}",
           messageSnackBar,
           time,
         );
@@ -195,13 +194,12 @@ class Utils {
     ThemeData t,
     ColorScheme c,
   ) async {
-   
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-        ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(25),
+        // ),
         backgroundColor: c.background,
         title: Text(
           "Create Alert",
@@ -274,8 +272,7 @@ class Utils {
                       onChanged: (value) {
                         selectedAlertPattern = value as String;
                         if (kDebugMode) {
-                          print("SELECTED VALUE: " +
-                              selectedAlertPattern.toString());
+                          print("SELECTED VALUE: $selectedAlertPattern");
                         }
                       },
                     ),
@@ -293,9 +290,9 @@ class Utils {
               style: TextButton.styleFrom(
                 backgroundColor: c.background,
                 side: BorderSide(color: c.outline, width: 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
               ),
               onPressed: () {},
               child: Text(
@@ -311,9 +308,9 @@ class Utils {
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: c.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
               ),
               onPressed: () {},
               child: Text(

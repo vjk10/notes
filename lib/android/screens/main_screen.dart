@@ -60,14 +60,15 @@ class _MainScreenState extends State<MainScreen>
     checkTerms();
     if (kDebugMode) {
       print("MAIN SCREEN INIT STATE");
-      print("SELECTED INDEX: " + widget.selectedIndex.toString());
+      print("SELECTED INDEX: ${widget.selectedIndex}");
     }
     super.initState();
   }
 
   checkTerms() async {
-    bool _conditions = await Utils().checkTerms();
-    if (_conditions == false) {
+    bool conditions = await Utils().checkTerms();
+    if (conditions == false) {
+      // ignore: use_build_context_synchronously
       Utils().licenseDialog(context, t, c, false);
     }
   }

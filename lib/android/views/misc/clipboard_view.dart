@@ -139,7 +139,7 @@ class _ClipBoardState extends State<ClipBoard> {
                             backgroundColor: c.surface,
                             margin: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
-                            borderRadius: 10,
+                            // borderRadius: 10,
                             icon: Icon(
                               Icons.content_paste_rounded,
                               color: c.primary,
@@ -223,32 +223,6 @@ class _ClipBoardState extends State<ClipBoard> {
                                     });
                                   }
                                 },
-                                // onTap: () {
-                                //   if (kDebugMode) {
-                                //     print("TAPPED");
-                                //   }
-                                //   FlutterClipboard.copy(e.get("text"))
-                                //       .whenComplete(() {
-                                //     HapticFeedback.heavyImpact();
-                                //     Get.showSnackbar(GetSnackBar(
-                                //       shouldIconPulse: false,
-                                //       backgroundColor: c.surface,
-                                //       margin: const EdgeInsets.symmetric(
-                                //           vertical: 16, horizontal: 16),
-                                //       borderRadius: 10,
-                                //       icon: Icon(
-                                //         Icons.content_paste_rounded,
-                                //         color: c.primary,
-                                //       ),
-                                //       duration: const Duration(seconds: 2),
-                                //       messageText: Text(
-                                //         "Copied to clipboard",
-                                //         style: t.textTheme.caption
-                                //             ?.copyWith(color: c.onSurface),
-                                //       ),
-                                //     ));
-                                //   });
-                                // },
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Container(
@@ -320,35 +294,30 @@ class _ClipBoardState extends State<ClipBoard> {
                             textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: c.secondaryContainer,
                                   width: 2,

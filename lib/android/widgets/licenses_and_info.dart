@@ -41,9 +41,9 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
               child: TextButton.icon(
                 style: TextButton.styleFrom(
                   backgroundColor: c.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.circular(25),
+                  // ),
                 ),
                 onPressed: () {
                   Get.to(() => const PPHtmlView());
@@ -69,9 +69,9 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
               child: TextButton.icon(
                 style: TextButton.styleFrom(
                   backgroundColor: c.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.circular(25),
+                  // ),
                 ),
                 onPressed: () {
                   Get.to(() => const TCHtmlView());
@@ -97,9 +97,9 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
               child: TextButton.icon(
                   style: TextButton.styleFrom(
                     backgroundColor: c.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(25),
+                    // ),
                   ),
                   onPressed: () {
                     navToLicense();
@@ -153,7 +153,7 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
             ),
             applicationLegalese: "Simple notes taking app",
             applicationName: " ",
-            applicationVersion: "v" + version + " (build v" + buildNumber + ")",
+            applicationVersion: "v$version (build v$buildNumber)",
           ),
         ));
   }

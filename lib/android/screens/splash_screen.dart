@@ -26,8 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
             .document("onboarding")
             .get();
         if (kDebugMode) {
-          print("ONBOARDING COMPLETED: " +
-              _onboardingSnapshot.data["completed"].toString());
+          print(
+              "ONBOARDING COMPLETED: ${_onboardingSnapshot.data["completed"]}");
         }
         if (_onboardingSnapshot.data["completed"] == true) {
           Get.offNamedUntil('/mainScreen', (route) => false);

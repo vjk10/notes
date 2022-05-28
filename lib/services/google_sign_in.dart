@@ -25,7 +25,7 @@ Future<String> signInWithGoogle(BuildContext context) async {
     assert(user!.email != null);
     assert(user!.photoURL != null);
     if (kDebugMode) {
-      print("UID: " + user!.uid);
+      print("UID: ${user!.uid}");
     }
 
     FirebaseFirestore.instance.collection("users").doc(user?.uid).set({

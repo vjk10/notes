@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
 import 'package:notes/services/imports.dart';
-import 'package:open_document/open_document.dart';
+// import 'package:open_document/open_document.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ExpenseServices {
   List<String> headers = ["Row", "Type", "Amount", "Description"];
 
   Future<bool> checkStoragePermission() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     var _storageAllowed = await Permission.storage.isGranted;
     if (_storageAllowed) {
       return true;
@@ -40,7 +41,7 @@ class ExpenseServices {
       final excel = Excel.createExcel();
       final sheet = excel[excel.getDefaultSheet()!];
       if (kDebugMode) {
-        print("Default Sheet: " + sheet.toString());
+        print("Default Sheet: $sheet");
       }
       // Adding Header
       for (var header = 0; header < headers.length; header++) {
@@ -91,35 +92,35 @@ class ExpenseServices {
               "$excelFilePath/$sheetName.xlsx",
               style: t.textTheme.bodySmall,
             ),
-            mainButton: TextButton(
-              child: const Text("Open File"),
-              onPressed: () async {
-                if (kDebugMode) {
-                  print("$excelFilePath/$sheetName.xlsx");
-                }
-                try {
-                  await OpenDocument.openDocument(
-                      filePath: "$excelFilePath/$sheetName.xlsx");
-                } on OpenDocumentException catch (e) {
-                  Get.showSnackbar(GetSnackBar(
-                    shouldIconPulse: false,
-                    backgroundColor: c.surface,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    borderRadius: 10,
-                    icon: Icon(
-                      Icons.error,
-                      color: c.error,
-                    ),
-                    duration: const Duration(seconds: 2),
-                    messageText: Text(
-                      e.errorMessage,
-                      style: t.textTheme.caption?.copyWith(color: c.onSurface),
-                    ),
-                  ));
-                }
-              },
-            ),
+            // mainButton: TextButton(
+            //   child: const Text("Open File"),
+            //   onPressed: () async {
+            //     if (kDebugMode) {
+            //       print("$excelFilePath/$sheetName.xlsx");
+            //     }
+            //     // try {
+            //     //   await OpenDocument.openDocument(
+            //     //       filePath: "$excelFilePath/$sheetName.xlsx");
+            //     // } on OpenDocumentException catch (e) {
+            //     //   Get.showSnackbar(GetSnackBar(
+            //     //     shouldIconPulse: false,
+            //     //     backgroundColor: c.surface,
+            //     //     margin: const EdgeInsets.symmetric(
+            //     //         vertical: 16, horizontal: 16),
+            //     //     borderRadius: 10,
+            //     //     icon: Icon(
+            //     //       Icons.error,
+            //     //       color: c.error,
+            //     //     ),
+            //     //     duration: const Duration(seconds: 2),
+            //     //     messageText: Text(
+            //     //       e.errorMessage,
+            //     //       style: t.textTheme.caption?.copyWith(color: c.onSurface),
+            //     //     ),
+            //     //   ));
+            //     // }
+            //   },
+            // ),
           ));
         } else {
           Get.showSnackbar(GetSnackBar(

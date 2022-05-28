@@ -63,7 +63,7 @@ class _FolderViewState extends State<FolderView> {
                 ? c.secondaryContainer.withAlpha(50)
                 : c.secondaryContainer,
             title: Text(
-              "/ " + widget.folderName,
+              "/ ${widget.folderName}",
               style: t.textTheme.headline5,
             ),
             leading: IconButton(
@@ -91,8 +91,7 @@ class _FolderViewState extends State<FolderView> {
                 case ConnectionState.done:
                   {
                     if (kDebugMode) {
-                      print(
-                          "LENGTH: " + folderNotesData.data!.length.toString());
+                      print("LENGTH: ${folderNotesData.data!.length}");
                     }
                     switch (folderNotesData.data!.length) {
                       case 0:
@@ -192,13 +191,7 @@ class _FolderViewState extends State<FolderView> {
                       ),
                       onPressed: () {
                         Share.share(
-                          "*" +
-                              folderNotesData.data![noteIndex].data["title"]
-                                  .toString() +
-                              "*" +
-                              "\n\n" +
-                              folderNotesData.data![noteIndex].data["body"]
-                                  .toString(),
+                          "*${folderNotesData.data![noteIndex].data["title"]}*\n\n${folderNotesData.data![noteIndex].data["body"]}",
                         );
                       },
                     ),

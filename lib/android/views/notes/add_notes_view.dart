@@ -9,6 +9,7 @@ class AddNoteView extends StatefulWidget {
   const AddNoteView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddNoteViewState createState() => _AddNoteViewState();
 }
 
@@ -39,8 +40,8 @@ class _AddNoteViewState extends State<AddNoteView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool _autosave = await NotesDatabase().checkAutoSave();
-        if (_autosave) {
+        bool autosave = await NotesDatabase().checkAutoSave();
+        if (autosave) {
           if (titleController.text.isNotEmpty ||
               bodyController.text.isNotEmpty) {
             note = Note(
@@ -71,8 +72,8 @@ class _AddNoteViewState extends State<AddNoteView> {
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
-                bool _autosave = await NotesDatabase().checkAutoSave();
-                if (_autosave) {
+                bool autosave = await NotesDatabase().checkAutoSave();
+                if (autosave) {
                   if (titleController.text.isNotEmpty ||
                       bodyController.text.isNotEmpty) {
                     note = Note(

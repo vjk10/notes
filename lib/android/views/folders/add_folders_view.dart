@@ -13,6 +13,7 @@ class AddFolderView extends StatefulWidget {
   const AddFolderView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AddFolderViewState createState() => _AddFolderViewState();
 }
 
@@ -73,17 +74,17 @@ class _AddFolderViewState extends State<AddFolderView> {
                       hintText: "folder name",
                       hintStyle: t.textTheme.button,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
@@ -97,9 +98,9 @@ class _AddFolderViewState extends State<AddFolderView> {
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
@@ -134,33 +135,33 @@ class _AddFolderViewState extends State<AddFolderView> {
                       hintText: "folder description",
                       hintStyle: t.textTheme.button,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
+                        // borderRadius: BorderRadius.circular(
+                        //   25,
+                        // ),
                         borderSide: BorderSide(
                           color: c.secondaryContainer,
                         ),
@@ -184,9 +185,9 @@ class _AddFolderViewState extends State<AddFolderView> {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: c.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: BorderRadius.circular(25),
+                        // ),
                       ),
                       onPressed: () async {
                         if (titleController.text.isNotEmpty) {

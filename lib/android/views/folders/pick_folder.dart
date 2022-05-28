@@ -150,9 +150,9 @@ class _PickFolderState extends State<PickFolder> {
               style: ElevatedButton.styleFrom(
                 primary: selectedIndex.isNegative ? c.secondary : c.primary,
                 onPrimary: c.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(20),
+                // ),
               ),
               onPressed: selectedIndex.isNegative
                   ? null
@@ -173,10 +173,10 @@ class _PickFolderState extends State<PickFolder> {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+                  // shape: RoundedRectangleBorder(
+                  //   borderRadius: BorderRadius.circular(15),
+                  // ),
+                  ),
               onPressed: () {
                 Get.offAllNamed('/mainScreen');
               },
@@ -258,9 +258,9 @@ class _PickFolderState extends State<PickFolder> {
                       SizedBox(
                         width: Get.width - 90,
                         child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
+                          // shape: RoundedRectangleBorder(
+                          //   borderRadius: BorderRadius.circular(25),
+                          // ),
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 10.0,
                             horizontal: 10.0,

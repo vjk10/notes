@@ -33,6 +33,7 @@ class TextDialogWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _TextDialogWidgetState createState() => _TextDialogWidgetState();
 }
 
@@ -48,9 +49,9 @@ class _TextDialogWidgetState extends State<TextDialogWidget> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(30),
+        // ),
         contentPadding: const EdgeInsets.all(15),
         backgroundColor: widget.c.background,
         title: Padding(
@@ -66,41 +67,41 @@ class _TextDialogWidgetState extends State<TextDialogWidget> {
           controller: controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
           ),
         ),
         actions: [
@@ -110,9 +111,9 @@ class _TextDialogWidgetState extends State<TextDialogWidget> {
               style: ElevatedButton.styleFrom(
                 primary: widget.c.primary,
                 onPrimary: widget.c.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
               ),
               child: const Text('Done'),
               onPressed: () => Navigator.of(context).pop(controller.text),

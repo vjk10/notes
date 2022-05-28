@@ -44,7 +44,7 @@ class _ListviewViewState extends State<ListviewView> {
 
   refreshNote() async {
     if (kDebugMode) {
-      print("NOTE ID: " + widget.noteId);
+      print("NOTE ID: ${widget.noteId}");
     }
     noteSnapshot = await ScientISSTdb.instance
         .collection("notes")
@@ -57,24 +57,24 @@ class _ListviewViewState extends State<ListviewView> {
       pinned = noteSnapshot.data["pinned"] as bool;
     });
     for (var c = 0; c < totalItems; c++) {
-      DocumentSnapshot _collectionSnapshot = await ScientISSTdb.instance
+      DocumentSnapshot collectionSnapshot = await ScientISSTdb.instance
           .collection("notes")
           .document(widget.noteId)
           .collection(c.toString())
           .document(c.toString())
           .get();
       if (kDebugMode) {
-        print(_collectionSnapshot.data["text"].toString());
+        print(collectionSnapshot.data["text"].toString());
       }
       setState(() {
         // rows.add(currentIndex);
         // checked.add(false);
         NoteListItem item = NoteListItem(
-            text: _collectionSnapshot.data["text"].toString(),
-            index: _collectionSnapshot.data["index"],
-            checked: _collectionSnapshot.data["checked"]);
+            text: collectionSnapshot.data["text"].toString(),
+            index: collectionSnapshot.data["index"],
+            checked: collectionSnapshot.data["checked"]);
         controllers.add(TextEditingController(
-            text: _collectionSnapshot.data["text"].toString()));
+            text: collectionSnapshot.data["text"].toString()));
         noteListItems.add(item);
         currentIndex = currentIndex + 1;
       });
@@ -97,8 +97,8 @@ class _ListviewViewState extends State<ListviewView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool _autosave = await NotesDatabase().checkAutoSave();
-        if (_autosave) {
+        bool autosave = await NotesDatabase().checkAutoSave();
+        if (autosave) {
           if (noteListItems.isNotEmpty) {
             await NotesDatabase().updateList(
               titleController,
@@ -122,8 +122,8 @@ class _ListviewViewState extends State<ListviewView> {
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
-                bool _autosave = await NotesDatabase().checkAutoSave();
-                if (_autosave) {
+                bool autosave = await NotesDatabase().checkAutoSave();
+                if (autosave) {
                   if (noteListItems.isNotEmpty) {
                     await NotesDatabase().updateList(
                       titleController,
@@ -216,20 +216,19 @@ class _ListviewViewState extends State<ListviewView> {
                 onReorder: (int oldIndex, int newIndex) {
                   if (newIndex > oldIndex) newIndex--;
                   setState(() {
-                    final _index = newIndex;
-                    final _itemInDrag = noteListItems.removeAt(oldIndex);
-                    final _controllerDrag = controllers.removeAt(oldIndex);
-                    noteListItems.insert(_index, _itemInDrag);
-                    controllers.insert(_index, _controllerDrag);
+                    final index = newIndex;
+                    final itemInDrag = noteListItems.removeAt(oldIndex);
+                    final controllerDrag = controllers.removeAt(oldIndex);
+                    noteListItems.insert(index, itemInDrag);
+                    controllers.insert(index, controllerDrag);
                   });
                 },
                 shrinkWrap: true,
                 itemCount: noteListItems.length,
                 itemBuilder: (context, index) {
                   if (kDebugMode) {
-                    print("List Length : " + noteListItems.length.toString());
-                    print(
-                        "List Text : " + noteListItems[index].text.toString());
+                    print("List Length : ${noteListItems.length}");
+                    print("List Text : ${noteListItems[index].text}");
                   }
                   if (noteListItems.isNotEmpty) {
                     final item = noteListItems.elementAt(index);

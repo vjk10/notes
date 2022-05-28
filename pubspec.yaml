@@ -24,7 +24,7 @@ dependencies:
   focused_menu: ^1.0.5
   filesize: ^2.0.1
   flutter_switch: ^0.3.2
-  share_plus: ^3.1.0
+  share_plus: ^4.0.4
   flutter_signin_button: ^2.0.0
   dynamic_themes: ^1.1.0
   shared_preferences: ^2.0.13
@@ -51,29 +51,30 @@ dependencies:
   provider: ^6.0.2
   dynamic_color: ^0.1.0
   dynamic_colorscheme: ^1.0.0
-  material_color_utilities: ^0.1.3
-  reorderables: ^0.4.3
+  material_color_utilities: ^0.1.4
+  reorderables: ^0.5.0
   excel: ^2.0.0-null-safety-3
   permission_handler: ^9.2.0
   permission_handler_windows: ^0.1.0
   flutter_widget_from_html: ^0.8.5
   flutter_widget_from_html_core: ^0.8.5+1
   flutter_screenutil: ^5.4.0
-  open_document: ^1.0.4
-  google_fonts: ^2.3.1
+  # open_document: ^1.0.4
+  google_fonts: ^3.0.1
   emojis: ^0.9.9
   currency_picker: ^2.0.9
   quick_actions: ^0.6.0+10
-  firebase_messaging: ^10.0.0
+  firebase_messaging: ^11.4.0
   flutter_local_notifications: ^9.4.1
   timezone: ^0.8.0
   flutter_native_timezone: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
   rename: ^2.0.1
+  very_good_analysis: ^3.0.0
 
 flutter:
 

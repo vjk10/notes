@@ -36,6 +36,7 @@ class AllNotesView extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AllNotesViewState createState() => _AllNotesViewState();
 }
 
@@ -327,7 +328,7 @@ class _AllNotesViewState extends State<AllNotesView> {
               color: notifier.material3
                   ? c.secondaryContainer.withAlpha(50)
                   : c.secondaryContainer,
-              shape: const CircularNotchedRectangle(),
+              // shape: const CircularNotchedRectangle(),
               clipBehavior: Clip.none,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -353,13 +354,8 @@ class _AllNotesViewState extends State<AllNotesView> {
                     onTap: () {
                       Get.bottomSheet(
                         SizedBox(
-                          width: Get.width - 30,
                           height: Get.height / 1.5,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10),
-                            child: AddAlertView(),
-                          ),
+                          child: const AddAlertView(),
                         ),
                         elevation: 10,
                       );
@@ -420,12 +416,9 @@ class _AllNotesViewState extends State<AllNotesView> {
           itemCount: notesData.data?.length,
           itemBuilder: (context, noteIndex) {
             if (kDebugMode) {
-              print("ISLIST" +
-                  notesData.data![noteIndex].data["isList"].toString());
-              print("ISEXPENSE" +
-                  notesData.data![noteIndex].data["isExpense"].toString());
-              print("PINNED" +
-                  notesData.data![noteIndex].data["pinned"].toString());
+              print("ISLIST${notesData.data![noteIndex].data["isList"]}");
+              print("ISEXPENSE${notesData.data![noteIndex].data["isExpense"]}");
+              print("PINNED${notesData.data![noteIndex].data["pinned"]}");
             }
             return Padding(
               padding: const EdgeInsets.symmetric(
@@ -607,7 +600,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                             Text(
                               notesData.data![noteIndex].data["title"]
                                   .toString(),
-                              style: t.textTheme.headline6,
+                              style: t.textTheme.button,
                             ),
                             const SizedBox(
                               height: 10,
@@ -655,7 +648,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                                                     TextWidthBasis.longestLine,
                                                 softWrap: true,
                                                 overflow: TextOverflow.fade,
-                                                style: t.textTheme.bodyText1,
+                                                style: t.textTheme.bodyMedium,
                                               ),
                                             ),
                                           ],
@@ -674,6 +667,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                                     .toString(),
                                 maxLines: 15,
                                 softWrap: true,
+                                style: t.textTheme.bodyMedium,
                                 overflow: TextOverflow.fade,
                               ),
                             const SizedBox(
@@ -690,10 +684,10 @@ class _AllNotesViewState extends State<AllNotesView> {
                                         .data![noteIndex].data["creationTime"]
                                         .toString(),
                                     style: notifier.material3
-                                        ? t.textTheme.caption?.copyWith(
+                                        ? t.textTheme.labelSmall?.copyWith(
                                             color: c.onSecondaryContainer,
                                           )
-                                        : t.textTheme.caption,
+                                        : t.textTheme.labelSmall,
                                   );
                                 }),
                                 Consumer<ThemeNotifier>(
@@ -702,10 +696,10 @@ class _AllNotesViewState extends State<AllNotesView> {
                                     notesData.data![noteIndex].data["type"]
                                         .toString(),
                                     style: notifier.material3
-                                        ? t.textTheme.caption?.copyWith(
+                                        ? t.textTheme.labelSmall?.copyWith(
                                             color: c.onSecondaryContainer,
                                           )
-                                        : t.textTheme.caption,
+                                        : t.textTheme.labelSmall,
                                   );
                                 }),
                               ],
@@ -725,17 +719,13 @@ class _AllNotesViewState extends State<AllNotesView> {
   void shareNote(
       AsyncSnapshot<List<DocumentSnapshot>> notesData, int noteIndex) {
     Share.share(
-      "*" +
-          notesData.data![noteIndex].data["title"].toString() +
-          "*" +
-          "\n\n" +
-          notesData.data![noteIndex].data["body"].toString(),
+      "*${notesData.data![noteIndex].data["title"]}*\n\n${notesData.data![noteIndex].data["body"]}",
     );
   }
 
   Future<void> pinNote(
       AsyncSnapshot<List<DocumentSnapshot>> notesData, int noteIndex) async {
-    var _note = Note(
+    var note = Note(
         body: notesData.data![noteIndex].data["body"].toString(),
         creationTime: DateFormat.yMMMMEEEEd().format(DateTime.now()).toString(),
         title: notesData.data![noteIndex].data["title"].toString(),
@@ -744,7 +734,6 @@ class _AllNotesViewState extends State<AllNotesView> {
         isList: notesData.data![noteIndex].data["isList"],
         totalItems: notesData.data![noteIndex].data["totalItems"],
         type: notesData.data![noteIndex].data["type"].toString());
-    await NotesDatabase()
-        .updateNote(_note, notesData.data![noteIndex].id, true);
+    await NotesDatabase().updateNote(note, notesData.data![noteIndex].id, true);
   }
 }
