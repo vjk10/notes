@@ -24,7 +24,7 @@ dependencies:
   focused_menu: ^1.0.5
   filesize: ^2.0.1
   flutter_switch: ^0.3.2
-  share_plus: ^3.1.0
+  share_plus: ^4.0.4
   flutter_signin_button: ^2.0.0
   dynamic_themes: ^1.1.0
   shared_preferences: ^2.0.13
@@ -59,7 +59,7 @@ dependencies:
   flutter_widget_from_html: ^0.8.5
   flutter_widget_from_html_core: ^0.8.5+1
   flutter_screenutil: ^5.4.0
-  open_document: ^1.0.4
+  # open_document: ^1.0.4
   google_fonts: ^3.0.1
   emojis: ^0.9.9
   currency_picker: ^2.0.9

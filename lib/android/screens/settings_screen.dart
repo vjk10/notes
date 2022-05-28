@@ -194,9 +194,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Scaffold(
           backgroundColor: c.background,
           appBar: AppBar(
-            backgroundColor: notifier.material3
-                ? c.secondaryContainer.withAlpha(50)
-                : c.secondaryContainer,
+            backgroundColor: c.background,
             title: Text(
               "settings",
               style: t.textTheme.headline5,
@@ -245,10 +243,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                               },
                               padding: const EdgeInsets.all(8),
                               text: "  Sign in to backup notes",
-                              // shape: RoundedRectangleBorder(
-                              //   borderRadius:
-                              //       BorderRadiusDirectional.circular(25),
-                              // ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadiusDirectional.circular(25),
+                              ),
                             ),
                           ),
                         ),
@@ -265,10 +263,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                               height: 75,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    // shape: RoundedRectangleBorder(
-                                    //   borderRadius: BorderRadius.circular(50),
-                                    // ),
-                                    ),
+                                  primary: c.primary,
+                                ),
                                 onPressed: () async {
                                   await signOutGoogle(context).whenComplete(() {
                                     setState(() {

@@ -328,7 +328,7 @@ class _AllNotesViewState extends State<AllNotesView> {
               color: notifier.material3
                   ? c.secondaryContainer.withAlpha(50)
                   : c.secondaryContainer,
-              shape: const CircularNotchedRectangle(),
+              // shape: const CircularNotchedRectangle(),
               clipBehavior: Clip.none,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -354,13 +354,8 @@ class _AllNotesViewState extends State<AllNotesView> {
                     onTap: () {
                       Get.bottomSheet(
                         SizedBox(
-                          width: Get.width - 30,
                           height: Get.height / 1.5,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 10),
-                            child: AddAlertView(),
-                          ),
+                          child: const AddAlertView(),
                         ),
                         elevation: 10,
                       );
@@ -605,7 +600,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                             Text(
                               notesData.data![noteIndex].data["title"]
                                   .toString(),
-                              style: t.textTheme.headline6,
+                              style: t.textTheme.button,
                             ),
                             const SizedBox(
                               height: 10,
@@ -653,7 +648,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                                                     TextWidthBasis.longestLine,
                                                 softWrap: true,
                                                 overflow: TextOverflow.fade,
-                                                style: t.textTheme.bodyText1,
+                                                style: t.textTheme.bodyMedium,
                                               ),
                                             ),
                                           ],
@@ -672,6 +667,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                                     .toString(),
                                 maxLines: 15,
                                 softWrap: true,
+                                style: t.textTheme.bodyMedium,
                                 overflow: TextOverflow.fade,
                               ),
                             const SizedBox(
@@ -688,10 +684,10 @@ class _AllNotesViewState extends State<AllNotesView> {
                                         .data![noteIndex].data["creationTime"]
                                         .toString(),
                                     style: notifier.material3
-                                        ? t.textTheme.caption?.copyWith(
+                                        ? t.textTheme.labelSmall?.copyWith(
                                             color: c.onSecondaryContainer,
                                           )
-                                        : t.textTheme.caption,
+                                        : t.textTheme.labelSmall,
                                   );
                                 }),
                                 Consumer<ThemeNotifier>(
@@ -700,10 +696,10 @@ class _AllNotesViewState extends State<AllNotesView> {
                                     notesData.data![noteIndex].data["type"]
                                         .toString(),
                                     style: notifier.material3
-                                        ? t.textTheme.caption?.copyWith(
+                                        ? t.textTheme.labelSmall?.copyWith(
                                             color: c.onSecondaryContainer,
                                           )
-                                        : t.textTheme.caption,
+                                        : t.textTheme.labelSmall,
                                   );
                                 }),
                               ],
