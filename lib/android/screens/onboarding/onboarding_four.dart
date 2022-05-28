@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../services/theme/android_app_themes.dart';
+import '../../../services/providers/android_app_themes.dart';
 
 class OnBoarding4 extends StatefulWidget {
   const OnBoarding4({Key? key}) : super(key: key);

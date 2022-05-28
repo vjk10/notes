@@ -16,6 +16,7 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
+import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,7 +25,7 @@ import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../services/theme/android_app_themes.dart';
+import '../../services/providers/android_app_themes.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -319,6 +320,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               usedStorageTile(),
               clearNotesTile(),
+              cancelRemindersTile(),
               appDetailsTile(),
             ],
           ),
@@ -624,6 +626,47 @@ class _SettingsScreenState extends State<SettingsScreen>
               },
               child: Text(
                 "Clear",
+                style: t.textTheme.button?.copyWith(
+                  fontSize: 14,
+                  color: c.error,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container cancelRemindersTile() {
+    return Container(
+      width: Get.width - 20,
+      height: 80,
+      decoration: BoxDecoration(
+        color: c.secondaryContainer,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.notifications_off_outlined,
+              color: c.onSecondaryContainer,
+              size: 24,
+            ),
+            title: Text(
+              "Cancel All Reminders",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+              ),
+            ),
+            trailing: GestureDetector(
+              onTap: () {
+                NotificationService().endAllReminder();
+              },
+              child: Text(
+                "Cancel",
                 style: t.textTheme.button?.copyWith(
                   fontSize: 14,
                   color: c.error,

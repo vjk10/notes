@@ -23,7 +23,7 @@ import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/android/views/misc/clipboard_view.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
-import 'package:notes/services/theme/android_app_themes.dart';
+import 'package:notes/services/providers/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
 import 'package:notes/windows/screens/splash_screen_win.dart';
 import 'package:provider/provider.dart';

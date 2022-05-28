@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/services/db/notes_model.dart';
+import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
+import 'package:notes/services/providers/repeat_intervals.dart';
 import 'package:provider/provider.dart';
 
 class AddAlertView extends StatefulWidget {
@@ -50,9 +52,22 @@ class _AddAlertViewState extends State<AddAlertView> {
                 const SizedBox(
                   height: 50,
                 ),
-                Icon(
-                  Icons.add_alert_outlined,
-                  color: c.primary,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add_alert_outlined,
+                      color: c.primary,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Create Alert",
+                      style: t.textTheme.titleLarge,
+                    )
+                  ],
                 ),
                 const SizedBox(
                   height: 30,
@@ -70,16 +85,17 @@ class _AddAlertViewState extends State<AddAlertView> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.only(right: 10.0),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         alignment: Alignment.center,
                         dropdownColor: c.surface,
-                        borderRadius: BorderRadius.circular(15),
+                        elevation: 0,
+                        borderRadius: BorderRadius.circular(5),
                         isDense: true,
                         style: t.textTheme.button,
                         hint: Text(
-                          'Select Pattern',
+                          'select pattern',
                           style: t.textTheme.button,
                         ),
                         items: items
@@ -223,7 +239,18 @@ class _AddAlertViewState extends State<AddAlertView> {
                         style: ElevatedButton.styleFrom(
                           primary: c.primary,
                         ),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          var repeatInterval = RepeatIntervals()
+                              .getInterval(selectedAlertPattern!);
+                          NotificationService().showAlert(
+                              context,
+                              UniqueKey().toString(),
+                              title,
+                              description,
+                              repeatInterval,
+                              title,
+                              DateTime.now());
+                        },
                         child: Text(
                           "Create Alert",
                           style: t.textTheme.button?.copyWith(

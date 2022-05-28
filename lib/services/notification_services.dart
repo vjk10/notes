@@ -126,7 +126,7 @@ class NotificationService {
     String id,
     String title,
     String message,
-    String messageTime,
+    RepeatInterval repeatIntervalReceived,
     String messageSnackbar,
     DateTime time,
   ) async {
@@ -136,26 +136,33 @@ class NotificationService {
       channelDescription: 'Notification channel for reminders',
     );
     int notificationId = createNotificationId(id, time);
-    String finalNotificationBody = "";
+    String finalNotificationBody = message;
     var iOS = const IOSNotificationDetails();
-    RepeatInterval repeatInterval = RepeatInterval.daily;
+    RepeatInterval repeatInterval = repeatIntervalReceived;
     NotificationDetails notificationDetails = NotificationDetails(
       android: android,
       iOS: iOS,
     );
-    await FlutterLocalNotificationsPlugin().periodicallyShow(
+    await FlutterLocalNotificationsPlugin()
+        .periodicallyShow(
       notificationId,
       title,
       finalNotificationBody,
       repeatInterval,
       notificationDetails,
       androidAllowWhileIdle: true,
-    );
+    )
+        .whenComplete(() {
+      if (kDebugMode) {
+        print("Alert Scheduled!");
+      }
+    });
   }
 
-  endReminder(String messageID) async {
+  endAllReminder() async {
     if (kDebugMode) {
       print("Schedule Cancelled");
     }
+    FlutterLocalNotificationsPlugin().cancelAll();
   }
 }
