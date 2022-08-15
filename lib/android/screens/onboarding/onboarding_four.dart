@@ -115,7 +115,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                       ),
                       Text(
                         "hey! your device supports dynamic color :)",
-                        style: t.textTheme.headline6,
+                        style: t.textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(

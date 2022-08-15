@@ -325,10 +325,7 @@ class _AllNotesViewState extends State<AllNotesView> {
             height: 65,
             child: BottomAppBar(
               elevation: 0,
-              color: notifier.material3
-                  ? c.secondaryContainer.withAlpha(50)
-                  : c.secondaryContainer,
-              // shape: const CircularNotchedRectangle(),
+              color: c.secondaryContainer,
               clipBehavior: Clip.none,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -587,8 +584,7 @@ class _AllNotesViewState extends State<AllNotesView> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        // color: c.secondaryContainer,
-                        color: Colors.transparent,
+                        color: c.secondaryContainer,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Padding(

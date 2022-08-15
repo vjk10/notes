@@ -115,12 +115,10 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
       return Scaffold(
-          backgroundColor: c.background,
+          backgroundColor: c.surfaceTint,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: notifier.material3
-                ? c.secondaryContainer.withAlpha(50)
-                : c.secondaryContainer,
+            backgroundColor: c.secondaryContainer,
             title: Text(
               "notes",
               style: t.textTheme.headline6,

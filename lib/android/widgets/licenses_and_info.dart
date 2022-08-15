@@ -41,9 +41,6 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
               child: TextButton.icon(
                 style: TextButton.styleFrom(
                   backgroundColor: c.primary,
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(25),
-                  // ),
                 ),
                 onPressed: () {
                   Get.to(() => const PPHtmlView());

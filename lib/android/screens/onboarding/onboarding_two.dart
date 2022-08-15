@@ -72,7 +72,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                           child: Text(
                             onBoarding2Message,
                             style: t.textTheme.bodyText1?.copyWith(
-                              fontSize: 18.sp,
+                              fontSize: 14.sp,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -98,33 +98,33 @@ class _OnBoarding2State extends State<OnBoarding2> {
                             textCapitalization: TextCapitalization.words,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                // borderRadius: BorderRadius.circular(
-                                //   10,
-                                // ),
+                                borderRadius: BorderRadius.circular(
+                                  10,
+                                ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                // borderRadius: BorderRadius.circular(
-                                //   10,
-                                // ),
+                                borderRadius: BorderRadius.circular(
+                                  10,
+                                ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
-                                // borderRadius: BorderRadius.circular(
-                                //   10,
-                                // ),
+                                borderRadius: BorderRadius.circular(
+                                  10,
+                                ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                // borderRadius: BorderRadius.circular(
-                                //   10,
-                                // ),
+                                borderRadius: BorderRadius.circular(
+                                  10,
+                                ),
                                 borderSide: BorderSide(
                                   color: c.surface,
                                 ),
@@ -146,8 +146,8 @@ class _OnBoarding2State extends State<OnBoarding2> {
                         height: 20,
                       ),
                       SizedBox(
-                        width: 150.w,
-                        height: 70.h,
+                        width: 130.w,
+                        height: 60.h,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: c.primary,

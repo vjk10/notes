@@ -63,7 +63,7 @@ class _OnBoarding3State extends State<OnBoarding3> {
                   child: Text(
                     onBoarding3Message,
                     style: t.textTheme.bodyText1?.copyWith(
-                      fontSize: 18.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ),

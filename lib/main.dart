@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
                 m3Dark = DynamicColorScheme.generate(palette1, dark: true);
                 if (notifier.material3) {
                   return ScreenUtilInit(
-                    builder: (_) => GetMaterialApp(
+                    builder: (_, widget) => GetMaterialApp(
                       themeMode: ThemeMode.system,
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: androidThemeDark.copyWith(
@@ -116,7 +116,7 @@ class MyApp extends StatelessWidget {
                     themeCollection: themeCollection,
                     defaultThemeId: AppThemes.regular,
                     builder: (context, theme) => ScreenUtilInit(
-                      builder: (_) => GetMaterialApp(
+                      builder: (_, widget) => GetMaterialApp(
                         debugShowCheckedModeBanner: kDebugMode,
                         theme: theme,
                         routes: {
@@ -145,7 +145,7 @@ class MyApp extends StatelessWidget {
                   themeCollection: themeCollection,
                   defaultThemeId: AppThemes.regular,
                   builder: (context, theme) => ScreenUtilInit(
-                    builder: (_) => GetMaterialApp(
+                    builder: (_, widget) => GetMaterialApp(
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: theme,
                       routes: {

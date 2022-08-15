@@ -78,7 +78,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                     child: Text(
                       onBoarding1Message,
                       style: t.textTheme.bodyText1?.copyWith(
-                        fontSize: 18.sp,
+                        fontSize: 14.sp,
                         color: c.onBackground,
                       ),
                       textAlign: TextAlign.center,
@@ -88,8 +88,8 @@ class _OnBoarding1State extends State<OnBoarding1> {
                     height: 20,
                   ),
                   SizedBox(
-                    width: 150.w,
-                    height: 70.h,
+                    width: 130.w,
+                    height: 60.h,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: c.primary,
@@ -111,7 +111,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                       child: Text(
                         "Get Started",
                         style: t.textTheme.button?.copyWith(
-                          fontSize: 18.sp,
+                          fontSize: 14.sp,
                           color: c.onPrimary,
                         ),
                       ),

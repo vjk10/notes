@@ -22,6 +22,8 @@ class _AddAlertViewState extends State<AddAlertView> {
   late Note note;
   late String title, description;
 
+  List<bool> isSelected = List.generate(4, (index) => false);
+
   @override
   void initState() {
     super.initState();
@@ -72,60 +74,59 @@ class _AddAlertViewState extends State<AddAlertView> {
                 const SizedBox(
                   height: 30,
                 ),
-                Container(
-                  width: Get.width - 50,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: c.secondaryContainer,
-                    borderRadius: BorderRadius.circular(
-                      5,
-                    ),
-                    border: Border.all(
-                      color: c.secondaryContainer,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        alignment: Alignment.center,
-                        dropdownColor: c.surface,
-                        elevation: 0,
-                        borderRadius: BorderRadius.circular(5),
-                        isDense: true,
-                        style: t.textTheme.button,
-                        hint: Text(
-                          'select pattern',
-                          style: t.textTheme.button,
-                        ),
-                        items: items
-                            .map(
-                              (item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      item,
-                                      textAlign: TextAlign.left,
-                                      style: t.textTheme.button,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        value: selectedAlertPattern,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedAlertPattern = value.toString();
-                          });
-                          if (kDebugMode) {
-                            print("SELECTED VALUE: $selectedAlertPattern");
-                          }
+                Center(
+                  child: SizedBox(
+                    width: Get.width - 30,
+                    child: Center(
+                      child: ToggleButtons(
+                        isSelected: isSelected,
+                        fillColor: c.primary,
+                        selectedColor: c.onPrimary,
+                        selectedBorderColor: c.onBackground,
+                        disabledColor: c.onBackground,
+                        disabledBorderColor: c.onBackground,
+                        splashColor: c.primary.withOpacity(0.2),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        borderRadius: BorderRadius.circular(30),
+                        color: c.onBackground,
+                        onPressed: (index) {
+                          setState(
+                            () {
+                              for (int buttonIndex = 0;
+                                  buttonIndex < isSelected.length;
+                                  buttonIndex++) {
+                                if (buttonIndex == index) {
+                                  isSelected[buttonIndex] = true;
+                                } else {
+                                  isSelected[buttonIndex] = false;
+                                }
+                              }
+                              selectedAlertPattern = items[index].toString();
+                              if (kDebugMode) {
+                                print(
+                                    "Selected Pattern: $selectedAlertPattern");
+                              }
+                            },
+                          );
                         },
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(21.0),
+                            child: Text('every minute'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(21.0),
+                            child: Text('hourly'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(21.0),
+                            child: Text('daily'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(21.0),
+                            child: Text('weekly'),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -152,22 +153,26 @@ class _AddAlertViewState extends State<AddAlertView> {
                         hintStyle: t.textTheme.button,
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 3,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 2,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 2,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 2,
                           ),
                         ),
                         filled: true,
@@ -201,22 +206,26 @@ class _AddAlertViewState extends State<AddAlertView> {
                         hintStyle: t.textTheme.button,
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 3,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 2,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 2,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: c.secondaryContainer,
+                            color: c.outline,
+                            width: 2,
                           ),
                         ),
                         filled: true,
@@ -240,6 +249,7 @@ class _AddAlertViewState extends State<AddAlertView> {
                           primary: c.primary,
                         ),
                         onPressed: () async {
+                          Get.back();
                           var repeatInterval = RepeatIntervals()
                               .getInterval(selectedAlertPattern!);
                           NotificationService().showAlert(

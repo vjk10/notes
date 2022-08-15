@@ -23,21 +23,21 @@ class _UserDetailsState extends State<UserDetails> {
             Icon(
               Icons.emoji_emotions_rounded,
               color: c.onBackground,
-              size: 60,
+              size: 35,
             ),
           if (widget.profileUrl.isNotEmpty)
             CircleAvatar(
-              radius: 60,
+              radius: 35,
               backgroundColor: c.primary,
               backgroundImage: NetworkImage(widget.profileUrl),
             ),
           Padding(
             padding: const EdgeInsets.only(
-              top: 20.0,
+              top: 10.0,
             ),
             child: Text(
               widget.userName,
-              style: t.textTheme.headline5,
+              style: t.textTheme.button,
             ),
           ),
         ],

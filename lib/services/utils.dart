@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -95,8 +94,12 @@ class Utils {
                 Get.offAllNamed('/mainScreen');
               }
             },
-            child: const Text(
+            child: Text(
               "Read It Later",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.primary,
+              ),
             ),
           ),
           TextButton(
@@ -120,8 +123,12 @@ class Utils {
                 ),
               );
             },
-            child: const Text(
+            child: Text(
               "View Documents",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.primary,
+              ),
             ),
           ),
           const SizedBox(
@@ -187,141 +194,5 @@ class Utils {
         }
       }
     });
-  }
-
-  Future<dynamic> createAlertDialog(
-    BuildContext context,
-    ThemeData t,
-    ColorScheme c,
-  ) async {
-    return showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        // shape: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.circular(25),
-        // ),
-        backgroundColor: c.background,
-        title: Text(
-          "Create Alert",
-          style: t.textTheme.button,
-        ),
-        buttonPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        content: SizedBox(
-          height: 150,
-          width: Get.width - 50,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: Get.width - 80,
-                height: 65,
-                decoration: BoxDecoration(
-                  color: c.background,
-                  border: Border.all(color: c.primary, width: 2),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      alignment: Alignment.center,
-                      icon: Icon(
-                        Icons.repeat,
-                        color: c.primary,
-                      ),
-                      dropdownColor: c.background,
-                      borderRadius: BorderRadius.circular(15),
-                      isDense: true,
-                      style: t.textTheme.button,
-                      hint: Text(
-                        'Select Pattern',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).hintColor,
-                        ),
-                      ),
-                      items: items
-                          .map(
-                            (item) => DropdownMenuItem<String>(
-                              value: item,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item,
-                                    textAlign: TextAlign.left,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  Icon(
-                                    item == "Select Date and Time"
-                                        ? Icons.calendar_month_outlined
-                                        : Icons.repeat,
-                                    color: c.primary,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      value: selectedAlertPattern,
-                      onChanged: (value) {
-                        selectedAlertPattern = value as String;
-                        if (kDebugMode) {
-                          print("SELECTED VALUE: $selectedAlertPattern");
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          SizedBox(
-            width: 80,
-            height: 40,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: c.background,
-                side: BorderSide(color: c.outline, width: 1),
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(25),
-                // ),
-              ),
-              onPressed: () {},
-              child: Text(
-                "Cancel",
-                style: t.textTheme.button
-                    ?.copyWith(color: c.onBackground, fontSize: 12),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 80,
-            height: 40,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: c.primary,
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(25),
-                // ),
-              ),
-              onPressed: () {},
-              child: Text(
-                "Create",
-                style: t.textTheme.button
-                    ?.copyWith(color: c.onPrimary, fontSize: 12),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
   }
 }

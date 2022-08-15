@@ -123,6 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       setState(() {
         _accountLinked = true;
         profileUrl = user.photoURL.toString();
+        userName = user.displayName.toString();
       });
     } catch (e) {
       if (e is FirebaseAuthException) {
@@ -195,7 +196,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Scaffold(
           backgroundColor: c.background,
           appBar: AppBar(
-            backgroundColor: c.background,
+            backgroundColor: c.secondaryContainer,
             title: Text(
               "settings",
               style: t.textTheme.headline5,
@@ -218,7 +219,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10.0,
-                      vertical: 20.0,
+                      vertical: 25.0,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,154 +296,86 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Padding deciveDataSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                  left: 15.0,
-                ),
-                child: Text(
-                  "Device Data",
-                  textAlign: TextAlign.start,
-                  style: t.textTheme.button,
-                ),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 15.0,
+              left: 15.0,
+            ),
+            child: Center(
+              child: Text(
+                "Device Data",
+                textAlign: TextAlign.center,
+                style: t.textTheme.labelLarge,
               ),
-              usedStorageTile(),
-              clearNotesTile(),
-              cancelRemindersTile(),
-              appDetailsTile(),
-            ],
+            ),
           ),
-        ),
+          usedStorageTile(),
+          clearNotesTile(),
+          cancelRemindersTile(),
+          appDetailsTile(),
+        ],
       ),
     );
   }
 
   Padding userDataSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                  left: 15.0,
-                ),
-                child: Text(
-                  "User Data",
-                  textAlign: TextAlign.start,
-                  style: t.textTheme.button,
-                ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 15.0,
+              left: 15.0,
+            ),
+            child: Center(
+              child: Text(
+                "User Data",
+                textAlign: TextAlign.center,
+                style: t.textTheme.labelLarge,
               ),
-              Visibility(
-                visible: _accountLinked,
-                child: cloudBackupTile(),
-              ),
-              if (m3YouAvail) materialYou(),
-              Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Visibility(
-                  visible: !notifier.material3,
-                  child: themeDataTile(),
-                ),
-              ),
-              autoSaveTile(),
-              currencyTile(),
-            ],
+            ),
           ),
-        ),
+          Visibility(
+            visible: _accountLinked,
+            child: cloudBackupTile(),
+          ),
+          if (m3YouAvail) materialYou(),
+          Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Visibility(
+              visible: !notifier.material3,
+              child: themeDataTile(),
+            ),
+          ),
+          autoSaveTile(),
+          currencyTile(),
+        ],
       ),
     );
   }
 
   Consumer<ThemeNotifier> materialYou() {
     return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-      return Container(
-        width: Get.width - 20,
-        height: 80,
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: ListTile(
-              leading: Icon(
-                Icons.colorize_outlined,
-                color: c.onSecondaryContainer,
-                size: 24,
-              ),
-              title: Text(
-                "Material You",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                ),
-              ),
-              trailing: Switch.adaptive(
-                  activeColor: c.primary,
-                  inactiveThumbColor: c.secondary,
-                  inactiveTrackColor: c.tertiaryContainer,
-                  value: notifier.material3,
-                  onChanged: (value) async {
-                    HapticFeedback.heavyImpact();
-                    notifier.toggleTheme();
-                    selectedThemeId = _pref.getInt('selectedThemeId')!;
-                    if (kDebugMode) {
-                      print("Selected Theme: $selectedThemeId");
-                    }
-                    if (selectedTheme.isEmpty) {
-                      setState(() {
-                        selectedTheme =
-                            AppThemes().getThemeName(selectedThemeId);
-                      });
-                    }
-                  }),
-            ),
-          ),
-        ),
-      );
-    });
-  }
-
-  Container autoSaveTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Center(
           child: ListTile(
             leading: Icon(
-              Icons.save,
+              Icons.colorize_outlined,
               color: c.onSecondaryContainer,
               size: 24,
             ),
             title: Text(
-              "Autosave",
+              "Material You",
               style: t.textTheme.button?.copyWith(
                 fontSize: 14,
               ),
@@ -451,317 +384,295 @@ class _SettingsScreenState extends State<SettingsScreen>
                 activeColor: c.primary,
                 inactiveThumbColor: c.secondary,
                 inactiveTrackColor: c.tertiaryContainer,
-                value: _autoSave,
+                value: notifier.material3,
                 onChanged: (value) async {
                   HapticFeedback.heavyImpact();
-                  await NotesDatabase().setAutoSave(value);
-                  setState(() {
-                    _autoSave = value;
-                  });
+                  notifier.toggleTheme();
+                  selectedThemeId = _pref.getInt('selectedThemeId')!;
+                  if (kDebugMode) {
+                    print("Selected Theme: $selectedThemeId");
+                  }
+                  if (selectedTheme.isEmpty) {
+                    setState(() {
+                      selectedTheme = AppThemes().getThemeName(selectedThemeId);
+                    });
+                  }
                 }),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Container currencyTile() {
-    return Container(
-        width: Get.width - 20,
-        height: 80,
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: ListTile(
-              leading: Icon(
-                Icons.money,
-                color: c.onSecondaryContainer,
-                size: 24,
-              ),
-              title: Text(
-                "Choose Currency",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                ),
-              ),
-              trailing: GestureDetector(
-                onTap: () {
-                  showCurrencyPicker(
-                      context: context,
-                      theme: CurrencyPickerThemeData(
-                          flagSize: 24,
-                          backgroundColor: c.secondaryContainer,
-                          titleTextStyle: t.textTheme.button,
-                          subtitleTextStyle: t.textTheme.subtitle1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          )),
-                      onSelect: (value) {
-                        setState(() {
-                          currency = value.symbol;
-                          currencyFlag = value.flag;
-                        });
-                      });
-                },
-                child: Text(
-                  "$currency $currencyFlag",
-                  style: t.textTheme.button,
-                ),
-              ),
+  Padding autoSaveTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.save,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Autosave",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
             ),
           ),
-        ));
-  }
-
-  Container cloudBackupTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.backup_outlined,
-              color: c.onSecondaryContainer,
-              size: 24,
-            ),
-            title: Text(
-              "Cloud Backup",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: c.primary,
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(25),
-                // ),
-              ),
-              onPressed: () async {
-                await DatabaseService().importNotes(user.uid);
-              },
-              child: Text(
-                "Import",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.onPrimary,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container usedStorageTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.folder_outlined,
-              color: c.onSecondaryContainer,
-              size: 24,
-            ),
-            title: Text(
-              "Used Storage",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: Text(
-              cacheMemorySize,
-              style: t.textTheme.bodyText1,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container clearNotesTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.delete_outline_rounded,
-              color: c.onSecondaryContainer,
-              size: 24,
-            ),
-            title: Text(
-              "Clear All Notes",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
-                NotesDatabase().clearAllNotes();
-              },
-              child: Text(
-                "Clear",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container cancelRemindersTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.notifications_off_outlined,
-              color: c.onSecondaryContainer,
-              size: 24,
-            ),
-            title: Text(
-              "Cancel All Reminders",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
-                NotificationService().endAllReminder();
-              },
-              child: Text(
-                "Cancel",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container appDetailsTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.info_outline_rounded,
-              color: c.onSecondaryContainer,
-              size: 24,
-            ),
-            title: Text(
-              "Licenses and Info",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: TextButton(
-              onPressed: () {
-                Get.bottomSheet(
-                  BottomSheet(
-                    backgroundColor: Colors.transparent,
-                    onClosing: () {},
-                    builder: (_) {
-                      return const LicensesAndInfo();
-                    },
-                  ),
-                );
-              },
-              child: Text(
-                "v$version (build v$buildNumber)",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container themeDataTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.palette,
-              color: c.onSecondaryContainer,
-              size: 24,
-            ),
-            title: Text(
-              "Choose Theme",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
+          trailing: Switch.adaptive(
+              activeColor: c.primary,
+              inactiveThumbColor: c.secondary,
+              inactiveTrackColor: c.tertiaryContainer,
+              value: _autoSave,
+              onChanged: (value) async {
                 HapticFeedback.heavyImpact();
-                showThemeSheet();
-              },
-              child: Image.asset(
-                selectedTheme,
-                width: 36,
-                height: 36,
+                await NotesDatabase().setAutoSave(value);
+                setState(() {
+                  _autoSave = value;
+                });
+              }),
+        ),
+      ),
+    );
+  }
+
+  Padding currencyTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.money,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Choose Currency",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+            ),
+          ),
+          trailing: GestureDetector(
+            onTap: () {
+              showCurrencyPicker(
+                  context: context,
+                  theme: CurrencyPickerThemeData(
+                      flagSize: 24,
+                      backgroundColor: c.secondaryContainer,
+                      titleTextStyle: t.textTheme.button,
+                      subtitleTextStyle: t.textTheme.subtitle1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                  onSelect: (value) {
+                    setState(() {
+                      currency = value.symbol;
+                      currencyFlag = value.flag!;
+                    });
+                  });
+            },
+            child: Text(
+              "$currency $currencyFlag",
+              style: t.textTheme.button,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding cloudBackupTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.backup_outlined,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Cloud Backup",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+            ),
+          ),
+          trailing: TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: c.primary,
+            ),
+            onPressed: () async {
+              await DatabaseService().importNotes(user.uid);
+            },
+            child: Text(
+              "Import",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.onPrimary,
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding usedStorageTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.folder_outlined,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Used Storage",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+            ),
+          ),
+          trailing: Text(
+            cacheMemorySize,
+            style: t.textTheme.bodyText1,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding clearNotesTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.delete_outline_rounded,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Clear All Notes",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+            ),
+          ),
+          trailing: GestureDetector(
+            onTap: () {
+              NotesDatabase().clearAllNotes();
+            },
+            child: Text(
+              "Clear",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.error,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding cancelRemindersTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.notifications_off_outlined,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Cancel All Reminders",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+            ),
+          ),
+          trailing: GestureDetector(
+            onTap: () {
+              NotificationService().endAllReminder();
+            },
+            child: Text(
+              "Cancel",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.error,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding appDetailsTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.info_outline_rounded,
+            color: c.onSecondaryContainer,
+            size: 24,
+          ),
+          title: Text(
+            "Licenses and Info",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+            ),
+          ),
+          trailing: TextButton(
+            onPressed: () {
+              Get.bottomSheet(
+                BottomSheet(
+                  backgroundColor: Colors.transparent,
+                  onClosing: () {},
+                  builder: (_) {
+                    return const LicensesAndInfo();
+                  },
+                ),
+              );
+            },
+            child: Text(
+              "v$version (build v$buildNumber)",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.error,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Center themeDataTile() {
+    return Center(
+      child: ListTile(
+        leading: Icon(
+          Icons.palette,
+          color: c.onSecondaryContainer,
+          size: 24,
+        ),
+        title: Text(
+          "Choose Theme",
+          style: t.textTheme.button?.copyWith(
+            fontSize: 14,
+          ),
+        ),
+        trailing: GestureDetector(
+          onTap: () {
+            HapticFeedback.heavyImpact();
+            showThemeSheet();
+          },
+          child: Image.asset(
+            selectedTheme,
+            width: 36,
+            height: 36,
           ),
         ),
       ),

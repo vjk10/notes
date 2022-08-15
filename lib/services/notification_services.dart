@@ -139,6 +139,7 @@ class NotificationService {
     String finalNotificationBody = message;
     var iOS = const IOSNotificationDetails();
     RepeatInterval repeatInterval = repeatIntervalReceived;
+    var interval = repeatIntervalReceived.name.capitalizeFirst;
     NotificationDetails notificationDetails = NotificationDetails(
       android: android,
       iOS: iOS,
@@ -156,6 +157,26 @@ class NotificationService {
       if (kDebugMode) {
         print("Alert Scheduled!");
       }
+      Get.showSnackbar(
+        GetSnackBar(
+          backgroundColor: c.surface,
+          duration: const Duration(seconds: 2),
+          margin: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 10,
+          ),
+          shouldIconPulse: false,
+          icon: Icon(
+            Icons.alarm_on_outlined,
+            color: c.primary,
+          ),
+          borderRadius: 10,
+          messageText: Text(
+            '$title will be reminded $interval',
+            style: t.textTheme.bodyMedium,
+          ),
+        ),
+      );
     });
   }
 
@@ -163,6 +184,27 @@ class NotificationService {
     if (kDebugMode) {
       print("Schedule Cancelled");
     }
-    FlutterLocalNotificationsPlugin().cancelAll();
+    FlutterLocalNotificationsPlugin().cancelAll().whenComplete(() {
+      Get.showSnackbar(
+        GetSnackBar(
+          backgroundColor: c.surface,
+          duration: const Duration(seconds: 2),
+          margin: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 10,
+          ),
+          shouldIconPulse: false,
+          icon: Icon(
+            Icons.alarm_off_outlined,
+            color: c.error,
+          ),
+          borderRadius: 10,
+          messageText: Text(
+            'All alerts are cleared',
+            style: t.textTheme.bodyMedium,
+          ),
+        ),
+      );
+    });
   }
 }

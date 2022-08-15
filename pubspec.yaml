@@ -1,9 +1,9 @@
 name: notes
 description: Simple note taking app
 
-publish_to: 'none' 
+publish_to: 'none'
 
-version: 1.1.1+15
+version: 1.1.2+16
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -74,7 +74,6 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.1
   rename: ^2.0.1
-  very_good_analysis: ^3.0.0
 
 flutter:
 
