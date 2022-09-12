@@ -30,6 +30,13 @@ class _AddAlertViewState extends State<AddAlertView> {
   }
 
   @override
+  void didChangeDependencies() {
+    t = Theme.of(context);
+    c = t.colorScheme;
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }
@@ -52,24 +59,19 @@ class _AddAlertViewState extends State<AddAlertView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 50,
+                  height: 10,
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_alert_outlined,
-                      color: c.primary,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Create Alert",
-                      style: t.textTheme.titleLarge,
-                    )
-                  ],
+                Container(
+                  width: 32,
+                  height: 4,
+                  color: c.onSurfaceVariant,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Add Alert",
+                  style: t.textTheme.headlineSmall,
                 ),
                 const SizedBox(
                   height: 30,
@@ -145,40 +147,20 @@ class _AddAlertViewState extends State<AddAlertView> {
                           title = value.toString();
                         });
                       },
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
-                        hintText: "alert name",
-                        hintStyle: t.textTheme.button,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 3,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 2,
-                          ),
-                        ),
+                        label: const Text("Alert Title"),
+                        labelStyle: t.textTheme.bodySmall
+                            ?.copyWith(color: c.onBackground),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelAlignment: FloatingLabelAlignment.start,
                         filled: true,
                         fillColor: c.secondaryContainer,
-                        contentPadding: const EdgeInsets.all(
-                          25.0,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 20,
                         ),
                       ),
                     ),
@@ -202,36 +184,16 @@ class _AddAlertViewState extends State<AddAlertView> {
                       keyboardType: TextInputType.name,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(
-                        hintText: "alert description",
-                        hintStyle: t.textTheme.button,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 3,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: c.outline,
-                            width: 2,
-                          ),
-                        ),
+                        label: const Text("Alert Description"),
+                        labelStyle: t.textTheme.bodySmall
+                            ?.copyWith(color: c.onBackground),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelAlignment: FloatingLabelAlignment.start,
                         filled: true,
                         fillColor: c.secondaryContainer,
-                        contentPadding: const EdgeInsets.all(
-                          25.0,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 20,
                         ),
                       ),
                     ),
@@ -246,20 +208,49 @@ class _AddAlertViewState extends State<AddAlertView> {
                     height: 70,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: c.primary,
+                          backgroundColor: c.primary,
                         ),
                         onPressed: () async {
-                          Get.back();
                           var repeatInterval = RepeatIntervals()
-                              .getInterval(selectedAlertPattern!);
-                          NotificationService().showAlert(
-                              context,
-                              UniqueKey().toString(),
-                              title,
-                              description,
-                              repeatInterval,
-                              title,
-                              DateTime.now());
+                              .getInterval(selectedAlertPattern!)
+                              .toString();
+                          if (kDebugMode) {
+                            print(repeatInterval.toString());
+                          }
+                          if (title.isNotEmpty && repeatInterval.isNotEmpty) {
+                            Get.back();
+                            var repeatInterval = RepeatIntervals()
+                                .getInterval(selectedAlertPattern!);
+                            NotificationService().showAlert(
+                                context,
+                                UniqueKey().toString(),
+                                title,
+                                description,
+                                repeatInterval,
+                                title,
+                                DateTime.now());
+                          } else {
+                            Get.showSnackbar(
+                              GetSnackBar(
+                                backgroundColor: c.surface,
+                                duration: const Duration(seconds: 2),
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 10,
+                                ),
+                                shouldIconPulse: false,
+                                icon: Icon(
+                                  Icons.error_outline_rounded,
+                                  color: c.error,
+                                ),
+                                borderRadius: 10,
+                                messageText: Text(
+                                  'Missing Details',
+                                  style: t.textTheme.bodyMedium,
+                                ),
+                              ),
+                            );
+                          }
                         },
                         child: Text(
                           "Create Alert",

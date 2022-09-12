@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/list/add_list_view.dart';
+import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/android/widgets/double_dialog.dart';
 import 'package:notes/android/widgets/text_dialog.dart';
 import 'package:notes/services/data_table_services.dart';
@@ -204,7 +206,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
         appBar: AppBar(
           elevation: 0,
           iconTheme: IconThemeData(color: c.onBackground),
-          backgroundColor: c.secondaryContainer.withAlpha(50),
+          backgroundColor: c.surface,
           title: Text(
             "expense",
             style: t.textTheme.headline5,
@@ -232,8 +234,32 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
             ),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
+            Hero(
+              tag: 'option1',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddNoteView());
+                },
+                icon: Icon(
+                  Icons.note_add_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'option2',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddListView());
+                },
+                icon: Icon(
+                  Icons.add_task_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'saveButton',
               child: IconButton(
                 onPressed: () async {
                   if (expenses.isNotEmpty && titleController.text.isNotEmpty) {

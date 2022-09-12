@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes/android/views/misc/pp_html_view.dart';
-import 'package:notes/android/views/misc/tc_html_view.dart';
+import 'package:notes/android/widgets/pphtml_view.dart';
+import 'package:notes/android/widgets/tchtml_view.dart';
 
 import '../data/data.dart';
 
@@ -22,48 +22,74 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Container(
-        width: Get.width - 50,
-        height: Get.height / 2,
-        decoration: BoxDecoration(
-          color: c.background,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: Get.width - 70,
-              height: 75,
-              child: TextButton.icon(
-                style: TextButton.styleFrom(
-                  backgroundColor: c.primary,
-                ),
-                onPressed: () {
-                  Get.to(() => const PPHtmlView());
-                },
-                icon: Icon(
-                  Icons.policy_outlined,
+    return Container(
+      width: Get.width - 50,
+      height: Get.height / 2,
+      decoration: BoxDecoration(
+        color: c.background,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: Get.width - 70,
+            height: 75,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                backgroundColor: c.primary,
+              ),
+              onPressed: () {
+                Get.to(() => const PPHtmlView());
+              },
+              icon: Icon(
+                Icons.policy_outlined,
+                color: c.onPrimary,
+              ),
+              label: Text(
+                "Privacy Policy",
+                style: t.textTheme.button?.copyWith(
                   color: c.onPrimary,
-                ),
-                label: Text(
-                  "Privacy Policy",
-                  style: t.textTheme.button?.copyWith(
-                    color: c.onPrimary,
-                  ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: Get.width - 70,
+            height: 75,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                backgroundColor: c.primary,
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
+              ),
+              onPressed: () {
+                Get.to(() => const TCHtmlView());
+              },
+              icon: Icon(
+                Icons.gavel_outlined,
+                color: c.onPrimary,
+              ),
+              label: Text(
+                "Terms & Conditions",
+                style: t.textTheme.button?.copyWith(
+                  color: c.onPrimary,
+                ),
+              ),
             ),
-            SizedBox(
-              width: Get.width - 70,
-              height: 75,
-              child: TextButton.icon(
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: Get.width - 70,
+            height: 75,
+            child: TextButton.icon(
                 style: TextButton.styleFrom(
                   backgroundColor: c.primary,
                   // shape: RoundedRectangleBorder(
@@ -71,49 +97,20 @@ class _LicensesAndInfoState extends State<LicensesAndInfo> {
                   // ),
                 ),
                 onPressed: () {
-                  Get.to(() => const TCHtmlView());
+                  navToLicense();
                 },
                 icon: Icon(
-                  Icons.gavel_outlined,
+                  Icons.lightbulb_outline,
                   color: c.onPrimary,
                 ),
                 label: Text(
-                  "Terms & Conditions",
+                  "Licenses",
                   style: t.textTheme.button?.copyWith(
                     color: c.onPrimary,
                   ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: Get.width - 70,
-              height: 75,
-              child: TextButton.icon(
-                  style: TextButton.styleFrom(
-                    backgroundColor: c.primary,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(25),
-                    // ),
-                  ),
-                  onPressed: () {
-                    navToLicense();
-                  },
-                  icon: Icon(
-                    Icons.lightbulb_outline,
-                    color: c.onPrimary,
-                  ),
-                  label: Text(
-                    "Licenses",
-                    style: t.textTheme.button?.copyWith(
-                      color: c.onPrimary,
-                    ),
-                  )),
-            )
-          ],
-        ),
+                )),
+          )
+        ],
       ),
     );
   }

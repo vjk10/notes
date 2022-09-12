@@ -1,4 +1,3 @@
-import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -10,11 +9,11 @@ import 'package:scientisst_db/scientisst_db.dart';
 import '../../data/data.dart';
 
 class PickFolder extends StatefulWidget {
-  final Future<List<DocumentSnapshot>> foldersFuture;
+  // final Future<List<DocumentSnapshot>> foldersFuture;
   final String noteId, noteTitle, noteBody;
   const PickFolder({
     Key? key,
-    required this.foldersFuture,
+    // required this.foldersFuture,
     required this.noteId,
     required this.noteTitle,
     required this.noteBody,
@@ -48,50 +47,13 @@ class _PickFolderState extends State<PickFolder> {
           style: t.textTheme.headline5,
         ),
       ),
-      // body: FutureBuilder(
-      //   future: widget.foldersFuture,
-      //   builder: (context, AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
-      //     switch (foldersData.connectionState) {
-      //       case ConnectionState.waiting:
-      //         {
-      //           return const NotesLoadingAndroid();
-      //         }
-      //       case ConnectionState.done:
-      //         {
-      //           switch (foldersData.data?.length) {
-      //             case 0:
-      //               {
-      //                 return Center(
-      //                   child: Text(
-      //                     "No folders",
-      //                     textAlign: TextAlign.center,
-      //                     style: t.textTheme.bodyText1?.copyWith(
-      //                       color: c.onSurface,
-      //                     ),
-      //                   ),
-      //                 );
-      //               }
-
-      //             default:
-      //               {
-      //                 return foldersGrid(foldersData);
-      //               }
-      //           }
-      //         }
-      //       default:
-      //         {
-      //           return const NotesLoadingAndroid();
-      //         }
-      //     }
-      //   },
-      // ),
       body: StreamBuilder(
         stream: ScientISSTdb.instance.collection("folders").watchDocuments(),
         builder: (context, AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
           switch (foldersData.connectionState) {
             case ConnectionState.waiting:
               {
-                return const NotesLoadingAndroid();
+                return const Center(child: NotesLoadingAndroid());
               }
             case ConnectionState.done:
               {
@@ -148,11 +110,9 @@ class _PickFolderState extends State<PickFolder> {
           children: [
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: selectedIndex.isNegative ? c.secondary : c.primary,
-                onPrimary: c.onPrimary,
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(20),
-                // ),
+                foregroundColor: c.onPrimary,
+                backgroundColor:
+                    selectedIndex.isNegative ? c.secondary : c.primary,
               ),
               onPressed: selectedIndex.isNegative
                   ? null
@@ -172,11 +132,6 @@ class _PickFolderState extends State<PickFolder> {
               width: 15,
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                  // shape: RoundedRectangleBorder(
-                  //   borderRadius: BorderRadius.circular(15),
-                  // ),
-                  ),
               onPressed: () {
                 Get.offAllNamed('/mainScreen');
               },
@@ -235,10 +190,10 @@ class _PickFolderState extends State<PickFolder> {
                       border: Border.all(
                         color: folderIndex == selectedIndex
                             ? c.primary
-                            : c.secondaryContainer,
+                            : c.surfaceVariant,
                         width: 2,
                       ),
-                      color: c.secondaryContainer,
+                      color: c.surfaceVariant,
                       borderRadius: BorderRadius.circular(15)),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,12 +218,9 @@ class _PickFolderState extends State<PickFolder> {
                           // ),
                           contentPadding: const EdgeInsets.symmetric(
                             vertical: 10.0,
-                            horizontal: 10.0,
+                            horizontal: 0.0,
                           ),
-                          leading: Text(
-                            Emojis.fileFolder,
-                            style: t.textTheme.headline4,
-                          ),
+
                           title: Text(
                             foldersData.data![folderIndex].data["title"]
                                 .toString(),

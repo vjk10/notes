@@ -1,4 +1,3 @@
-import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -36,181 +35,135 @@ class _AddFolderViewState extends State<AddFolderView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-      return Container(
-        decoration: BoxDecoration(
-          color: c.background,
-          borderRadius: BorderRadius.circular(25),
+      return Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
+        color: c.surface,
+        surfaceTintColor: c.surfaceTint,
+        elevation: 2,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                Emojis.fileFolder,
-                style: TextStyle(fontSize: 48),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: SizedBox(
-                  width: Get.width - 50,
-                  height: 75,
-                  child: TextFormField(
-                    controller: titleController,
-                    onChanged: (value) {
-                      setState(() {
-                        title = value.toString();
-                      });
-                    },
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.name,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration(
-                      hintText: "folder name",
-                      hintStyle: t.textTheme.button,
-                      border: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          25,
-                        ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: c.secondaryContainer,
-                      contentPadding: const EdgeInsets.all(
-                        25.0,
-                      ),
-                    ),
-                  ),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: SizedBox(
-                  width: Get.width - 50,
-                  height: 75,
-                  child: TextFormField(
-                    controller: descriptionController,
-                    onChanged: (value) {
-                      setState(() {
-                        description = value.toString();
-                      });
-                    },
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.name,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration(
-                      hintText: "folder description",
-                      hintStyle: t.textTheme.button,
-                      border: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        // borderRadius: BorderRadius.circular(
-                        //   25,
-                        // ),
-                        borderSide: BorderSide(
-                          color: c.secondaryContainer,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: c.secondaryContainer,
-                      contentPadding: const EdgeInsets.all(
-                        25.0,
-                      ),
-                    ),
-                  ),
+                Container(
+                  width: 32,
+                  height: 4,
+                  color: c.onSurfaceVariant,
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: SizedBox(
-                  width: Get.width - 50,
-                  height: 70,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: c.primary,
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.circular(25),
-                        // ),
-                      ),
-                      onPressed: () async {
-                        if (titleController.text.isNotEmpty) {
-                          var folder = Folder(
-                            description: descriptionController.text,
-                            creationTime: DateFormat.yMMMMEEEEd()
-                                .format(DateTime.now())
-                                .toString(),
-                            title: titleController.text,
-                          );
-                          NotesDatabase().createFolder(folder);
-                          Get.back();
-                        }
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Create Folder',
+                  style: t.textTheme.headlineSmall,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: Get.width - 50,
+                    height: 75,
+                    child: TextFormField(
+                      controller: titleController,
+                      onChanged: (value) {
+                        setState(() {
+                          title = value.toString();
+                        });
                       },
-                      child: Text(
-                        "Create Folder",
-                        style: t.textTheme.button?.copyWith(
-                          color: c.onPrimary,
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.name,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        label: const Text("Folder Name"),
+                        labelStyle: t.textTheme.bodySmall
+                            ?.copyWith(color: c.onBackground),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelAlignment: FloatingLabelAlignment.start,
+                        filled: true,
+                        fillColor: c.secondaryContainer,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 20,
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
-              )
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: Get.width - 50,
+                    height: 75,
+                    child: TextFormField(
+                      controller: descriptionController,
+                      onChanged: (value) {
+                        setState(() {
+                          description = value.toString();
+                        });
+                      },
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.name,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        label: const Text("Folder Description"),
+                        labelStyle: t.textTheme.bodySmall
+                            ?.copyWith(color: c.onBackground),
+                        floatingLabelBehavior: FloatingLabelBehavior.auto,
+                        floatingLabelAlignment: FloatingLabelAlignment.start,
+                        filled: true,
+                        fillColor: c.secondaryContainer,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: SizedBox(
+                    width: Get.width - 50,
+                    height: 70,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: c.primary,
+                        ),
+                        onPressed: () async {
+                          if (titleController.text.isNotEmpty) {
+                            var folder = Folder(
+                              description: descriptionController.text,
+                              creationTime: DateFormat.yMMMMEEEEd()
+                                  .format(DateTime.now())
+                                  .toString(),
+                              title: titleController.text,
+                            );
+                            NotesDatabase().createFolder(folder);
+                            Get.back();
+                          }
+                        },
+                        child: Text(
+                          "Create Folder",
+                          style: t.textTheme.button?.copyWith(
+                            color: c.onPrimary,
+                          ),
+                        )),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       );

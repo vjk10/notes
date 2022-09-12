@@ -21,7 +21,7 @@ class _UserDetailsState extends State<UserDetails> {
         children: [
           if (widget.profileUrl.isEmpty)
             Icon(
-              Icons.emoji_emotions_rounded,
+              Icons.account_circle_outlined,
               color: c.onBackground,
               size: 35,
             ),

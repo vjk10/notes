@@ -132,14 +132,14 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           ),
                           activeTextColor: c.onPrimary,
                           activeToggleColor: c.onPrimary,
-                          inactiveColor: c.secondary,
+                          inactiveColor: c.tertiary,
                           inactiveIcon: Center(
                             child: Icon(
                               Icons.highlight_off_rounded,
                               color: c.onError,
                             ),
                           ),
-                          inactiveTextColor: c.onSecondary,
+                          inactiveTextColor: c.onTertiary,
                           inactiveToggleColor: c.error,
                           width: 150.w,
                           height: 70.h,
@@ -261,7 +261,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                   height: 70.h,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: c.primary,
+                      backgroundColor: c.primary,
                       elevation: 20,
                       shadowColor: c.background,
                       // shape: RoundedRectangleBorder(

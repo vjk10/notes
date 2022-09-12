@@ -28,10 +28,7 @@ class Utils {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        // shape: RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.circular(30),
-        // ),
-        backgroundColor: c.surface,
+        // backgroundColor: c.background,
         title: const Text(
           "Error Saving",
         ),
@@ -55,8 +52,40 @@ class Utils {
               "Continue Editing",
             ),
           ),
-          const SizedBox(
-            width: 10,
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> confirmationForAlertsDeletion(
+      BuildContext context, ThemeData t, ColorScheme c) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        // backgroundColor: c.background,
+        title: const Text(
+          "Confirm",
+        ),
+        content: const Text(
+          "If you proceed with deletion, then all reminders and alerts that were scheduled will be cancelled.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              "Cancel",
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              NotificationService().endAllReminder();
+            },
+            child: const Text(
+              "Proceed",
+            ),
           ),
         ],
       ),

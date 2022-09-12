@@ -8,6 +8,7 @@ import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:notes/android/views/clipboard/add_clipboard_view.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -95,17 +96,31 @@ class _ClipBoardState extends State<ClipBoard> {
         child: Scaffold(
           backgroundColor: c.background,
           resizeToAvoidBottomInset: true,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: Visibility(
+                visible: _isVisible,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Get.bottomSheet(
+                      SizedBox(
+                        height: Get.height / 2,
+                        child: const AddClipboardView(),
+                      ),
+                      elevation: 10,
+                    );
+                  },
+                  child: const Icon(
+                    Icons.note_alt_outlined,
+                  ),
+                ),
+              )),
           appBar: appBarControl
               ? AppBar(
-                  elevation: 0,
-                  iconTheme: IconThemeData(color: c.onBackground),
-                  backgroundColor: notifier.material3
-                      ? c.secondaryContainer.withAlpha(50)
-                      : c.secondaryContainer,
-                  title: Text(
-                    "",
-                    style: t.textTheme.headline5,
-                  ),
+                  primary: true,
+                  backgroundColor: c.background,
+                  title: const Text("clipboard"),
                   leading: IconButton(
                     onPressed: () {
                       setState(() {
@@ -117,7 +132,7 @@ class _ClipBoardState extends State<ClipBoard> {
                     },
                     icon: Icon(
                       Icons.deselect_outlined,
-                      color: c.onSecondaryContainer,
+                      color: c.onBackground,
                     ),
                   ),
                   actions: [
@@ -155,7 +170,7 @@ class _ClipBoardState extends State<ClipBoard> {
                       },
                       icon: Icon(
                         Icons.copy_outlined,
-                        color: c.onSecondaryContainer,
+                        color: c.onBackground,
                       ),
                     ),
                     IconButton(
@@ -182,37 +197,40 @@ class _ClipBoardState extends State<ClipBoard> {
                       },
                       icon: Icon(
                         Icons.delete_outline,
-                        color: c.onSecondaryContainer,
+                        color: c.onBackground,
                       ),
                     ),
                   ],
-                  toolbarHeight: 80,
                 )
               : AppBar(
-                  elevation: 0,
-                  iconTheme: IconThemeData(color: c.onSecondaryContainer),
-                  backgroundColor: notifier.material3
-                      ? c.secondaryContainer.withAlpha(50)
-                      : c.secondaryContainer,
-                  title: Text(
-                    "clipboard",
-                    style: t.textTheme.headline5,
-                  ),
-                  toolbarHeight: 80,
+                  backgroundColor: c.background,
+                  title: const Text("clipboard"),
+                  automaticallyImplyLeading: false,
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Get.toNamed('/settings');
+                      },
+                      icon: Icon(
+                        Icons.settings_outlined,
+                        color: c.onBackground,
+                      ),
+                    ),
+                  ],
                 ),
-          body: Stack(
-            children: [
-              StreamBuilder<QuerySnapshot>(
-                  stream: getClipBoardData(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.hasData) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: ListView(
-                          controller: _hideButtonController,
-                          children: snapshot.data!.docs.map(
-                            (e) {
-                              return GestureDetector(
+          body: StreamBuilder<QuerySnapshot>(
+              stream: getClipBoardData(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  return CustomScrollView(
+                    controller: _hideButtonController,
+                    slivers: [
+                      SliverList(
+                          delegate: SliverChildListDelegate.fixed(
+                        snapshot.data!.docs.map((e) {
+                          return Column(
+                            children: [
+                              GestureDetector(
                                 onLongPress: () async {
                                   if (!appBarControl) {
                                     HapticFeedback.heavyImpact();
@@ -225,21 +243,27 @@ class _ClipBoardState extends State<ClipBoard> {
                                 },
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Container(
+                                  child: Card(
                                     key: ValueKey(e.get("text").toString()),
                                     margin: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
+                                    color: c.surfaceVariant,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      side: e.id == selectedID
+                                          ? BorderSide(
+                                              color: c.primary,
+                                              width: 2,
+                                            )
+                                          : BorderSide.none,
                                       borderRadius: const BorderRadius.all(
-                                        Radius.circular(20),
-                                      ),
-                                      color: c.secondaryContainer,
+                                          Radius.circular(12)),
                                     ),
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.all(
-                                        Radius.circular(20),
+                                        Radius.circular(25),
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(0.0),
                                         child: LinkPreview(
                                           openOnPreviewImageTap: false,
                                           openOnPreviewTitleTap: false,
@@ -255,11 +279,13 @@ class _ClipBoardState extends State<ClipBoard> {
                                           previewData: datas[e.get("text")],
                                           text: e.get("text"),
                                           linkStyle:
-                                              t.textTheme.button?.copyWith(
-                                            color: c.onSecondaryContainer,
+                                              t.textTheme.bodyMedium?.copyWith(
+                                            color: c.onBackground,
                                           ),
-                                          textStyle: t.textTheme.button
-                                              ?.copyWith(color: c.onSurface),
+                                          textStyle:
+                                              t.textTheme.bodyMedium?.copyWith(
+                                            color: c.onBackground,
+                                          ),
                                           width:
                                               MediaQuery.of(context).size.width,
                                         ),
@@ -267,110 +293,17 @@ class _ClipBoardState extends State<ClipBoard> {
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          ).toList(),
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }),
-              Visibility(
-                visible: _isVisible,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: Get.width - 70,
-                          child: TextField(
-                            style: t.textTheme.bodySmall
-                                ?.copyWith(color: c.onSecondaryContainer),
-                            controller: clipboardController,
-                            textCapitalization: TextCapitalization.none,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: c.secondaryContainer,
-                                  width: 2,
-                                ),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: c.secondaryContainer,
-                                  width: 2,
-                                ),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: c.secondaryContainer,
-                                  width: 2,
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: c.secondaryContainer,
-                                  width: 2,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: c.secondaryContainer,
-                                  width: 2,
-                                ),
-                              ),
-                              filled: true,
-                              fillColor: c.secondaryContainer,
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0, right: 2),
-                          child: GestureDetector(
-                            onTap: () async {
-                              if (clipboardController.text.isNotEmpty) {
-                                await FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(user.uid)
-                                    .collection("clipboards")
-                                    .doc()
-                                    .set({
-                                  "text": clipboardController.text
-                                }).whenComplete(() {
-                                  setState(() {
-                                    clipboardController.text = "";
-                                  });
-                                });
-                              }
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: c.primary,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.content_paste_rounded,
-                                  color: c.background,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+                            ],
+                          );
+                        }).toList(),
+                      ))
+                    ],
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              }),
         ),
       );
     });

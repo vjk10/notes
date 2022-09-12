@@ -1,6 +1,4 @@
-import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:get/get.dart';
@@ -13,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 import '../../data/data.dart';
+import '../../screens/settings_screen.dart';
 
 class AllFoldersView extends StatefulWidget {
   const AllFoldersView({Key? key}) : super(key: key);
@@ -36,28 +35,46 @@ class _AllFoldersViewState extends State<AllFoldersView> {
         resizeToAvoidBottomInset: true,
         backgroundColor: c.background,
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionButton.large(
-          heroTag: "folderTag",
-          onPressed: () {
-            Get.bottomSheet(
-              SizedBox(
-                width: Get.width - 30,
-                height: Get.height / 2,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                  child: AddFolderView(),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: FloatingActionButton(
+            heroTag: "folderTag",
+            onPressed: () {
+              Get.bottomSheet(
+                SizedBox(
+                  height: Get.height / 2,
+                  child: const AddFolderView(),
                 ),
+                elevation: 10,
+                enableDrag: true,
+                isScrollControlled: true,
+              );
+            },
+            backgroundColor: c.primaryContainer,
+            child: Center(
+              child: Icon(
+                Icons.create_new_folder_outlined,
+                color: c.onPrimaryContainer,
               ),
-              elevation: 10,
-            );
-          },
-          backgroundColor: c.primaryContainer,
-          child: Center(
-            child: Icon(
-              Icons.create_new_folder_outlined,
-              color: c.onPrimaryContainer,
             ),
           ),
+        ),
+        appBar: AppBar(
+          backgroundColor: c.background,
+          toolbarHeight: 80,
+          title: const Text('folders'),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Get.to(() => const SettingsScreen());
+              },
+              icon: Icon(
+                Icons.settings_outlined,
+                color: c.onSurface,
+              ),
+            )
+          ],
         ),
         body: StreamBuilder<List<DocumentSnapshot>>(
           stream: ScientISSTdb.instance.collection("folders").watchDocuments(),
@@ -103,139 +120,127 @@ class _AllFoldersViewState extends State<AllFoldersView> {
     });
   }
 
-  Padding foldersGrid(AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10.0,
-        vertical: 10.0,
-      ),
-      child: MasonryGridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 1,
-          mainAxisSpacing: 2,
-          crossAxisSpacing: 2,
-          itemCount: foldersData.data?.length,
-          itemBuilder: (context, folderIndex) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 5.0,
-                vertical: 5.0,
-              ),
-              child: FocusedMenuHolder(
-                onPressed: () {},
-                menuWidth: Get.width * 0.50,
-                blurSize: 5.0,
-                menuItemExtent: 45,
-                menuBoxDecoration: const BoxDecoration(
-                  color: Colors.transparent,
+  CustomScrollView foldersGrid(
+      AsyncSnapshot<List<DocumentSnapshot>> foldersData) {
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, folderIndex) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 5.0,
+                  vertical: 5.0,
                 ),
-                duration: const Duration(milliseconds: 400),
-                animateMenuItems: true,
-                blurBackgroundColor: c.background.withOpacity(0.2),
-                openWithTap:
-                    false, // Open Focused-Menu on Tap rather than Long Press
-                menuOffset:
-                    10.0, // Offset value to show menuItem from the selected item
-                bottomOffsetHeight:
-                    80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
-                menuItems: <FocusedMenuItem>[
-                  // Add Each FocusedMenuItem  for Menu Options
-                  FocusedMenuItem(
-                    backgroundColor: c.secondaryContainer,
-                    title: Text(
-                      "Favorite",
-                      style: t.textTheme.button?.copyWith(
-                        color: c.onSecondaryContainer,
-                        fontSize: 12,
-                      ),
-                    ),
-                    trailingIcon: Icon(
-                      Icons.favorite_border_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    onPressed: () {},
+                child: FocusedMenuHolder(
+                  onPressed: () {},
+                  menuWidth: Get.width * 0.50,
+                  blurSize: 5.0,
+                  menuItemExtent: 45,
+                  menuBoxDecoration: const BoxDecoration(
+                    color: Colors.transparent,
                   ),
-                  FocusedMenuItem(
-                    backgroundColor: c.secondaryContainer,
-                    title: Text(
-                      "Delete",
-                      style: t.textTheme.button?.copyWith(
-                        color: c.onSecondaryContainer,
-                        fontSize: 12,
-                      ),
-                    ),
-                    trailingIcon: Icon(
-                      Icons.delete_outlined,
-                      color: c.onSecondaryContainer,
-                    ),
-                    onPressed: () {
-                      NotesDatabase()
-                          .deleteFolder(foldersData.data![folderIndex].id);
-                    },
-                  ),
-                ],
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(
-                      () => FolderView(
-                        folderName: foldersData.data![folderIndex].data["title"]
-                            .toString(),
-                      ),
-                    );
-                  },
-                  child: ListTile(
-                    tileColor: c.secondaryContainer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 15.0,
-                      horizontal: 15.0,
-                    ),
-                    leading: Text(
-                      Emojis.fileFolder,
-                      style: t.textTheme.headline4,
-                    ),
-                    title: Text(
-                      foldersData.data![folderIndex].data["title"].toString(),
-                      textAlign: TextAlign.start,
-                      style: t.textTheme.headline6,
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        foldersData.data![folderIndex].data["description"]
-                            .toString(),
-                        style: t.textTheme.subtitle1?.copyWith(
+                  duration: const Duration(milliseconds: 400),
+                  animateMenuItems: true,
+                  blurBackgroundColor: c.background.withOpacity(0.2),
+                  openWithTap:
+                      false, // Open Focused-Menu on Tap rather than Long Press
+                  menuOffset:
+                      10.0, // Offset value to show menuItem from the selected item
+                  bottomOffsetHeight:
+                      80.0, // Offset height to consider, for showing the menu item ( for example bottom navigation bar), so that the popup menu will be shown on top of selected item.
+                  menuItems: <FocusedMenuItem>[
+                    FocusedMenuItem(
+                      backgroundColor: c.secondaryContainer,
+                      title: Text(
+                        "Delete",
+                        style: t.textTheme.button?.copyWith(
                           color: c.onSecondaryContainer,
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailingIcon: Icon(
+                        Icons.delete_outlined,
+                        color: c.onSecondaryContainer,
+                      ),
+                      onPressed: () {
+                        NotesDatabase()
+                            .deleteFolder(foldersData.data![folderIndex].id);
+                      },
+                    ),
+                  ],
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(
+                        () => FolderView(
+                          folderName: foldersData
+                              .data![folderIndex].data["title"]
+                              .toString(),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      color: c.surfaceVariant,
+                      elevation: 0,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 15.0,
+                        ),
+                        leading: Icon(
+                          Icons.folder_open_rounded,
+                          color: c.onBackground,
+                        ),
+                        title: Text(
+                          foldersData.data![folderIndex].data["title"]
+                              .toString(),
+                          textAlign: TextAlign.start,
+                          style: t.textTheme.headline6,
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            foldersData.data![folderIndex].data["description"]
+                                .toString(),
+                            style: t.textTheme.subtitle1?.copyWith(
+                              color: c.onSecondaryContainer,
+                            ),
+                          ),
+                        ),
+                        trailing: Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 5,
+                            children: [
+                              Icon(
+                                Icons.schedule_outlined,
+                                color: c.secondary,
+                                size: 10,
+                              ),
+                              Text(
+                                foldersData
+                                    .data![folderIndex].data["creationTime"]
+                                    .toString(),
+                                style: t.textTheme.caption?.copyWith(
+                                    color: c.secondary, fontSize: 10),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    trailing: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: 5,
-                        children: [
-                          Icon(
-                            Icons.schedule_outlined,
-                            color: c.secondary,
-                            size: 10,
-                          ),
-                          Text(
-                            foldersData.data![folderIndex].data["creationTime"]
-                                .toString(),
-                            style: t.textTheme.caption
-                                ?.copyWith(color: c.secondary, fontSize: 10),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+            childCount: foldersData.data!.length,
+          ),
+        )
+      ],
     );
   }
 }

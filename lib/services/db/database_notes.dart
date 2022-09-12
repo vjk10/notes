@@ -693,4 +693,26 @@ class NotesDatabase {
       ));
     }
   }
+
+  storeAlerts(int notificationId, String title, String description) async {
+    await ScientISSTdb.instance
+        .collection("alerts")
+        .document(notificationId.toString())
+        .set({
+      "notificationID": notificationId,
+      "title": title,
+      "description": description,
+    });
+  }
+
+  deleteAlerts() async {
+    await ScientISSTdb.instance.collection("alerts").delete();
+  }
+
+  deleteAlert(int notificationId) async {
+    await ScientISSTdb.instance
+        .collection("alerts")
+        .document(notificationId.toString())
+        .delete();
+  }
 }

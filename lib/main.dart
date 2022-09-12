@@ -3,7 +3,6 @@ import 'package:dynamic_colorscheme/dynamic_colorscheme.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
@@ -20,12 +19,11 @@ import 'package:notes/android/screens/settings_screen.dart';
 import 'package:notes/android/theme/android_theme.dart';
 import 'package:notes/android/views/folders/add_folders_view.dart';
 import 'package:notes/android/views/notes/add_notes_view.dart';
-import 'package:notes/android/views/misc/clipboard_view.dart';
+import 'package:notes/android/views/clipboard/clipboard_view.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/providers/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
-import 'package:notes/windows/screens/splash_screen_win.dart';
 import 'package:provider/provider.dart';
 
 import 'android/screens/splash_screen.dart';
@@ -45,20 +43,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    ColorScheme? m3Light;
-    ColorScheme? m3Dark;
-    if (defaultTargetPlatform == TargetPlatform.windows && !kIsWeb) {
-      // Windows Application
-      return fluent_ui.FluentApp(
-        debugShowCheckedModeBanner: kDebugMode,
-        themeMode: fluent_ui.ThemeMode.system,
-        routes: {
-          '/splash': (context) => const SplashScreenWin(),
-        },
-        title: 'Notes',
-        home: const SplashScreenWin(),
-      );
-    }
+    // if (defaultTargetPlatform == TargetPlatform.windows && !kIsWeb) {
+    //   // Windows Application
+    //   return fluent_ui.FluentApp(
+    //     debugShowCheckedModeBanner: kDebugMode,
+    //     themeMode: fluent_ui.ThemeMode.system,
+    //     routes: {
+    //       '/splash': (context) => const SplashScreenWin(),
+    //     },
+    //     title: 'Notes',
+    //     home: const SplashScreenWin(),
+    //   );
+    // }
     if (defaultTargetPlatform == TargetPlatform.android) {
       // Android Application
       return ChangeNotifierProvider(

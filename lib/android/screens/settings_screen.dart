@@ -16,7 +16,6 @@ import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
-import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
 import 'package:path_provider/path_provider.dart';
@@ -58,6 +57,10 @@ class _SettingsScreenState extends State<SettingsScreen>
   late User user;
 
   late AnimationController _bottomSheetController;
+
+  late TextStyle topBarTextStyle;
+
+  bool styleExpanded = true;
 
   @override
   void initState() {
@@ -195,99 +198,124 @@ class _SettingsScreenState extends State<SettingsScreen>
         },
         child: Scaffold(
           backgroundColor: c.background,
-          appBar: AppBar(
-            backgroundColor: c.secondaryContainer,
-            title: Text(
-              "settings",
-              style: t.textTheme.headline5,
-            ),
-            leading: IconButton(
-                onPressed: () {
-                  Get.offAllNamed('/mainScreen');
-                },
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: c.onBackground,
-                )),
-            toolbarHeight: 80,
-          ),
           body: _isLoading
               ? const Center(
                   child: NotesLoadingAndroid(),
                 )
-              : SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 25.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        UserDetails(
-                          userName: userName,
-                          profileUrl: profileUrl,
+              : CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar.large(
+                      backgroundColor: c.background,
+                      surfaceTintColor: c.surfaceTint,
+                      primary: true,
+                      leading: IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: c.onBackground,
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: Visibility(
-                            visible: !_accountLinked,
-                            child: SignInButton(
-                              Buttons.Google,
-                              onPressed: () async {
-                                await signInWithGoogle(context)
-                                    .whenComplete(() {
-                                  getUserStatus();
+                      ),
+                      title: const Text(
+                        "settings",
+                      ),
+                      actions: [
+                        Visibility(
+                          visible: _accountLinked,
+                          child: IconButton(
+                            onPressed: () async {
+                              await signOutGoogle(context).whenComplete(() {
+                                setState(() {
+                                  profileUrl = "";
+                                  _accountLinked = !_accountLinked;
                                 });
-                              },
-                              padding: const EdgeInsets.all(8),
-                              text: "  Sign in to backup notes",
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadiusDirectional.circular(25),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: _accountLinked ? 0 : 50,
-                        ),
-                        userDataSection(),
-                        deciveDataSection(),
-                        Center(
-                          child: Visibility(
-                            visible: _accountLinked,
-                            child: SizedBox(
-                              width: Get.width,
-                              height: 75,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: c.primary,
-                                ),
-                                onPressed: () async {
-                                  await signOutGoogle(context).whenComplete(() {
-                                    setState(() {
-                                      profileUrl = "";
-                                      _accountLinked = !_accountLinked;
-                                    });
-                                  });
-                                },
-                                child: Text(
-                                  "Logout",
-                                  style: t.textTheme.button?.copyWith(
-                                    color: c.onPrimary,
-                                  ),
-                                ),
-                              ),
+                              });
+                            },
+                            icon: Icon(
+                              Icons.login_outlined,
+                              color: c.outline,
                             ),
                           ),
                         )
                       ],
                     ),
-                  ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                          vertical: 25.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            UserDetails(
+                              userName: userName,
+                              profileUrl: profileUrl,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: Visibility(
+                                visible: !_accountLinked,
+                                child: SignInButton(
+                                  Buttons.Google,
+                                  onPressed: () async {
+                                    await signInWithGoogle(context)
+                                        .whenComplete(() {
+                                      getUserStatus();
+                                    });
+                                  },
+                                  padding: const EdgeInsets.all(8),
+                                  text: "  Sign in to backup notes",
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadiusDirectional.circular(25),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: _accountLinked ? 0 : 50,
+                            ),
+                            userDataSection(),
+                            deciveDataSection(),
+                            Center(
+                              child: Visibility(
+                                visible: false,
+                                child: SizedBox(
+                                  width: Get.width,
+                                  height: 75,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: c.primary,
+                                    ),
+                                    onPressed: () async {
+                                      await signOutGoogle(context)
+                                          .whenComplete(() {
+                                        setState(() {
+                                          profileUrl = "";
+                                          _accountLinked = !_accountLinked;
+                                        });
+                                      });
+                                    },
+                                    child: Text(
+                                      "Logout",
+                                      style: t.textTheme.button?.copyWith(
+                                        color: c.onPrimary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
         ),
       );
@@ -306,17 +334,17 @@ class _SettingsScreenState extends State<SettingsScreen>
               top: 15.0,
               left: 15.0,
             ),
-            child: Center(
-              child: Text(
-                "Device Data",
-                textAlign: TextAlign.center,
-                style: t.textTheme.labelLarge,
+            child: Text(
+              "Device Data",
+              textAlign: TextAlign.center,
+              style: t.textTheme.button?.copyWith(
+                color: c.primary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
           usedStorageTile(),
           clearNotesTile(),
-          cancelRemindersTile(),
           appDetailsTile(),
         ],
       ),
@@ -337,11 +365,12 @@ class _SettingsScreenState extends State<SettingsScreen>
               top: 15.0,
               left: 15.0,
             ),
-            child: Center(
-              child: Text(
-                "User Data",
-                textAlign: TextAlign.center,
-                style: t.textTheme.labelLarge,
+            child: Text(
+              "User Data",
+              textAlign: TextAlign.center,
+              style: t.textTheme.button?.copyWith(
+                color: c.primary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -371,16 +400,17 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: ListTile(
             leading: Icon(
               Icons.colorize_outlined,
-              color: c.onSecondaryContainer,
+              color: c.onBackground,
               size: 24,
             ),
             title: Text(
               "Material You",
               style: t.textTheme.button?.copyWith(
                 fontSize: 14,
+                color: c.onBackground,
               ),
             ),
-            trailing: Switch.adaptive(
+            trailing: Switch(
                 activeColor: c.primary,
                 inactiveThumbColor: c.secondary,
                 inactiveTrackColor: c.tertiaryContainer,
@@ -411,16 +441,17 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: ListTile(
           leading: Icon(
             Icons.save,
-            color: c.onSecondaryContainer,
+            color: c.onBackground,
             size: 24,
           ),
           title: Text(
             "Autosave",
             style: t.textTheme.button?.copyWith(
               fontSize: 14,
+              color: c.onBackground,
             ),
           ),
-          trailing: Switch.adaptive(
+          trailing: Switch(
               activeColor: c.primary,
               inactiveThumbColor: c.secondary,
               inactiveTrackColor: c.tertiaryContainer,
@@ -444,22 +475,23 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: ListTile(
           leading: Icon(
             Icons.money,
-            color: c.onSecondaryContainer,
+            color: c.onBackground,
             size: 24,
           ),
           title: Text(
             "Choose Currency",
             style: t.textTheme.button?.copyWith(
               fontSize: 14,
+              color: c.onBackground,
             ),
           ),
-          trailing: GestureDetector(
-            onTap: () {
+          trailing: OutlinedButton(
+            onPressed: () {
               showCurrencyPicker(
                   context: context,
                   theme: CurrencyPickerThemeData(
                       flagSize: 24,
-                      backgroundColor: c.secondaryContainer,
+                      backgroundColor: c.background,
                       titleTextStyle: t.textTheme.button,
                       subtitleTextStyle: t.textTheme.subtitle1,
                       shape: RoundedRectangleBorder(
@@ -474,7 +506,10 @@ class _SettingsScreenState extends State<SettingsScreen>
             },
             child: Text(
               "$currency $currencyFlag",
-              style: t.textTheme.button,
+              style: t.textTheme.button?.copyWith(
+                fontSize: 12,
+                color: c.primary,
+              ),
             ),
           ),
         ),
@@ -489,27 +524,25 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: ListTile(
           leading: Icon(
             Icons.backup_outlined,
-            color: c.onSecondaryContainer,
+            color: c.onBackground,
             size: 24,
           ),
           title: Text(
             "Cloud Backup",
             style: t.textTheme.button?.copyWith(
               fontSize: 14,
+              color: c.onBackground,
             ),
           ),
-          trailing: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: c.primary,
-            ),
+          trailing: OutlinedButton(
             onPressed: () async {
               await DatabaseService().importNotes(user.uid);
             },
             child: Text(
               "Import",
               style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-                color: c.onPrimary,
+                fontSize: 12,
+                color: c.primary,
               ),
             ),
           ),
@@ -525,18 +558,19 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: ListTile(
           leading: Icon(
             Icons.folder_outlined,
-            color: c.onSecondaryContainer,
+            color: c.onBackground,
             size: 24,
           ),
           title: Text(
             "Used Storage",
             style: t.textTheme.button?.copyWith(
               fontSize: 14,
+              color: c.onBackground,
             ),
           ),
           trailing: Text(
             cacheMemorySize,
-            style: t.textTheme.bodyText1,
+            style: t.textTheme.bodyLarge?.copyWith(color: c.onBackground),
           ),
         ),
       ),
@@ -550,57 +584,25 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: ListTile(
           leading: Icon(
             Icons.delete_outline_rounded,
-            color: c.onSecondaryContainer,
+            color: c.onBackground,
             size: 24,
           ),
           title: Text(
             "Clear All Notes",
             style: t.textTheme.button?.copyWith(
               fontSize: 14,
+              color: c.onBackground,
             ),
           ),
-          trailing: GestureDetector(
-            onTap: () {
+          trailing: OutlinedButton(
+            onPressed: () {
               NotesDatabase().clearAllNotes();
             },
             child: Text(
               "Clear",
               style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-                color: c.error,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding cancelRemindersTile() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Center(
-        child: ListTile(
-          leading: Icon(
-            Icons.notifications_off_outlined,
-            color: c.onSecondaryContainer,
-            size: 24,
-          ),
-          title: Text(
-            "Cancel All Reminders",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-            ),
-          ),
-          trailing: GestureDetector(
-            onTap: () {
-              NotificationService().endAllReminder();
-            },
-            child: Text(
-              "Cancel",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-                color: c.error,
+                fontSize: 12,
+                color: c.primary,
               ),
             ),
           ),
@@ -616,13 +618,14 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: ListTile(
           leading: Icon(
             Icons.info_outline_rounded,
-            color: c.onSecondaryContainer,
+            color: c.onBackground,
             size: 24,
           ),
           title: Text(
             "Licenses and Info",
             style: t.textTheme.button?.copyWith(
               fontSize: 14,
+              color: c.onBackground,
             ),
           ),
           trailing: TextButton(
@@ -639,10 +642,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             },
             child: Text(
               "v$version (build v$buildNumber)",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-                color: c.error,
-              ),
+              style: t.textTheme.bodyMedium?.copyWith(color: c.onBackground),
             ),
           ),
         ),
@@ -655,7 +655,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: ListTile(
         leading: Icon(
           Icons.palette,
-          color: c.onSecondaryContainer,
+          color: c.onBackground,
           size: 24,
         ),
         title: Text(
@@ -752,7 +752,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                         decoration: BoxDecoration(
                                           color: selectedThemeId == index
                                               ? c.primary.withOpacity(0.2)
-                                              : c.secondary.withOpacity(0.2),
+                                              : c.onBackground.withOpacity(0.2),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),

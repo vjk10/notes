@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/expenses/add_expense_tracker.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_list_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:notes/services/utils.dart';
+
+import '../notes/add_notes_view.dart';
 
 class AddListView extends StatefulWidget {
   const AddListView({Key? key}) : super(key: key);
@@ -79,31 +82,32 @@ class _AddListViewState extends State<AddListView> {
           backgroundColor: c.background,
           toolbarHeight: 80,
           leading: IconButton(
-              onPressed: () async {
-                bool autosave = await NotesDatabase().checkAutoSave();
-                if (autosave) {
-                  if (noteListItems.isNotEmpty &&
-                      titleController.text.isNotEmpty) {
-                    await NotesDatabase().saveList(
-                        titleController, controllers, false, noteListItems);
-                    Get.toNamed('/mainScreen');
-                  }
-                  if (titleController.text.isEmpty) {
-                    // ignore: use_build_context_synchronously
-                    Utils().confirmationForSave(context, t, c);
-                  } else {
-                    Get.offAllNamed('/mainScreen');
-                  }
+            onPressed: () async {
+              bool autosave = await NotesDatabase().checkAutoSave();
+              if (autosave) {
+                if (noteListItems.isNotEmpty &&
+                    titleController.text.isNotEmpty) {
+                  await NotesDatabase().saveList(
+                      titleController, controllers, false, noteListItems);
+                  Get.toNamed('/mainScreen');
+                }
+                if (titleController.text.isEmpty) {
+                  // ignore: use_build_context_synchronously
+                  Utils().confirmationForSave(context, t, c);
                 } else {
                   Get.offAllNamed('/mainScreen');
                 }
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: c.onBackground,
-              )),
+              } else {
+                Get.offAllNamed('/mainScreen');
+              }
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: c.onBackground,
+            ),
+          ),
           title: Text(
-            "notes",
+            "list",
             style: t.textTheme.headline6,
           ),
           bottom: PreferredSize(
@@ -134,9 +138,33 @@ class _AddListViewState extends State<AddListView> {
             ),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextButton.icon(
+            Hero(
+              tag: 'option1',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddExpenseTrackerView());
+                },
+                icon: Icon(
+                  Icons.request_page_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'option2',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddNoteView());
+                },
+                icon: Icon(
+                  Icons.note_add_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'saveButton',
+              child: IconButton(
                 onPressed: () async {
                   await NotesDatabase()
                       .saveList(
@@ -147,12 +175,8 @@ class _AddListViewState extends State<AddListView> {
                 },
                 icon: Icon(
                   Icons.save_outlined,
-                  color: c.onBackground,
+                  color: c.primary,
                   size: 24,
-                ),
-                label: Text(
-                  "Save",
-                  style: t.textTheme.button?.copyWith(fontSize: 18),
                 ),
               ),
             ),

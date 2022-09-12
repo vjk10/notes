@@ -1,6 +1,7 @@
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:notes/services/db/database_notes.dart';
 // import 'package:locally/locally.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -157,6 +158,7 @@ class NotificationService {
       if (kDebugMode) {
         print("Alert Scheduled!");
       }
+      NotesDatabase().storeAlerts(notificationId, title, message);
       Get.showSnackbar(
         GetSnackBar(
           backgroundColor: c.surface,
@@ -180,11 +182,41 @@ class NotificationService {
     });
   }
 
+  endReminder(int notificationId, String title) async {
+    // if (kDebugMode) {
+    //   // print("$notificationId Cancelled");
+    // }
+    FlutterLocalNotificationsPlugin().cancel(notificationId).whenComplete(() {
+      NotesDatabase().deleteAlert(notificationId);
+      Get.showSnackbar(
+        GetSnackBar(
+          backgroundColor: c.surface,
+          duration: const Duration(seconds: 2),
+          margin: const EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 10,
+          ),
+          shouldIconPulse: false,
+          icon: Icon(
+            Icons.alarm_off_outlined,
+            color: c.error,
+          ),
+          borderRadius: 10,
+          messageText: Text(
+            '$title is deleted',
+            style: t.textTheme.bodyMedium,
+          ),
+        ),
+      );
+    });
+  }
+
   endAllReminder() async {
     if (kDebugMode) {
       print("Schedule Cancelled");
     }
     FlutterLocalNotificationsPlugin().cancelAll().whenComplete(() {
+      NotesDatabase().deleteAlerts();
       Get.showSnackbar(
         GetSnackBar(
           backgroundColor: c.surface,

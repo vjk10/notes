@@ -134,6 +134,25 @@ class DatabaseService {
           ),
         ),
       );
+    } else {
+      Get.back();
+      Get.showSnackbar(
+        GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: c.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.error_outline,
+            color: c.error,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "No notes found!",
+            style: t.textTheme.caption?.copyWith(color: c.onSurface),
+          ),
+        ),
+      );
     }
   }
 }

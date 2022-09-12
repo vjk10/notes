@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/expenses/add_expense_tracker.dart';
+import 'package:notes/android/views/list/add_list_view.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/notes_model.dart';
+import 'package:notes/services/utils.dart';
 
 class AddNoteView extends StatefulWidget {
   const AddNoteView({Key? key}) : super(key: key);
@@ -57,10 +60,12 @@ class _AddNoteViewState extends State<AddNoteView> {
             );
             await NotesDatabase().addNote(note, false);
           } else {
-            Get.offAllNamed('/mainScreen');
+            // ignore: use_build_context_synchronously
+            Utils().confirmationForSave(context, t, c);
           }
         } else {
-          Get.offAllNamed('/mainScreen');
+          // ignore: use_build_context_synchronously
+          Utils().confirmationForSave(context, t, c);
         }
         return false;
       },
@@ -68,7 +73,7 @@ class _AddNoteViewState extends State<AddNoteView> {
         backgroundColor: c.background,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: c.background,
+          backgroundColor: c.surface,
           toolbarHeight: 80,
           leading: IconButton(
               onPressed: () async {
@@ -90,12 +95,12 @@ class _AddNoteViewState extends State<AddNoteView> {
                     );
                     NotesDatabase().addNote(note, false);
                   } else {
-                    // Get.offAllNamed('/mainScreen');
-                    Get.back();
+                    Get.offAllNamed('/mainScreen');
+                    // Get.back();
                   }
                 } else {
-                  // Get.offAllNamed('/mainScreen');
-                  Get.back();
+                  Get.offAllNamed('/mainScreen');
+                  // Get.back();
                 }
               },
               icon: Icon(
@@ -134,9 +139,33 @@ class _AddNoteViewState extends State<AddNoteView> {
             ),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextButton.icon(
+            Hero(
+              tag: 'option1',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddExpenseTrackerView());
+                },
+                icon: Icon(
+                  Icons.request_quote_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'option2',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddListView());
+                },
+                icon: Icon(
+                  Icons.add_task,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'saveButton',
+              child: IconButton(
                 onPressed: () async {
                   if (titleController.text.isNotEmpty ||
                       bodyController.text.isNotEmpty) {
@@ -175,12 +204,7 @@ class _AddNoteViewState extends State<AddNoteView> {
                 },
                 icon: Icon(
                   Icons.save_outlined,
-                  color: c.onBackground,
-                  size: 24,
-                ),
-                label: Text(
-                  "Save",
-                  style: t.textTheme.button?.copyWith(fontSize: 18),
+                  color: c.primary,
                 ),
               ),
             ),

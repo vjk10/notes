@@ -92,7 +92,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                     height: 60.h,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: c.primary,
+                        backgroundColor: c.primary,
                         elevation: 20,
                         shadowColor: c.background,
                         // shape: RoundedRectangleBorder(

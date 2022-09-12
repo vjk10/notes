@@ -109,11 +109,9 @@ class _TextDialogWidgetState extends State<TextDialogWidget> {
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: widget.c.primary,
-                onPrimary: widget.c.onPrimary,
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(25),
-                // ),
+                foregroundColor: widget.c.onPrimary,
+                backgroundColor: widget.c.primary,
+
               ),
               child: const Text('Done'),
               onPressed: () => Navigator.of(context).pop(controller.text),
