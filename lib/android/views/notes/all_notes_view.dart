@@ -31,7 +31,6 @@ class AllNotesView extends StatefulWidget {
 class _AllNotesViewState extends State<AllNotesView>
     with SingleTickerProviderStateMixin {
   bool isLoading = false;
-  bool _accountLinked = false;
   bool userSignedIn = false;
 
   late fire_store.DocumentSnapshot firebaseUserDetails;
@@ -125,11 +124,7 @@ class _AllNotesViewState extends State<AllNotesView>
             .collection("users")
             .doc(user.uid)
             .get();
-        if (firebaseUserDetails.exists) {
-          setState(() {
-            _accountLinked = true;
-          });
-        }
+        if (firebaseUserDetails.exists) {}
       }
     } catch (e) {
       if (e is FirebaseAuthException) {
@@ -255,7 +250,8 @@ class _AllNotesViewState extends State<AllNotesView>
                               textAlign: TextAlign.left,
                             ),
                           ),
-                          notesGrid(pinnedSnapshot, user, _accountLinked),
+                          // Fix for #39
+                          NoteGrid(notesData: pinnedSnapshot),
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 20.0,
@@ -285,7 +281,8 @@ class _AllNotesViewState extends State<AllNotesView>
                     otherSnapshot.data?.removeWhere(
                         (element) => element.data["pinned"] == true);
                     if (otherSnapshot.hasData) {
-                      return notesGrid(otherSnapshot, user, _accountLinked);
+                      // Fix for #39
+                      return NoteGrid(notesData: otherSnapshot);
                     } else {
                       return const SizedBox();
                     }

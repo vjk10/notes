@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +8,6 @@ import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
 import '../../widgets/notes_grid.dart';
 
@@ -22,40 +20,13 @@ class FolderView extends StatefulWidget {
 }
 
 class _FolderViewState extends State<FolderView> {
-  bool _accountsLinked = false;
-  late fire_store.DocumentSnapshot firebaseUserDetails;
-  late User user;
   late Future<List<DocumentSnapshot>> folderNotesFuture;
 
   @override
   void initState() {
-    initUser();
     folderNotesSnapshot = [];
     folderNotesFuture = NotesDatabase().getFolderNotes(widget.folderName);
     super.initState();
-  }
-
-  initUser() async {
-    try {
-      user = FirebaseAuth.instance.currentUser!;
-      if (user.uid.isNotEmpty) {
-        firebaseUserDetails = await fire_store.FirebaseFirestore.instance
-            .collection("users")
-            .doc(user.uid)
-            .get();
-        if (firebaseUserDetails.exists) {
-          setState(() {
-            _accountsLinked = true;
-          });
-        }
-      }
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        if (kDebugMode) {
-          print(e.message);
-        }
-      }
-    }
   }
 
   @override
@@ -124,8 +95,7 @@ class _FolderViewState extends State<FolderView> {
                               }
                             default:
                               {
-                                return notesGrid(
-                                    folderNotesData, user, _accountsLinked);
+                                return NoteGrid(notesData: folderNotesData);
                               }
                           }
                         }

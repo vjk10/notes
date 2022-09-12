@@ -53,46 +53,61 @@ class _MainScreenState extends State<MainScreen>
 
   int selectedIndex = 0;
 
+  NavigationDestination clipBoardDest = NavigationDestination(
+      key: clipboardPageKey,
+      selectedIcon: const Icon(
+        Icons.assignment,
+      ),
+      icon: const Icon(
+        Icons.assignment_outlined,
+      ),
+      label: 'clipboard');
+
+  Widget clipBoardBody = const ClipBoard();
+
   List<NavigationDestination> mainScreenDestination = [
-    const NavigationDestination(
-        selectedIcon: Icon(
+    NavigationDestination(
+        key: notesPageKey,
+        selectedIcon: const Icon(
           Icons.description_rounded,
         ),
-        icon: Icon(
+        icon: const Icon(
           Icons.description_outlined,
         ),
         label: 'notes'),
-    const NavigationDestination(
-        selectedIcon: Icon(
+    NavigationDestination(
+        key: foldersPageKey,
+        selectedIcon: const Icon(
           Icons.folder_rounded,
         ),
-        icon: Icon(
+        icon: const Icon(
           Icons.folder_outlined,
         ),
         label: 'folders'),
-    const NavigationDestination(
-        selectedIcon: Icon(
+    NavigationDestination(
+        key: alertsPageKey,
+        selectedIcon: const Icon(
           Icons.notifications,
         ),
-        icon: Icon(
+        icon: const Icon(
           Icons.notifications_outlined,
         ),
         label: 'alerts'),
-    const NavigationDestination(
-        selectedIcon: Icon(
-          Icons.assignment,
-        ),
-        icon: Icon(
-          Icons.assignment_outlined,
-        ),
-        label: 'clipboard'),
+    // const NavigationDestination(
+    //     selectedIcon: Icon(
+    //       Icons.assignment,
+    //     ),
+    //     icon: Icon(
+    //       Icons.assignment_outlined,
+    //     ),
+    //     label: 'clipboard'),
   ];
 
   List<Widget> destinations = [
     const AllNotesView(),
     const AllFoldersView(),
     const AllAlertsView(),
-    const ClipBoard(),
+    // const ClipBoard(),
   ];
 
   @override
@@ -139,6 +154,27 @@ class _MainScreenState extends State<MainScreen>
         if (kDebugMode) {
           print(e.message);
         }
+      }
+    }
+    // Fix for #39
+    addClipBoardView();
+  }
+
+// Fix for #39
+  addClipBoardView() {
+    if (userSignedIn) {
+      if (mainScreenDestination.length <= 3) {
+        mainScreenDestination.add(clipBoardDest);
+        destinations.add(clipBoardBody);
+      }
+    } else {
+      if (mainScreenDestination.length >= 4) {
+        mainScreenDestination.removeWhere(
+          (element) {
+            return element.key == clipboardPageKey;
+          },
+        );
+        destinations.removeAt(3);
       }
     }
   }
