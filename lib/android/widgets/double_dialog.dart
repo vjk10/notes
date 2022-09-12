@@ -33,6 +33,7 @@ class DoubleDialogWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DoubleDialogWidgetState createState() => _DoubleDialogWidgetState();
 }
 
@@ -48,9 +49,9 @@ class _DoubleDialogWidgetState extends State<DoubleDialogWidget> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        //shape: RoundedRectangleBorder(
+        //  borderRadius: BorderRadius.circular(30),
+        //),
         contentPadding: const EdgeInsets.all(15),
         backgroundColor: widget.c.background,
         title: Padding(
@@ -67,41 +68,41 @@ class _DoubleDialogWidgetState extends State<DoubleDialogWidget> {
           controller: controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
             focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+                // borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: c.onBackground,
-                  width: 1,
-                )),
+              color: c.onBackground,
+              width: 1,
+            )),
           ),
         ),
         actions: [
@@ -109,11 +110,11 @@ class _DoubleDialogWidgetState extends State<DoubleDialogWidget> {
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: widget.c.primary,
-                onPrimary: widget.c.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
+                foregroundColor: widget.c.onPrimary,
+                backgroundColor: widget.c.primary,
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
               ),
               child: const Text('Done'),
               onPressed: () => Navigator.of(context).pop(controller.text),

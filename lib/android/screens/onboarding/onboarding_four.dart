@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../services/theme/android_app_themes.dart';
+import '../../../services/providers/android_app_themes.dart';
 
 class OnBoarding4 extends StatefulWidget {
   const OnBoarding4({Key? key}) : super(key: key);
@@ -49,13 +49,13 @@ class _OnBoarding4State extends State<OnBoarding4> {
       });
 
       if (kDebugMode) {
-        print("SELECTED THEME: " + selectedTheme);
+        print("SELECTED THEME: $selectedTheme");
       }
     } catch (e) {
-      var _pref = await SharedPreferences.getInstance();
-      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      var pref = await SharedPreferences.getInstance();
+      selectedThemeId = pref.getInt('selectedThemeId')!;
       if (kDebugMode) {
-        print("Selected Theme: " + selectedThemeId.toString());
+        print("Selected Theme: $selectedThemeId");
       }
       if (selectedTheme.isEmpty) {
         setState(() {
@@ -115,7 +115,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                       ),
                       Text(
                         "hey! your device supports dynamic color :)",
-                        style: t.textTheme.headline6,
+                        style: t.textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -132,14 +132,14 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           ),
                           activeTextColor: c.onPrimary,
                           activeToggleColor: c.onPrimary,
-                          inactiveColor: c.secondary,
+                          inactiveColor: c.tertiary,
                           inactiveIcon: Center(
                             child: Icon(
                               Icons.highlight_off_rounded,
                               color: c.onError,
                             ),
                           ),
-                          inactiveTextColor: c.onSecondary,
+                          inactiveTextColor: c.onTertiary,
                           inactiveToggleColor: c.error,
                           width: 150.w,
                           height: 70.h,
@@ -261,12 +261,12 @@ class _OnBoarding4State extends State<OnBoarding4> {
                   height: 70.h,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: c.primary,
+                      backgroundColor: c.primary,
                       elevation: 20,
                       shadowColor: c.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.circular(50),
+                      // ),
                     ),
                     onPressed: () async {
                       await ScientISSTdb.instance
@@ -275,9 +275,9 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           .set(
                         {
                           "completed": true,
+                          "conditions": true,
                         },
                       );
-                      // Get.offNamedUntil('/mainScreen', (route) => false);
                       Get.offAllNamed('/mainScreen');
                     },
                     child: Text(

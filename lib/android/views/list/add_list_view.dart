@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/expenses/add_expense_tracker.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_list_model.dart';
 import 'package:notes/services/db/notes_model.dart';
 import 'package:notes/services/utils.dart';
+
+import '../notes/add_notes_view.dart';
 
 class AddListView extends StatefulWidget {
   const AddListView({Key? key}) : super(key: key);
@@ -53,14 +56,15 @@ class _AddListViewState extends State<AddListView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool _autosave = await NotesDatabase().checkAutoSave();
-        if (_autosave) {
+        bool autosave = await NotesDatabase().checkAutoSave();
+        if (autosave) {
           if (noteListItems.isNotEmpty && titleController.text.isNotEmpty) {
             await NotesDatabase()
                 .saveList(titleController, controllers, false, noteListItems);
             Get.offAllNamed('/mainScreen');
           }
           if (titleController.text.isEmpty) {
+            // ignore: use_build_context_synchronously
             Utils().confirmationForSave(context, t, c);
           } else {
             Get.offAllNamed('/mainScreen');
@@ -78,30 +82,32 @@ class _AddListViewState extends State<AddListView> {
           backgroundColor: c.background,
           toolbarHeight: 80,
           leading: IconButton(
-              onPressed: () async {
-                bool _autosave = await NotesDatabase().checkAutoSave();
-                if (_autosave) {
-                  if (noteListItems.isNotEmpty &&
-                      titleController.text.isNotEmpty) {
-                    await NotesDatabase().saveList(
-                        titleController, controllers, false, noteListItems);
-                    Get.toNamed('/mainScreen');
-                  }
-                  if (titleController.text.isEmpty) {
-                    Utils().confirmationForSave(context, t, c);
-                  } else {
-                    Get.offAllNamed('/mainScreen');
-                  }
+            onPressed: () async {
+              bool autosave = await NotesDatabase().checkAutoSave();
+              if (autosave) {
+                if (noteListItems.isNotEmpty &&
+                    titleController.text.isNotEmpty) {
+                  await NotesDatabase().saveList(
+                      titleController, controllers, false, noteListItems);
+                  Get.toNamed('/mainScreen');
+                }
+                if (titleController.text.isEmpty) {
+                  // ignore: use_build_context_synchronously
+                  Utils().confirmationForSave(context, t, c);
                 } else {
                   Get.offAllNamed('/mainScreen');
                 }
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: c.onBackground,
-              )),
+              } else {
+                Get.offAllNamed('/mainScreen');
+              }
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: c.onBackground,
+            ),
+          ),
           title: Text(
-            "notes",
+            "list",
             style: t.textTheme.headline6,
           ),
           bottom: PreferredSize(
@@ -126,15 +132,39 @@ class _AddListViewState extends State<AddListView> {
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
-                hintText: "Title",
+                hintText: "title",
                 hintStyle: t.textTheme.headline4,
               ),
             ),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextButton.icon(
+            Hero(
+              tag: 'option1',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddExpenseTrackerView());
+                },
+                icon: Icon(
+                  Icons.request_page_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'option2',
+              child: IconButton(
+                onPressed: () {
+                  Get.offAll(() => const AddNoteView());
+                },
+                icon: Icon(
+                  Icons.note_add_outlined,
+                  color: c.primary,
+                ),
+              ),
+            ),
+            Hero(
+              tag: 'saveButton',
+              child: IconButton(
                 onPressed: () async {
                   await NotesDatabase()
                       .saveList(
@@ -145,12 +175,8 @@ class _AddListViewState extends State<AddListView> {
                 },
                 icon: Icon(
                   Icons.save_outlined,
-                  color: c.onBackground,
+                  color: c.primary,
                   size: 24,
-                ),
-                label: Text(
-                  "Save",
-                  style: t.textTheme.button?.copyWith(fontSize: 18),
                 ),
               ),
             ),
@@ -166,20 +192,19 @@ class _AddListViewState extends State<AddListView> {
                 onReorder: (int oldIndex, int newIndex) {
                   if (newIndex > oldIndex) newIndex--;
                   setState(() {
-                    final _index = newIndex;
-                    final _itemInDrag = noteListItems.removeAt(oldIndex);
-                    final _controllerDrag = controllers.removeAt(oldIndex);
-                    noteListItems.insert(_index, _itemInDrag);
-                    controllers.insert(_index, _controllerDrag);
+                    final index = newIndex;
+                    final itemInDrag = noteListItems.removeAt(oldIndex);
+                    final controllerDrag = controllers.removeAt(oldIndex);
+                    noteListItems.insert(index, itemInDrag);
+                    controllers.insert(index, controllerDrag);
                   });
                 },
                 shrinkWrap: true,
                 itemCount: noteListItems.length,
                 itemBuilder: (context, index) {
                   if (kDebugMode) {
-                    print("List Length : " + noteListItems.length.toString());
-                    print(
-                        "List Text : " + noteListItems[index].text.toString());
+                    print("List Length : ${noteListItems.length}");
+                    print("List Text : ${noteListItems[index].text}");
                   }
                   if (noteListItems.isNotEmpty) {
                     final item = noteListItems.elementAt(index);
@@ -253,7 +278,7 @@ class _AddListViewState extends State<AddListView> {
               },
               style: t.textTheme.bodyMedium,
               decoration: InputDecoration(
-                  hintText: "List Item",
+                  hintText: "list item",
                   hintStyle: t.textTheme.bodyMedium?.copyWith(
                     color: c.outline,
                   ),

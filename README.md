@@ -1,8 +1,12 @@
 # notes
 
-![Getting Started](./assets/images/logo.png)
+![Getting Started](https://play-lh.googleusercontent.com/-Q4vLsL1VesT7IS4qVSpI07HCMYxmN9Q3dkG-izJ0LbTp_f7CIrYnLDR0CeAh8TJcQY=w2247-h1264-rw)
 
-Simple Note Taking App
+<a href="https://play.google.com/store/apps/details?id=com.vlabs.notes"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=80px /></a>
+
+![Image 1](https://play-lh.googleusercontent.com/jDTTVEqZ5bswMS4LV8xJRRNHpPrXy2m0eXWxfhaRgWKSQNASlpVtOUS_rrn35G-kyPcu=w720-h310-rw) ![Image 2](https://play-lh.googleusercontent.com/z0eRQuqotJP2OVc_V7-6ovnRlIJ6fvdTUNQpquDxekdORf7exczew4paePKxA7m0gYSr=w720-h310-rw) ![Image 3](https://play-lh.googleusercontent.com/lU1iszGeOaCWNG5qa3PshhHxN24eCfatGdItJzC5aBcnnuZ3D3-KKTQS6E9LirrZ8cM=w720-h310-rw) ![Image 4](https://play-lh.googleusercontent.com/N32UzxIMCLPNkRaHZV7TW931XBBgENfB25jyKbvXc3XLqg25QcD2-olycVsxP9iCuSGB=w720-h310-rw)
+
+Simple Note Taking App Built Using Flutter
 
 ## Getting Started
 

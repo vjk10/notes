@@ -2,7 +2,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:dynamic_colorscheme/dynamic_colorscheme.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
@@ -19,11 +19,11 @@ import 'package:notes/android/screens/settings_screen.dart';
 import 'package:notes/android/theme/android_theme.dart';
 import 'package:notes/android/views/folders/add_folders_view.dart';
 import 'package:notes/android/views/notes/add_notes_view.dart';
-import 'package:notes/android/views/misc/clipboard_view.dart';
+import 'package:notes/android/views/clipboard/clipboard_view.dart';
+import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
-import 'package:notes/services/theme/android_app_themes.dart';
+import 'package:notes/services/providers/android_app_themes.dart';
 import 'package:notes/under_construction.dart';
-import 'package:notes/windows/screens/splash_screen_win.dart';
 import 'package:provider/provider.dart';
 
 import 'android/screens/splash_screen.dart';
@@ -32,6 +32,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
   await Firebase.initializeApp();
+  token = await FirebaseMessaging.instance.getToken();
+  await NotificationService().initialize();
   runApp(const MyApp());
 }
 
@@ -41,46 +43,50 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    ColorScheme? m3Light;
-    ColorScheme? m3Dark;
-    if (defaultTargetPlatform == TargetPlatform.windows && !kIsWeb) {
-      // Windows Application
-      return fluent_ui.FluentApp(
-        debugShowCheckedModeBanner: kDebugMode,
-        themeMode: fluent_ui.ThemeMode.system,
-        routes: {
-          '/splash': (context) => const SplashScreenWin(),
-        },
-        title: 'Notes',
-        home: const SplashScreenWin(),
-      );
-    }
+    // if (defaultTargetPlatform == TargetPlatform.windows && !kIsWeb) {
+    //   // Windows Application
+    //   return fluent_ui.FluentApp(
+    //     debugShowCheckedModeBanner: kDebugMode,
+    //     themeMode: fluent_ui.ThemeMode.system,
+    //     routes: {
+    //       '/splash': (context) => const SplashScreenWin(),
+    //     },
+    //     title: 'Notes',
+    //     home: const SplashScreenWin(),
+    //   );
+    // }
     if (defaultTargetPlatform == TargetPlatform.android) {
       // Android Application
       return ChangeNotifierProvider(
           create: (_) => ThemeNotifier(),
           child: Consumer<ThemeNotifier>(
               builder: (context, ThemeNotifier notifier, child) {
-            return DynamicColorBuilder(builder: (CorePalette? _palette) {
-              if (_palette != null) {
-                palette = _palette;
+            return DynamicColorBuilder(builder: (CorePalette? palette1) {
+              if (palette1 != null) {
+                palette = palette1;
                 m3YouAvail = true;
-                m3Light = DynamicColorScheme.generate(_palette, dark: false);
-                m3Dark = DynamicColorScheme.generate(_palette, dark: true);
+                m3Light = DynamicColorScheme.generate(palette1, dark: false);
+                m3Dark = DynamicColorScheme.generate(palette1, dark: true);
                 if (notifier.material3) {
                   return ScreenUtilInit(
-                    builder: (_) => GetMaterialApp(
+                    builder: (_, widget) => GetMaterialApp(
                       themeMode: ThemeMode.system,
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: androidThemeDark.copyWith(
                         colorScheme: m3Light,
                         useMaterial3: true,
                         brightness: Brightness.light,
+                        dialogTheme: DialogTheme(
+                          backgroundColor: m3Light!.background,
+                        ),
                       ),
                       darkTheme: androidThemeRegular.copyWith(
                         colorScheme: m3Dark,
                         useMaterial3: true,
                         brightness: Brightness.dark,
+                        dialogTheme: DialogTheme(
+                          backgroundColor: m3Dark!.background,
+                        ),
                       ),
                       routes: {
                         '/splash': (context) => const SplashScreen(),
@@ -106,7 +112,7 @@ class MyApp extends StatelessWidget {
                     themeCollection: themeCollection,
                     defaultThemeId: AppThemes.regular,
                     builder: (context, theme) => ScreenUtilInit(
-                      builder: (_) => GetMaterialApp(
+                      builder: (_, widget) => GetMaterialApp(
                         debugShowCheckedModeBanner: kDebugMode,
                         theme: theme,
                         routes: {
@@ -135,7 +141,7 @@ class MyApp extends StatelessWidget {
                   themeCollection: themeCollection,
                   defaultThemeId: AppThemes.regular,
                   builder: (context, theme) => ScreenUtilInit(
-                    builder: (_) => GetMaterialApp(
+                    builder: (_, widget) => GetMaterialApp(
                       debugShowCheckedModeBanner: kDebugMode,
                       theme: theme,
                       routes: {

@@ -42,6 +42,7 @@ class ComboBoxDialogWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ComboBoxDialogWidgetState createState() => _ComboBoxDialogWidgetState();
 }
 
@@ -57,9 +58,9 @@ class _ComboBoxDialogWidgetState extends State<ComboBoxDialogWidget> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        //shape: RoundedRectangleBorder(
+        //borderRadius: BorderRadius.circular(30),
+        //),
         contentPadding: const EdgeInsets.all(15),
         backgroundColor: widget.c.secondaryContainer,
         title: Padding(
@@ -88,9 +89,9 @@ class _ComboBoxDialogWidgetState extends State<ComboBoxDialogWidget> {
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: widget.c.secondaryContainer,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
               ),
               child: const Text('Cancel'),
               onPressed: () => Navigator.of(context).pop(-1),
@@ -100,11 +101,11 @@ class _ComboBoxDialogWidgetState extends State<ComboBoxDialogWidget> {
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: widget.c.primary,
-                onPrimary: widget.c.onPrimary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
+                foregroundColor: widget.c.onPrimary,
+                backgroundColor: widget.c.primary,
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(25),
+                // ),
               ),
               child: const Text('Done'),
               onPressed: () => Navigator.of(context).pop(_controller.text),

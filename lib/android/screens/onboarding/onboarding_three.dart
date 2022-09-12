@@ -63,7 +63,7 @@ class _OnBoarding3State extends State<OnBoarding3> {
                   child: Text(
                     onBoarding3Message,
                     style: t.textTheme.bodyText1?.copyWith(
-                      fontSize: 18.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
                 ),
@@ -108,12 +108,12 @@ class _OnBoarding3State extends State<OnBoarding3> {
                   height: 70.h,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: c.primary,
+                      backgroundColor: c.primary,
                       elevation: 20,
                       shadowColor: c.background,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: BorderRadius.circular(50),
+                      // ),
                     ),
                     onPressed: () async {
                       await NotesDatabase().setAutoSave(_autoSave);

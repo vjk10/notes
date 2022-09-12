@@ -46,7 +46,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
 
   refreshNote() async {
     if (kDebugMode) {
-      print("NOTE ID: " + widget.noteId);
+      print("NOTE ID: ${widget.noteId}");
     }
     noteSnapshot = await ScientISSTdb.instance
         .collection("notes")
@@ -59,23 +59,23 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       pinned = noteSnapshot.data["pinned"] as bool;
     });
     for (var c = 0; c < totalItems; c++) {
-      DocumentSnapshot _collectionSnapshot = await ScientISSTdb.instance
+      DocumentSnapshot collectionSnapshot = await ScientISSTdb.instance
           .collection("notes")
           .document(widget.noteId)
           .collection(c.toString())
           .document(c.toString())
           .get();
       if (kDebugMode) {
-        print(_collectionSnapshot.data["text"].toString());
+        print(collectionSnapshot.data["text"].toString());
       }
       setState(() {
         // rows.add(currentIndex);
         // checked.add(false);
         ExpenseModel item = ExpenseModel(
-          type: _collectionSnapshot.data["type"],
-          index: _collectionSnapshot.data["index"],
-          amount: _collectionSnapshot.data["amount"],
-          description: _collectionSnapshot.data["description"],
+          type: collectionSnapshot.data["type"],
+          index: collectionSnapshot.data["index"],
+          amount: collectionSnapshot.data["amount"],
+          description: collectionSnapshot.data["description"],
         );
         expenses.add(item);
         currentIndex = currentIndex + 1;
@@ -118,13 +118,13 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
                 switch (index) {
                   case 0:
                     setState(() {
-                      var _deleteIndex = expenses.indexWhere(
+                      var deleteIndex = expenses.indexWhere(
                           ((element) => element.index == expense.index));
                       if (kDebugMode) {
-                        print(_deleteIndex);
+                        print(deleteIndex);
                       }
                       setState(() {
-                        expenses.removeAt(_deleteIndex);
+                        expenses.removeAt(deleteIndex);
                         currentIndex = expenses.length;
                       });
                     });
@@ -195,15 +195,15 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
       t: t,
       c: c,
       title: 'Amount',
-      value: editExpense.amount.toString(),
+      value: '',
     );
     setState(() => expenses = expenses.map((expense) {
           final isEditedAmount = expense.index == editExpense.index;
 
           if (isEditedAmount) {
-            double _amount = double.parse(amount);
-            if (!_amount.isNaN) {
-              return expense.copy(amount: _amount, index: editExpense.index);
+            double amount1 = double.parse(amount);
+            if (!amount1.isNaN) {
+              return expense.copy(amount: amount1, index: editExpense.index);
             } else {
               return expense;
             }
@@ -231,8 +231,8 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
     return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
       return WillPopScope(
         onWillPop: () async {
-          bool _autosave = await NotesDatabase().checkAutoSave();
-          if (_autosave) {
+          bool autosave = await NotesDatabase().checkAutoSave();
+          if (autosave) {
             NotesDatabase().updateExpenseSheet(
               titleController,
               bodyController,
@@ -256,8 +256,8 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
             ),
             leading: IconButton(
               onPressed: () async {
-                bool _autosave = await NotesDatabase().checkAutoSave();
-                if (_autosave) {
+                bool autosave = await NotesDatabase().checkAutoSave();
+                if (autosave) {
                   NotesDatabase().updateExpenseSheet(
                     titleController,
                     bodyController,
@@ -298,7 +298,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
               IconButton(
                 onPressed: () async {
                   if (kDebugMode) {
-                    print("DOC ID: " + noteSnapshot.id.toString());
+                    print("DOC ID: ${noteSnapshot.id}");
                   }
                   NotesDatabase().deleteNote(noteSnapshot.id);
                 },
@@ -471,7 +471,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-            hintText: "Sheet Name",
+            hintText: "sheet name",
             hintStyle: t.textTheme.headline4,
           ),
         ),
@@ -495,7 +495,7 @@ class _ExpenseTrackerViewState extends State<ExpenseTrackerView> {
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-            hintText: "Description",
+            hintText: "description",
             hintStyle: t.textTheme.bodySmall?.copyWith(color: c.onBackground),
           ),
         ),

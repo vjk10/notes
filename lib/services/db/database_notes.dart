@@ -7,6 +7,7 @@ class NotesDatabase {
   //NOTES SECTION
 
   Future<List<DocumentSnapshot>> getNotes() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
     _notes.removeWhere((element) => element.data["pinned"] == true);
     notesSnapshot = _notes;
@@ -14,6 +15,7 @@ class NotesDatabase {
   }
 
   Future<List<DocumentSnapshot>> getPinnedNotes() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     var _notes = await ScientISSTdb.instance.collection("notes").getDocuments();
     _notes.removeWhere((element) => element.data["pinned"] != true);
     pinnedNotesSnapshot = _notes;
@@ -21,6 +23,7 @@ class NotesDatabase {
   }
 
   Future<List<DocumentSnapshot>> getFolders() async {
+    // ignore: no_leading_underscores_for_local_identifiers
     var _folders =
         await ScientISSTdb.instance.collection("folders").getDocuments();
     foldersSnapshot = _folders;
@@ -44,9 +47,10 @@ class NotesDatabase {
         .document("save")
         .get();
 
+    // ignore: no_leading_underscores_for_local_identifiers
     bool _returnSave = userPref.data["autoSave"];
     if (kDebugMode) {
-      print("AUTOSAVE: " + _returnSave.toString());
+      print("AUTOSAVE: $_returnSave");
     }
 
     return _returnSave;
@@ -58,7 +62,7 @@ class NotesDatabase {
     }
     var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
     if (kDebugMode) {
-      print("CREATION TIME: " + creationTime);
+      print("CREATION TIME: $creationTime");
     }
     await ScientISSTdb.instance.collection("notes").add({
       "title": note.title,
@@ -100,7 +104,7 @@ class NotesDatabase {
     }
     var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
     if (kDebugMode) {
-      print("CREATION TIME: " + creationTime);
+      print("CREATION TIME: $creationTime");
     }
 
     await ScientISSTdb.instance.collection("notes").document(noteId).update({
@@ -196,7 +200,7 @@ class NotesDatabase {
   Future createFolder(Folder folder) async {
     var creationTime = DateFormat.yMMMMd().format(DateTime.now()).toString();
     if (kDebugMode) {
-      print("CREATION TIME: " + creationTime);
+      print("CREATION TIME: $creationTime");
     }
 
     await ScientISSTdb.instance.collection("folders").add({
@@ -287,6 +291,7 @@ class NotesDatabase {
   }
 
   Future<List<DocumentSnapshot>> getFolderNotes(String folderName) async {
+    // ignore: no_leading_underscores_for_local_identifiers
     var _folderNotes =
         await ScientISSTdb.instance.collection(folderName).getDocuments();
     for (var element in _folderNotes) {
@@ -343,7 +348,7 @@ class NotesDatabase {
       if (titleController.text.isNotEmpty && noteList.isNotEmpty) {
         var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
         if (kDebugMode) {
-          print("CREATION TIME: " + creationTime);
+          print("CREATION TIME: $creationTime");
         }
         var note = Note(
             title: titleController.text,
@@ -367,7 +372,7 @@ class NotesDatabase {
           for (var c = 0; c < noteList.length; c++) {
             if (kDebugMode) {
               print(noteList[c].text.toString());
-              print("ID" + value.id.toString());
+              print("ID${value.id}");
             }
             ScientISSTdb.instance
                 .collection("notes")
@@ -449,7 +454,7 @@ class NotesDatabase {
           controllers.first.text.isNotEmpty) {
         var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
         if (kDebugMode) {
-          print("CREATION TIME: " + creationTime);
+          print("CREATION TIME: $creationTime");
         }
 
         if (kDebugMode) {
@@ -531,7 +536,7 @@ class NotesDatabase {
       if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
         var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
         if (kDebugMode) {
-          print("CREATION TIME: " + creationTime);
+          print("CREATION TIME: $creationTime");
         }
 
         var note = Note(
@@ -620,7 +625,7 @@ class NotesDatabase {
       if (titleController.text.isNotEmpty && bodyController.text.isNotEmpty) {
         var creationTime = DateFormat.MMMd().format(DateTime.now()).toString();
         if (kDebugMode) {
-          print("CREATION TIME: " + creationTime);
+          print("CREATION TIME: $creationTime");
         }
         await ScientISSTdb.instance
             .collection("notes")
@@ -687,5 +692,27 @@ class NotesDatabase {
         ),
       ));
     }
+  }
+
+  storeAlerts(int notificationId, String title, String description) async {
+    await ScientISSTdb.instance
+        .collection("alerts")
+        .document(notificationId.toString())
+        .set({
+      "notificationID": notificationId,
+      "title": title,
+      "description": description,
+    });
+  }
+
+  deleteAlerts() async {
+    await ScientISSTdb.instance.collection("alerts").delete();
+  }
+
+  deleteAlert(int notificationId) async {
+    await ScientISSTdb.instance
+        .collection("alerts")
+        .document(notificationId.toString())
+        .delete();
   }
 }

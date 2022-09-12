@@ -16,6 +16,7 @@ class NotePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _NotePageState createState() => _NotePageState();
 }
 
@@ -69,8 +70,8 @@ class _NotePageState extends State<NotePage> {
           )
         : WillPopScope(
             onWillPop: () async {
-              bool _autosave = await NotesDatabase().checkAutoSave();
-              if (_autosave) {
+              bool autosave = await NotesDatabase().checkAutoSave();
+              if (autosave) {
                 if (noteSnapshot.data["title"].toString() !=
                         titleController.text ||
                     noteSnapshot.data["body"].toString() !=
@@ -109,8 +110,8 @@ class _NotePageState extends State<NotePage> {
                 toolbarHeight: 80,
                 leading: IconButton(
                   onPressed: () async {
-                    bool _autosave = await NotesDatabase().checkAutoSave();
-                    if (_autosave) {
+                    bool autosave = await NotesDatabase().checkAutoSave();
+                    if (autosave) {
                       if (noteSnapshot.data["title"].toString() !=
                               titleController.text ||
                           noteSnapshot.data["body"].toString() !=
@@ -168,7 +169,7 @@ class _NotePageState extends State<NotePage> {
                   IconButton(
                     onPressed: () async {
                       if (kDebugMode) {
-                        print("DOC ID: " + noteSnapshot.id.toString());
+                        print("DOC ID: ${noteSnapshot.id}");
                       }
                       NotesDatabase().deleteNote(noteSnapshot.id);
                     },
@@ -200,7 +201,7 @@ class _NotePageState extends State<NotePage> {
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       disabledBorder: InputBorder.none,
-                      hintText: "Title",
+                      hintText: "title",
                       hintStyle: t.textTheme.headline4,
                     ),
                   ),
@@ -230,7 +231,7 @@ class _NotePageState extends State<NotePage> {
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     disabledBorder: InputBorder.none,
-                    hintText: "Type something....",
+                    hintText: "type something....",
                     hintStyle: t.textTheme.bodyText1?.copyWith(fontSize: 18),
                   ),
                 ),

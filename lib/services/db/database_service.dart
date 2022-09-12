@@ -45,7 +45,7 @@ class DatabaseService {
           ),
           duration: const Duration(seconds: 2),
           messageText: Text(
-            title + " backed up",
+            "$title backed up",
             style: t.textTheme.caption?.copyWith(color: c.onSurface),
           ),
         ),
@@ -89,6 +89,7 @@ class DatabaseService {
     if (importSnapshot.docs.isNotEmpty) {
       for (var element in importSnapshot.docs) {
         if (kDebugMode) {
+          // ignore: prefer_interpolation_to_compose_strings
           print("Note Title: " + element.get("title"));
         }
         var note = Note(
@@ -129,6 +130,25 @@ class DatabaseService {
           duration: const Duration(seconds: 2),
           messageText: Text(
             "All notes imported successfully!",
+            style: t.textTheme.caption?.copyWith(color: c.onSurface),
+          ),
+        ),
+      );
+    } else {
+      Get.back();
+      Get.showSnackbar(
+        GetSnackBar(
+          shouldIconPulse: false,
+          backgroundColor: c.surface,
+          margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          borderRadius: 10,
+          icon: Icon(
+            Icons.error_outline,
+            color: c.error,
+          ),
+          duration: const Duration(seconds: 2),
+          messageText: Text(
+            "No notes found!",
             style: t.textTheme.caption?.copyWith(color: c.onSurface),
           ),
         ),

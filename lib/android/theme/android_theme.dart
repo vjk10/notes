@@ -1,5 +1,4 @@
 //ANDROID THEME SECTION//
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notes/services/imports.dart';
 import 'package:notes/theme/colors.dart';
@@ -16,7 +15,7 @@ ThemeData androidThemeDark = ThemeData(
       primaryContainer: purple,
       onPrimary: white,
       onPrimaryContainer: black,
-      secondary: darkGrey,
+      secondary: white,
       secondaryContainer: lightBlack,
       onSecondary: white,
       onSecondaryContainer: lightGrey,
@@ -37,6 +36,7 @@ ThemeData androidThemeDark = ThemeData(
     toolbarHeight: 80,
     elevation: 0,
   ),
+  timePickerTheme: timePickerThemeData,
   textTheme: TextTheme(
     headline1:
         GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),
@@ -82,7 +82,7 @@ ThemeData androidThemeRegular = ThemeData(
     primaryContainer: purple,
     onPrimary: white,
     onPrimaryContainer: white,
-    secondary: darkGrey,
+    secondary: white,
     secondaryContainer: lightBlack,
     onSecondary: lightGrey,
     onSecondaryContainer: lightGrey,
@@ -105,6 +105,7 @@ ThemeData androidThemeRegular = ThemeData(
     toolbarHeight: 80,
     elevation: 0,
   ),
+  timePickerTheme: timePickerThemeData,
   textTheme: TextTheme(
     headline1:
         GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
@@ -173,6 +174,7 @@ ThemeData androidThemePitchBlack = ThemeData(
     toolbarHeight: 80,
     elevation: 0,
   ),
+  timePickerTheme: timePickerThemeData,
   textTheme: TextTheme(
     headline1:
         GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
@@ -241,6 +243,7 @@ ThemeData androidThemeKindaRed = ThemeData(
     toolbarHeight: 80,
     elevation: 0,
   ),
+  timePickerTheme: timePickerThemeData,
   textTheme: TextTheme(
     headline1:
         GoogleFonts.sourceSansPro(color: white, fontWeight: FontWeight.bold),
@@ -304,6 +307,7 @@ ThemeData androidThemeDarkYellow = ThemeData(
     onSurface: white,
     inversePrimary: yellow,
   ),
+  timePickerTheme: timePickerThemeData,
   appBarTheme: AppBarTheme(
     backgroundColor: darkYellowBackground,
     toolbarHeight: 80,
@@ -377,6 +381,7 @@ ThemeData androidThemeKindaWhite = ThemeData(
     toolbarHeight: 80,
     elevation: 0,
   ),
+  timePickerTheme: timePickerThemeData,
   textTheme: TextTheme(
     headline1:
         GoogleFonts.sourceSansPro(color: black, fontWeight: FontWeight.bold),

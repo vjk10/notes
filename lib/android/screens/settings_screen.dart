@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:currency_picker/currency_picker.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:filesize/filesize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,8 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/views/misc/pp_html_view.dart';
-import 'package:notes/android/views/misc/tc_html_view.dart';
+import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -24,12 +24,13 @@ import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../services/theme/android_app_themes.dart';
+import '../../services/providers/android_app_themes.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -57,6 +58,10 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   late AnimationController _bottomSheetController;
 
+  late TextStyle topBarTextStyle;
+
+  bool styleExpanded = true;
+
   @override
   void initState() {
     _bottomSheetController = AnimationController(vsync: this);
@@ -82,13 +87,13 @@ class _SettingsScreenState extends State<SettingsScreen>
       });
 
       if (kDebugMode) {
-        print("SELECTED THEME: " + selectedTheme);
+        print("SELECTED THEME: $selectedTheme");
       }
     } catch (e) {
-      var _pref = await SharedPreferences.getInstance();
-      selectedThemeId = _pref.getInt('selectedThemeId')!;
+      var pref = await SharedPreferences.getInstance();
+      selectedThemeId = pref.getInt('selectedThemeId')!;
       if (kDebugMode) {
-        print("Selected Theme: " + selectedThemeId.toString());
+        print("Selected Theme: $selectedThemeId");
       }
       if (selectedTheme.isEmpty) {
         setState(() {
@@ -99,9 +104,9 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getSaveStatus() async {
-    bool _value = await NotesDatabase().checkAutoSave();
+    bool value = await NotesDatabase().checkAutoSave();
     setState(() {
-      _autoSave = _value;
+      _autoSave = value;
     });
   }
 
@@ -121,6 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       setState(() {
         _accountLinked = true;
         profileUrl = user.photoURL.toString();
+        userName = user.displayName.toString();
       });
     } catch (e) {
       if (e is FirebaseAuthException) {
@@ -136,11 +142,11 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getCacheMemory() async {
-    Directory _tempDir = await getApplicationDocumentsDirectory();
+    Directory tempDir = await getApplicationDocumentsDirectory();
     if (kDebugMode) {
-      print("ApplicationDocumentsDirectory: " + _tempDir.toString());
+      print("ApplicationDocumentsDirectory: $tempDir");
     }
-    cacheDirStatSync(_tempDir.path);
+    cacheDirStatSync(tempDir.path);
   }
 
   Map<String, int> cacheDirStatSync(String dirPath) {
@@ -192,103 +198,124 @@ class _SettingsScreenState extends State<SettingsScreen>
         },
         child: Scaffold(
           backgroundColor: c.background,
-          appBar: AppBar(
-            backgroundColor: notifier.material3
-                ? c.secondaryContainer.withAlpha(50)
-                : c.secondaryContainer,
-            title: Text(
-              "settings",
-              style: t.textTheme.headline5,
-            ),
-            leading: IconButton(
-                onPressed: () {
-                  Get.offAllNamed('/mainScreen');
-                },
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: c.onBackground,
-                )),
-            toolbarHeight: 80,
-          ),
           body: _isLoading
               ? const Center(
                   child: NotesLoadingAndroid(),
                 )
-              : SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                      vertical: 20.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        UserDetails(
-                          userName: userName,
-                          profileUrl: profileUrl,
+              : CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar.large(
+                      backgroundColor: c.background,
+                      surfaceTintColor: c.surfaceTint,
+                      primary: true,
+                      leading: IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: c.onBackground,
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: Visibility(
-                            visible: !_accountLinked,
-                            child: SignInButton(
-                              Buttons.Google,
-                              onPressed: () async {
-                                await signInWithGoogle(context)
-                                    .whenComplete(() {
-                                  getUserStatus();
+                      ),
+                      title: const Text(
+                        "settings",
+                      ),
+                      actions: [
+                        Visibility(
+                          visible: _accountLinked,
+                          child: IconButton(
+                            onPressed: () async {
+                              await signOutGoogle(context).whenComplete(() {
+                                setState(() {
+                                  profileUrl = "";
+                                  _accountLinked = !_accountLinked;
                                 });
-                              },
-                              padding: const EdgeInsets.all(8),
-                              text: "  Sign in to backup notes",
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadiusDirectional.circular(25),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: _accountLinked ? 0 : 50,
-                        ),
-                        userDataSection(),
-                        deciveDataSection(),
-                        Center(
-                          child: Visibility(
-                            visible: _accountLinked,
-                            child: SizedBox(
-                              width: Get.width,
-                              height: 75,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  await signOutGoogle(context).whenComplete(() {
-                                    setState(() {
-                                      profileUrl = "";
-                                      _accountLinked = !_accountLinked;
-                                    });
-                                  });
-                                },
-                                child: Text(
-                                  "Logout",
-                                  style: t.textTheme.button?.copyWith(
-                                    color: c.onPrimary,
-                                  ),
-                                ),
-                              ),
+                              });
+                            },
+                            icon: Icon(
+                              Icons.login_outlined,
+                              color: c.outline,
                             ),
                           ),
                         )
                       ],
                     ),
-                  ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                          vertical: 25.0,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            UserDetails(
+                              userName: userName,
+                              profileUrl: profileUrl,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: Visibility(
+                                visible: !_accountLinked,
+                                child: SignInButton(
+                                  Buttons.Google,
+                                  onPressed: () async {
+                                    await signInWithGoogle(context)
+                                        .whenComplete(() {
+                                      getUserStatus();
+                                    });
+                                  },
+                                  padding: const EdgeInsets.all(8),
+                                  text: "  Sign in to backup notes",
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadiusDirectional.circular(25),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: _accountLinked ? 0 : 50,
+                            ),
+                            userDataSection(),
+                            deciveDataSection(),
+                            Center(
+                              child: Visibility(
+                                visible: false,
+                                child: SizedBox(
+                                  width: Get.width,
+                                  height: 75,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: c.primary,
+                                    ),
+                                    onPressed: () async {
+                                      await signOutGoogle(context)
+                                          .whenComplete(() {
+                                        setState(() {
+                                          profileUrl = "";
+                                          _accountLinked = !_accountLinked;
+                                        });
+                                      });
+                                    },
+                                    child: Text(
+                                      "Logout",
+                                      style: t.textTheme.button?.copyWith(
+                                        color: c.onPrimary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
         ),
       );
@@ -297,510 +324,355 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Padding deciveDataSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                  left: 15.0,
-                ),
-                child: Text(
-                  "Device Data",
-                  textAlign: TextAlign.start,
-                  style: t.textTheme.button,
-                ),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 15.0,
+              left: 15.0,
+            ),
+            child: Text(
+              "Device Data",
+              textAlign: TextAlign.center,
+              style: t.textTheme.button?.copyWith(
+                color: c.primary,
+                fontWeight: FontWeight.w600,
               ),
-              usedStorageTile(),
-              clearNotesTile(),
-              appDetailsTile(),
-            ],
+            ),
           ),
-        ),
+          usedStorageTile(),
+          clearNotesTile(),
+          appDetailsTile(),
+        ],
       ),
     );
   }
 
   Padding userDataSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                  left: 15.0,
-                ),
-                child: Text(
-                  "User Data",
-                  textAlign: TextAlign.start,
-                  style: t.textTheme.button,
-                ),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 15.0,
+              left: 15.0,
+            ),
+            child: Text(
+              "User Data",
+              textAlign: TextAlign.center,
+              style: t.textTheme.button?.copyWith(
+                color: c.primary,
+                fontWeight: FontWeight.w600,
               ),
-              Visibility(
-                visible: _accountLinked,
-                child: cloudBackupTile(),
-              ),
-              if (m3YouAvail) materialYou(),
-              Consumer<ThemeNotifier>(
-                builder: (context, notifier, child) => Visibility(
-                  visible: !notifier.material3,
-                  child: themeDataTile(),
-                ),
-              ),
-              autoSaveTile(),
-            ],
+            ),
           ),
-        ),
+          Visibility(
+            visible: _accountLinked,
+            child: cloudBackupTile(),
+          ),
+          if (m3YouAvail) materialYou(),
+          Consumer<ThemeNotifier>(
+            builder: (context, notifier, child) => Visibility(
+              visible: !notifier.material3,
+              child: themeDataTile(),
+            ),
+          ),
+          autoSaveTile(),
+          currencyTile(),
+        ],
       ),
     );
   }
 
   Consumer<ThemeNotifier> materialYou() {
     return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-      return Container(
-        width: Get.width - 20,
-        height: 80,
-        decoration: BoxDecoration(
-          color: c.secondaryContainer,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: ListTile(
-              leading: Icon(
-                Icons.palette_outlined,
-                color: c.primary,
-                size: 24,
-              ),
-              title: Text(
-                "Material You",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                ),
-              ),
-              trailing: Switch.adaptive(
-                  activeColor: c.primary,
-                  inactiveThumbColor: c.secondary,
-                  inactiveTrackColor: c.tertiaryContainer,
-                  value: notifier.material3,
-                  onChanged: (value) async {
-                    HapticFeedback.heavyImpact();
-                    notifier.toggleTheme();
-                    selectedThemeId = _pref.getInt('selectedThemeId')!;
-                    if (kDebugMode) {
-                      print("Selected Theme: " + selectedThemeId.toString());
-                    }
-                    if (selectedTheme.isEmpty) {
-                      setState(() {
-                        selectedTheme =
-                            AppThemes().getThemeName(selectedThemeId);
-                      });
-                    }
-                  }),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Center(
+          child: ListTile(
+            leading: Icon(
+              Icons.colorize_outlined,
+              color: c.onBackground,
+              size: 24,
             ),
+            title: Text(
+              "Material You",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 14,
+                color: c.onBackground,
+              ),
+            ),
+            trailing: Switch(
+                activeColor: c.primary,
+                inactiveThumbColor: c.secondary,
+                inactiveTrackColor: c.tertiaryContainer,
+                value: notifier.material3,
+                onChanged: (value) async {
+                  HapticFeedback.heavyImpact();
+                  notifier.toggleTheme();
+                  selectedThemeId = _pref.getInt('selectedThemeId')!;
+                  if (kDebugMode) {
+                    print("Selected Theme: $selectedThemeId");
+                  }
+                  if (selectedTheme.isEmpty) {
+                    setState(() {
+                      selectedTheme = AppThemes().getThemeName(selectedThemeId);
+                    });
+                  }
+                }),
           ),
         ),
       );
     });
   }
 
-  Container autoSaveTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.save,
-              color: c.primary,
-              size: 24,
-            ),
-            title: Text(
-              "Autosave",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: Switch.adaptive(
-                activeColor: c.primary,
-                inactiveThumbColor: c.secondary,
-                inactiveTrackColor: c.tertiaryContainer,
-                value: _autoSave,
-                onChanged: (value) async {
-                  HapticFeedback.heavyImpact();
-                  await NotesDatabase().setAutoSave(value);
-                  setState(() {
-                    _autoSave = value;
-                  });
-                }),
+  Padding autoSaveTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.save,
+            color: c.onBackground,
+            size: 24,
           ),
-        ),
-      ),
-    );
-  }
-
-  Container cloudBackupTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.backup_outlined,
-              color: c.primary,
-              size: 24,
-            ),
-            title: Text(
-              "Cloud Backup",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: c.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  )),
-              onPressed: () async {
-                await DatabaseService().importNotes(user.uid);
-              },
-              child: Text(
-                "Import",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.onPrimary,
-                ),
-              ),
+          title: Text(
+            "Autosave",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+              color: c.onBackground,
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Container usedStorageTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.folder_outlined,
-              color: c.primary,
-              size: 24,
-            ),
-            title: Text(
-              "Used Storage",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: Text(
-              cacheMemorySize,
-              style: t.textTheme.bodyText1,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container clearNotesTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.delete_outline_rounded,
-              color: c.primary,
-              size: 24,
-            ),
-            title: Text(
-              "Clear All Notes",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
-                NotesDatabase().clearAllNotes();
-              },
-              child: Text(
-                "Clear",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container appDetailsTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.info_outline_rounded,
-              color: c.primary,
-              size: 24,
-            ),
-            title: Text(
-              "Licenses and Info",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: TextButton(
-              onPressed: () {
-                Get.bottomSheet(
-                  BottomSheet(
-                    backgroundColor: Colors.transparent,
-                    onClosing: () {},
-                    builder: (_) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          width: Get.width - 50,
-                          height: Get.height / 2,
-                          decoration: BoxDecoration(
-                            color: c.background,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: Get.width - 70,
-                                height: 75,
-                                child: TextButton.icon(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: c.primary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Get.to(() => const PPHtmlView());
-                                  },
-                                  icon: Icon(
-                                    Icons.policy_outlined,
-                                    color: c.onPrimary,
-                                  ),
-                                  label: Text(
-                                    "Privacy Policy",
-                                    style: t.textTheme.button?.copyWith(
-                                      color: c.onPrimary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: Get.width - 70,
-                                height: 75,
-                                child: TextButton.icon(
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: c.primary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Get.to(() => const TCHtmlView());
-                                  },
-                                  icon: Icon(
-                                    Icons.gavel_outlined,
-                                    color: c.onPrimary,
-                                  ),
-                                  label: Text(
-                                    "Terms & Conditions",
-                                    style: t.textTheme.button?.copyWith(
-                                      color: c.onPrimary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: Get.width - 70,
-                                height: 75,
-                                child: TextButton.icon(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: c.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      navToLicense();
-                                    },
-                                    icon: Icon(
-                                      Icons.lightbulb_outline,
-                                      color: c.onPrimary,
-                                    ),
-                                    label: Text(
-                                      "Licenses",
-                                      style: t.textTheme.button?.copyWith(
-                                        color: c.onPrimary,
-                                      ),
-                                    )),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-              child: Text(
-                "v" + version + " (build v" + buildNumber + ")",
-                style: t.textTheme.button?.copyWith(
-                  fontSize: 14,
-                  color: c.error,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void navToLicense() {
-    Get.to(() => Theme(
-          data: t.copyWith(
-            colorScheme: c,
-            cardColor: c.background,
-            backgroundColor: c.background,
-            appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(
-                color: c.onBackground,
-              ),
-              color: c.background,
-              elevation: 0,
-              toolbarHeight: 80,
-              titleTextStyle: t.textTheme.headline5,
-            ),
-          ),
-          child: LicensePage(
-            applicationIcon: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "notes",
-                  style: t.textTheme.headline6?.copyWith(fontSize: 24),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-            applicationLegalese: "Simple notes taking app",
-            applicationName: " ",
-            applicationVersion: "v" + version + " (build v" + buildNumber + ")",
-          ),
-        ));
-  }
-
-  Container themeDataTile() {
-    return Container(
-      width: Get.width - 20,
-      height: 80,
-      decoration: BoxDecoration(
-        color: c.secondaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: ListTile(
-            leading: Icon(
-              Icons.palette,
-              color: c.primary,
-              size: 24,
-            ),
-            title: Text(
-              "Choose Theme",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-              ),
-            ),
-            trailing: GestureDetector(
-              onTap: () {
+          trailing: Switch(
+              activeColor: c.primary,
+              inactiveThumbColor: c.secondary,
+              inactiveTrackColor: c.tertiaryContainer,
+              value: _autoSave,
+              onChanged: (value) async {
                 HapticFeedback.heavyImpact();
-                showThemeSheet();
-              },
-              child: Image.asset(
-                selectedTheme,
-                width: 36,
-                height: 36,
+                await NotesDatabase().setAutoSave(value);
+                setState(() {
+                  _autoSave = value;
+                });
+              }),
+        ),
+      ),
+    );
+  }
+
+  Padding currencyTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.money,
+            color: c.onBackground,
+            size: 24,
+          ),
+          title: Text(
+            "Choose Currency",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+              color: c.onBackground,
+            ),
+          ),
+          trailing: OutlinedButton(
+            onPressed: () {
+              showCurrencyPicker(
+                  context: context,
+                  theme: CurrencyPickerThemeData(
+                      flagSize: 24,
+                      backgroundColor: c.background,
+                      titleTextStyle: t.textTheme.button,
+                      subtitleTextStyle: t.textTheme.subtitle1,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                  onSelect: (value) {
+                    setState(() {
+                      currency = value.symbol;
+                      currencyFlag = value.flag!;
+                    });
+                  });
+            },
+            child: Text(
+              "$currency $currencyFlag",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 12,
+                color: c.primary,
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding cloudBackupTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.backup_outlined,
+            color: c.onBackground,
+            size: 24,
+          ),
+          title: Text(
+            "Cloud Backup",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+              color: c.onBackground,
+            ),
+          ),
+          trailing: OutlinedButton(
+            onPressed: () async {
+              await DatabaseService().importNotes(user.uid);
+            },
+            child: Text(
+              "Import",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 12,
+                color: c.primary,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding usedStorageTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.folder_outlined,
+            color: c.onBackground,
+            size: 24,
+          ),
+          title: Text(
+            "Used Storage",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+              color: c.onBackground,
+            ),
+          ),
+          trailing: Text(
+            cacheMemorySize,
+            style: t.textTheme.bodyLarge?.copyWith(color: c.onBackground),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding clearNotesTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.delete_outline_rounded,
+            color: c.onBackground,
+            size: 24,
+          ),
+          title: Text(
+            "Clear All Notes",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+              color: c.onBackground,
+            ),
+          ),
+          trailing: OutlinedButton(
+            onPressed: () {
+              NotesDatabase().clearAllNotes();
+            },
+            child: Text(
+              "Clear",
+              style: t.textTheme.button?.copyWith(
+                fontSize: 12,
+                color: c.primary,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding appDetailsTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: ListTile(
+          leading: Icon(
+            Icons.info_outline_rounded,
+            color: c.onBackground,
+            size: 24,
+          ),
+          title: Text(
+            "Licenses and Info",
+            style: t.textTheme.button?.copyWith(
+              fontSize: 14,
+              color: c.onBackground,
+            ),
+          ),
+          trailing: TextButton(
+            onPressed: () {
+              Get.bottomSheet(
+                BottomSheet(
+                  backgroundColor: Colors.transparent,
+                  onClosing: () {},
+                  builder: (_) {
+                    return const LicensesAndInfo();
+                  },
+                ),
+              );
+            },
+            child: Text(
+              "v$version (build v$buildNumber)",
+              style: t.textTheme.bodyMedium?.copyWith(color: c.onBackground),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Center themeDataTile() {
+    return Center(
+      child: ListTile(
+        leading: Icon(
+          Icons.palette,
+          color: c.onBackground,
+          size: 24,
+        ),
+        title: Text(
+          "Choose Theme",
+          style: t.textTheme.button?.copyWith(
+            fontSize: 14,
+          ),
+        ),
+        trailing: GestureDetector(
+          onTap: () {
+            HapticFeedback.heavyImpact();
+            showThemeSheet();
+          },
+          child: Image.asset(
+            selectedTheme,
+            width: 36,
+            height: 36,
           ),
         ),
       ),
@@ -880,7 +752,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                         decoration: BoxDecoration(
                                           color: selectedThemeId == index
                                               ? c.primary.withOpacity(0.2)
-                                              : c.secondary.withOpacity(0.2),
+                                              : c.onBackground.withOpacity(0.2),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),

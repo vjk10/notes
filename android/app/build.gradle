@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 32
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,7 +51,7 @@ android {
 
     defaultConfig {
         applicationId 'com.vlabs.notes'
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -72,6 +72,11 @@ android {
        }
    }
 
+   lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false //<- add this line
+    }
+
     // buildTypes {
     //     release {
     //         // TODO: Add your own signing config for the release build.
@@ -86,7 +91,18 @@ flutter {
 }
 
 dependencies {
+    implementation 'androidx.work:work-runtime:2.7.0'
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
+    implementation 'androidx.work:work-runtime:2.7.0-alpha04'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation platform('com.google.firebase:firebase-bom') // add this
+    implementation('com.google.firebase:firebase-auth') {
+        exclude module: 'play-services-safetynet'
+    }
+    // implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation 'com.google.firebase:firebase-iid:21.1.0' // add this
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    // implementation 'androidx.work:work-runtime:2.7.1'
+    compile  'com.android.support:multidex:1.0.3'
 }
