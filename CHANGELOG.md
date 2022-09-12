@@ -8,7 +8,11 @@
     Build: 17
     Release Name: Public Release
 
-## **1.1.3+18 (Public Release)**
+## **1.1.3+19 (Public Release)**
+
+     Minor Bug Fixes
+
+### *1.1.3+18 (Public Release)*
 
      🚑️ Bug Fix for Screen going Grey when user is not signed in.
 
