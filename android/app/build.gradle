@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -59,6 +59,14 @@ android {
     }
 
     signingConfigs {
+        debug {
+        }
+        beta {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
@@ -69,6 +77,12 @@ android {
    buildTypes {
        debug {
            applicationIdSuffix ".debug"
+           signingConfig signingConfigs.debug
+       }
+       profile{
+           applicationIdSuffix ".beta"
+           signingConfig signingConfigs.beta
+           debuggable false
        }
        release {
            signingConfig signingConfigs.release
@@ -94,18 +108,17 @@ flutter {
 }
 
 dependencies {
-    implementation 'androidx.work:work-runtime:2.7.0'
-    implementation 'androidx.work:work-runtime-ktx:2.7.0'
-    implementation 'androidx.work:work-runtime:2.7.0-alpha04'
+    // implementation 'androidx.work:work-runtime:2.7.1'
+    // implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.work:work-runtime:2.8.0-alpha04'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform('com.google.firebase:firebase-bom:29.1.0')
-    implementation platform('com.google.firebase:firebase-bom') // add this
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-core'
     implementation('com.google.firebase:firebase-auth') {
-        exclude module: 'play-services-safetynet'
+        exclude module: "play-services-safetynet"
     }
-    // implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.firebase:firebase-iid:21.1.0' // add this
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    // implementation 'androidx.work:work-runtime:2.7.1'
+    implementation 'com.google.firebase:firebase-appcheck-playintegrity'
     implementation 'com.android.support:multidex:1.0.3'
 }

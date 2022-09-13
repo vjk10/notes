@@ -224,4 +224,25 @@ class Utils {
       }
     });
   }
+
+  getAppName(String packageName) {
+    switch (packageName) {
+      case 'com.vlabs.notes':
+        {
+          return 'notes';
+        }
+      case 'com.vlabs.notes.debug':
+        {
+          return 'notes (debug)';
+        }
+      case 'com.vlabs.notes.beta':
+        {
+          return 'notes (beta)';
+        }
+      default:
+        {
+          return 'notes';
+        }
+    }
+  }
 }

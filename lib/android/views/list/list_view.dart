@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/note_list_model.dart';
 import 'package:notes/services/db/notes_model.dart';
-import 'package:notes/services/utils.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 import '../../data/data.dart';

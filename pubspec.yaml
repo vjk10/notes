@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none'
 
-version: 1.1.3+19
+version: 1.1.4+23
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -54,7 +54,7 @@ dependencies:
   material_color_utilities: ^0.1.4
   reorderables: ^0.5.0
   excel: ^2.0.0-null-safety-3
-  permission_handler: ^9.2.0
+  permission_handler: ^10.0.0
   permission_handler_windows: ^0.1.0
   flutter_html: ^2.2.1
   flutter_screenutil: ^5.4.0
@@ -62,12 +62,13 @@ dependencies:
   google_fonts: ^3.0.1
   emojis: ^0.9.9
   currency_picker: ^2.0.9
-  quick_actions: ^0.6.0+10
+  quick_actions: ^1.0.0
   firebase_messaging: ^11.4.0
   flutter_local_notifications: ^9.4.1
   timezone: ^0.8.0
   flutter_native_timezone: ^2.0.0
   flutter_expandable_fab: ^1.5.1
+  about: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -82,5 +83,6 @@ flutter:
   assets:
     - CHANGELOG.md
     - README.md
+    - CONTRIBUTING.md
     - assets/images/
     - assets/lottie/

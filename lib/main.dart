@@ -75,6 +75,12 @@ class MyApp extends StatelessWidget {
                       theme: androidThemeDark.copyWith(
                         colorScheme: m3Light,
                         useMaterial3: true,
+                        backgroundColor: m3Light!.background,
+                        scaffoldBackgroundColor: m3Light!.background,
+                        appBarTheme: AppBarTheme(
+                          backgroundColor: m3Light!.background,
+                          surfaceTintColor: m3Light!.surfaceTint,
+                        ),
                         brightness: Brightness.light,
                         dialogTheme: DialogTheme(
                           backgroundColor: m3Light!.background,
@@ -83,6 +89,12 @@ class MyApp extends StatelessWidget {
                       darkTheme: androidThemeRegular.copyWith(
                         colorScheme: m3Dark,
                         useMaterial3: true,
+                        backgroundColor: m3Dark!.background,
+                        scaffoldBackgroundColor: m3Dark!.background,
+                        appBarTheme: AppBarTheme(
+                          backgroundColor: m3Dark!.background,
+                          surfaceTintColor: m3Dark!.surfaceTint,
+                        ),
                         brightness: Brightness.dark,
                         dialogTheme: DialogTheme(
                           backgroundColor: m3Dark!.background,

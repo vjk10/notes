@@ -4,11 +4,33 @@
 
     Play Store Beta Releases are logged in GitHub Releases and Not Play Store Changelog.
 
-    Current Version: 1.1.3
-    Build: 17
-    Release Name: Public Release
+    *--------------------------*
+    *      Public Release      *
+    *--------------------------*
+    * Current Version: | 1.1.3 *
+    * Build:           | 17    *
+    *--------------------------*
 
 ## **1.1.3+19 (Public Release)**
+
+     Minor Bug Fixes
+
+### *1.1.4+22 (Beta Release)*
+
+      1. Play Safety Net Removed
+      2. Play Integrity API Added
+
+### *1.1.4+21 (Internal)*
+
+      1. Quick Action Rendering Issue
+      2. Notification Permission Fix
+
+### *1.1.4+20 (Internal)*
+
+      1. Quick Action Rendering Issue
+      2. Notification Permission Fix
+
+### *1.1.3+19 (Public Release)*
 
      Minor Bug Fixes
 

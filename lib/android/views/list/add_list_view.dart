@@ -139,10 +139,13 @@ class _AddListViewState extends State<AddListView> {
           ),
           actions: [
             Hero(
-              tag: 'option1',
+              tag: 'expenseButtonTag',
               child: IconButton(
                 onPressed: () {
-                  Get.offAll(() => const AddExpenseTrackerView());
+                  Get.offAll(
+                    () => const AddExpenseTrackerView(),
+                    duration: const Duration(milliseconds: 600),
+                  );
                 },
                 icon: Icon(
                   Icons.request_page_outlined,
@@ -151,10 +154,13 @@ class _AddListViewState extends State<AddListView> {
               ),
             ),
             Hero(
-              tag: 'option2',
+              tag: 'noteButtonTag',
               child: IconButton(
                 onPressed: () {
-                  Get.offAll(() => const AddNoteView());
+                  Get.offAll(
+                    () => const AddNoteView(),
+                    duration: const Duration(milliseconds: 600),
+                  );
                 },
                 icon: Icon(
                   Icons.note_add_outlined,
@@ -163,7 +169,7 @@ class _AddListViewState extends State<AddListView> {
               ),
             ),
             Hero(
-              tag: 'saveButton',
+              tag: 'listButtonTag',
               child: IconButton(
                 onPressed: () async {
                   await NotesDatabase()

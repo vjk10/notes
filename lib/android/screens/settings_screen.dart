@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:about/about.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:filesize/filesize.dart';
@@ -18,6 +19,8 @@ import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
+import 'package:notes/services/utils.dart';
+import 'package:notes/theme/colors.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -330,10 +333,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 15.0,
-              left: 15.0,
-            ),
+            padding: const EdgeInsets.all(20),
             child: Text(
               "Device Data",
               textAlign: TextAlign.center,
@@ -361,10 +361,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 15.0,
-              left: 15.0,
-            ),
+            padding: const EdgeInsets.all(20),
             child: Text(
               "User Data",
               textAlign: TextAlign.center,
@@ -401,14 +398,14 @@ class _SettingsScreenState extends State<SettingsScreen>
             leading: Icon(
               Icons.colorize_outlined,
               color: c.onBackground,
-              size: 24,
             ),
             title: Text(
               "Material You",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-                color: c.onBackground,
-              ),
+              style: t.textTheme.button,
+            ),
+            subtitle: Text(
+              "Supported devices will pick the theme \ndynamically from your system wallpaper",
+              style: t.textTheme.labelSmall,
             ),
             trailing: Switch(
                 activeColor: c.primary,
@@ -440,9 +437,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           leading: Icon(
-            Icons.save,
+            Icons.save_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Autosave",
@@ -450,6 +446,10 @@ class _SettingsScreenState extends State<SettingsScreen>
               fontSize: 14,
               color: c.onBackground,
             ),
+          ),
+          subtitle: Text(
+            "Disabling auto save will require you to \nmanually save notes",
+            style: t.textTheme.labelSmall,
           ),
           trailing: Switch(
               activeColor: c.primary,
@@ -474,16 +474,16 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           leading: Icon(
-            Icons.money,
+            Icons.currency_exchange_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Choose Currency",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "The currency to be used in Expense Tracker \ncan be selected here",
+            style: t.textTheme.labelSmall,
           ),
           trailing: OutlinedButton(
             onPressed: () {
@@ -525,14 +525,14 @@ class _SettingsScreenState extends State<SettingsScreen>
           leading: Icon(
             Icons.backup_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Cloud Backup",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "Import notes from your Google Account to offline storage",
+            style: t.textTheme.labelSmall,
           ),
           trailing: OutlinedButton(
             onPressed: () async {
@@ -559,14 +559,14 @@ class _SettingsScreenState extends State<SettingsScreen>
           leading: Icon(
             Icons.folder_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Used Storage",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "Total storage used by notes app \nas a whole",
+            style: t.textTheme.labelSmall,
           ),
           trailing: Text(
             cacheMemorySize,
@@ -583,16 +583,16 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           leading: Icon(
-            Icons.delete_outline_rounded,
+            Icons.delete_sweep_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Clear All Notes",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "On doing this all notes local and imported \nwill be cleared",
+            style: t.textTheme.labelSmall,
           ),
           trailing: OutlinedButton(
             onPressed: () {
@@ -616,34 +616,20 @@ class _SettingsScreenState extends State<SettingsScreen>
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Center(
         child: ListTile(
+          onTap: () {
+            showAbout();
+          },
           leading: Icon(
-            Icons.info_outline_rounded,
+            Icons.tips_and_updates_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
-            "Licenses and Info",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            "About and Info",
+            style: t.textTheme.button,
           ),
-          trailing: TextButton(
-            onPressed: () {
-              Get.bottomSheet(
-                BottomSheet(
-                  backgroundColor: Colors.transparent,
-                  onClosing: () {},
-                  builder: (_) {
-                    return const LicensesAndInfo();
-                  },
-                ),
-              );
-            },
-            child: Text(
-              "v$version (build v$buildNumber)",
-              style: t.textTheme.bodyMedium?.copyWith(color: c.onBackground),
-            ),
+          subtitle: Text(
+            "v$version \nbuild: $buildNumber",
+            style: t.textTheme.labelSmall,
           ),
         ),
       ),
@@ -654,15 +640,16 @@ class _SettingsScreenState extends State<SettingsScreen>
     return Center(
       child: ListTile(
         leading: Icon(
-          Icons.palette,
+          Icons.palette_outlined,
           color: c.onBackground,
-          size: 24,
         ),
         title: Text(
           "Choose Theme",
-          style: t.textTheme.button?.copyWith(
-            fontSize: 14,
-          ),
+          style: t.textTheme.button,
+        ),
+        subtitle: Text(
+          "Choose from our list of themes to \nchange the look of notes",
+          style: t.textTheme.labelSmall,
         ),
         trailing: GestureDetector(
           onTap: () {
@@ -810,5 +797,46 @@ class _SettingsScreenState extends State<SettingsScreen>
       selectedThemeId = index;
     });
     DynamicTheme.of(context)!.setTheme(index);
+  }
+
+  void showAbout() {
+    showAboutPage(
+      context: context,
+      title: const Text('about'),
+      applicationName: Utils().getAppName(packageName),
+      applicationVersion: 'v $version (build $buildNumber)',
+      children: <Widget>[
+        const MarkdownPageListTile(
+          shrinkWrap: true,
+          icon: Icon(
+            Icons.notes_outlined,
+          ),
+          title: Text('View Readme'),
+          filename: 'README.md',
+        ),
+        const MarkdownPageListTile(
+          shrinkWrap: true,
+          icon: Icon(
+            Icons.track_changes_outlined,
+          ),
+          title: Text('Read Changelog'),
+          filename: 'CHANGELOG.md',
+        ),
+        const LicensesPageListTile(
+          title: Text("View Licenses"),
+          icon: Icon(
+            Icons.public,
+          ),
+        ),
+        const MarkdownPageListTile(
+          shrinkWrap: true,
+          icon: Icon(
+            Icons.handshake_outlined,
+          ),
+          title: Text('View Contributing'),
+          filename: 'CONTRIBUTING.md',
+        ),
+      ],
+    );
   }
 }
