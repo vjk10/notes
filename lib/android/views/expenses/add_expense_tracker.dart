@@ -235,7 +235,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
           ),
           actions: [
             Hero(
-              tag: 'option1',
+              tag: 'noteButtonTag',
               child: IconButton(
                 onPressed: () {
                   Get.offAll(() => const AddNoteView());
@@ -247,7 +247,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
               ),
             ),
             Hero(
-              tag: 'option2',
+              tag: 'listButtonTag',
               child: IconButton(
                 onPressed: () {
                   Get.offAll(() => const AddListView());
@@ -259,7 +259,7 @@ class _AddExpenseTrackerViewState extends State<AddExpenseTrackerView> {
               ),
             ),
             Hero(
-              tag: 'saveButton',
+              tag: 'expenseButtonTag',
               child: IconButton(
                 onPressed: () async {
                   if (expenses.isNotEmpty && titleController.text.isNotEmpty) {

@@ -1,10 +1,17 @@
+import 'dart:convert';
+
+import 'package:about/about.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/services/notification_services.dart';
+import 'package:notes/services/playstore/playstore_data_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
+import 'package:http/http.dart' as http;
+
+import '../android/widgets/app_update_widget.dart';
 
 class Utils {
   static List<T> modelBuilder<M, T>(
@@ -223,5 +230,111 @@ class Utils {
         }
       }
     });
+  }
+
+  // #47
+  showAbout(BuildContext context, String package, String version,
+      String buildNumber, String icon) async {
+    showAboutPage(
+      context: context,
+      title: const Text('about'),
+      applicationName: getAppName(package),
+      applicationVersion: 'v $version (build $buildNumber)',
+      applicationIcon: Image.network(
+        icon,
+        width: Get.width / 4,
+        height: Get.width / 4,
+      ),
+      children: <Widget>[
+        // #48
+        const MarkdownPageListTile(
+          shrinkWrap: true,
+          icon: Icon(
+            Icons.notes_outlined,
+          ),
+          title: Text('View Readme'),
+          filename: 'README.md',
+        ),
+        // #49
+        const MarkdownPageListTile(
+          shrinkWrap: true,
+          icon: Icon(
+            Icons.track_changes_outlined,
+          ),
+          title: Text('Read Changelog'),
+          filename: 'CHANGELOG.md',
+        ),
+        // #52
+        const LicensesPageListTile(
+          title: Text("View Licenses"),
+          icon: Icon(
+            Icons.public,
+          ),
+        ),
+        // #50
+        const MarkdownPageListTile(
+          shrinkWrap: true,
+          icon: Icon(
+            Icons.handshake_outlined,
+          ),
+          title: Text('View Contributing'),
+          filename: 'CONTRIBUTING.md',
+        ),
+        // #45
+        ListTile(
+          onTap: (() {
+            Get.to(() => AppUpdate(
+                  packageName: package,
+                  currentVersion: 'v $version (build $buildNumber)',
+                ));
+          }),
+          leading: const Icon(
+            Icons.system_security_update_outlined,
+          ),
+          title: const Text('Check for Updates'),
+        ),
+      ],
+    );
+  }
+
+  getAppName(String packageName) {
+    switch (packageName) {
+      case 'com.vlabs.notes':
+        {
+          return 'notes';
+        }
+      case 'com.vlabs.notes.debug':
+        {
+          return 'notes (debug)';
+        }
+      case 'com.vlabs.notes.beta':
+        {
+          return 'notes (beta)';
+        }
+      default:
+        {
+          return 'notes';
+        }
+    }
+  }
+
+  Future<PlaystoreData> fetchPlaystoreData(String packagename) async {
+    final response = await http.get(
+      kDebugMode
+          ? Uri.parse(
+              'https://peekanapp.vercel.app/api/playstore?appId=com.vlabs.notes')
+          : Uri.parse(
+              'https://peekanapp.vercel.app/api/playstore?appId=$packagename'),
+    );
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return PlaystoreData.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load PlaystoreData');
+    }
   }
 }

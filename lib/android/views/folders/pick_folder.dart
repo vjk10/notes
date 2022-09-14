@@ -53,7 +53,10 @@ class _PickFolderState extends State<PickFolder> {
           switch (foldersData.connectionState) {
             case ConnectionState.waiting:
               {
-                return const Center(child: NotesLoadingAndroid());
+                return const Center(
+                    child: NotesLoadingAndroid(
+                  strokeWidth: 4,
+                ));
               }
             case ConnectionState.done:
               {

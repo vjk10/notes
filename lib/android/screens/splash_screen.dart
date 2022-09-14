@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     getAppInfo();
+    getNotificationPermission();
     Future.delayed(const Duration(seconds: 2), () async {
       try {
         _onboardingSnapshot = await ScientISSTdb.instance
@@ -50,6 +52,10 @@ class _SplashScreenState extends State<SplashScreen> {
     packageName = packageInfo.packageName;
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
+  }
+
+  getNotificationPermission() async {
+    await Permission.notification.request();
   }
 
   @override
@@ -84,7 +90,9 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const NotesLoadingAndroid(),
+                const NotesLoadingAndroid(
+                  strokeWidth: 4,
+                ),
                 const SizedBox(
                   height: 10,
                 ),

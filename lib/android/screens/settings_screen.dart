@@ -11,13 +11,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
 import 'package:notes/services/db/database_service.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
+import 'package:notes/services/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -61,6 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   late TextStyle topBarTextStyle;
 
   bool styleExpanded = true;
+  late String icon;
 
   @override
   void initState() {
@@ -71,7 +72,20 @@ class _SettingsScreenState extends State<SettingsScreen>
     getSaveStatus();
     getUserStatus();
     getCacheMemory();
+    getAppIcon();
     super.initState();
+  }
+
+  getAppIcon() async {
+    await Utils().fetchPlaystoreData(packageName).then((value) {
+      setState(() {
+        icon = value.icon;
+      });
+    }, onError: (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
   }
 
   _initPrefs() async {
@@ -200,7 +214,9 @@ class _SettingsScreenState extends State<SettingsScreen>
           backgroundColor: c.background,
           body: _isLoading
               ? const Center(
-                  child: NotesLoadingAndroid(),
+                  child: NotesLoadingAndroid(
+                    strokeWidth: 4,
+                  ),
                 )
               : CustomScrollView(
                   slivers: <Widget>[
@@ -330,10 +346,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 15.0,
-              left: 15.0,
-            ),
+            padding: const EdgeInsets.all(20),
             child: Text(
               "Device Data",
               textAlign: TextAlign.center,
@@ -361,10 +374,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(
-              top: 15.0,
-              left: 15.0,
-            ),
+            padding: const EdgeInsets.all(20),
             child: Text(
               "User Data",
               textAlign: TextAlign.center,
@@ -401,14 +411,14 @@ class _SettingsScreenState extends State<SettingsScreen>
             leading: Icon(
               Icons.colorize_outlined,
               color: c.onBackground,
-              size: 24,
             ),
             title: Text(
               "Material You",
-              style: t.textTheme.button?.copyWith(
-                fontSize: 14,
-                color: c.onBackground,
-              ),
+              style: t.textTheme.button,
+            ),
+            subtitle: Text(
+              "Supported devices will pick the theme \ndynamically from your system wallpaper",
+              style: t.textTheme.labelSmall,
             ),
             trailing: Switch(
                 activeColor: c.primary,
@@ -440,9 +450,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           leading: Icon(
-            Icons.save,
+            Icons.save_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Autosave",
@@ -450,6 +459,10 @@ class _SettingsScreenState extends State<SettingsScreen>
               fontSize: 14,
               color: c.onBackground,
             ),
+          ),
+          subtitle: Text(
+            "Disabling auto save will require you to \nmanually save notes",
+            style: t.textTheme.labelSmall,
           ),
           trailing: Switch(
               activeColor: c.primary,
@@ -474,16 +487,16 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           leading: Icon(
-            Icons.money,
+            Icons.currency_exchange_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Choose Currency",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "The currency to be used in Expense Tracker \ncan be selected here",
+            style: t.textTheme.labelSmall,
           ),
           trailing: OutlinedButton(
             onPressed: () {
@@ -525,14 +538,14 @@ class _SettingsScreenState extends State<SettingsScreen>
           leading: Icon(
             Icons.backup_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Cloud Backup",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "Import notes from your Google Account to offline storage",
+            style: t.textTheme.labelSmall,
           ),
           trailing: OutlinedButton(
             onPressed: () async {
@@ -559,14 +572,14 @@ class _SettingsScreenState extends State<SettingsScreen>
           leading: Icon(
             Icons.folder_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Used Storage",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "Total storage used by notes app \nas a whole",
+            style: t.textTheme.labelSmall,
           ),
           trailing: Text(
             cacheMemorySize,
@@ -583,16 +596,16 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           leading: Icon(
-            Icons.delete_outline_rounded,
+            Icons.delete_sweep_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
             "Clear All Notes",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button,
+          ),
+          subtitle: Text(
+            "On doing this all notes local and imported \nwill be cleared",
+            style: t.textTheme.labelSmall,
           ),
           trailing: OutlinedButton(
             onPressed: () {
@@ -616,34 +629,21 @@ class _SettingsScreenState extends State<SettingsScreen>
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Center(
         child: ListTile(
+          onTap: () {
+            // #47
+            Utils().showAbout(context, packageName, version, buildNumber, icon);
+          },
           leading: Icon(
-            Icons.info_outline_rounded,
+            Icons.tips_and_updates_outlined,
             color: c.onBackground,
-            size: 24,
           ),
           title: Text(
-            "Licenses and Info",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            "About and Info",
+            style: t.textTheme.button,
           ),
-          trailing: TextButton(
-            onPressed: () {
-              Get.bottomSheet(
-                BottomSheet(
-                  backgroundColor: Colors.transparent,
-                  onClosing: () {},
-                  builder: (_) {
-                    return const LicensesAndInfo();
-                  },
-                ),
-              );
-            },
-            child: Text(
-              "v$version (build v$buildNumber)",
-              style: t.textTheme.bodyMedium?.copyWith(color: c.onBackground),
-            ),
+          subtitle: Text(
+            "v$version \nbuild: $buildNumber",
+            style: t.textTheme.labelSmall,
           ),
         ),
       ),
@@ -654,15 +654,16 @@ class _SettingsScreenState extends State<SettingsScreen>
     return Center(
       child: ListTile(
         leading: Icon(
-          Icons.palette,
+          Icons.palette_outlined,
           color: c.onBackground,
-          size: 24,
         ),
         title: Text(
           "Choose Theme",
-          style: t.textTheme.button?.copyWith(
-            fontSize: 14,
-          ),
+          style: t.textTheme.button,
+        ),
+        subtitle: Text(
+          "Choose from our list of themes to \nchange the look of notes",
+          style: t.textTheme.labelSmall,
         ),
         trailing: GestureDetector(
           onTap: () {

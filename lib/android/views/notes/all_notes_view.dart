@@ -200,21 +200,33 @@ class _AllNotesViewState extends State<AllNotesView>
                 ),
                 children: [
                   FloatingActionButton(
+                    heroTag: 'noteButtonTag',
                     child: const Icon(Icons.note_add_outlined),
                     onPressed: () {
-                      Get.to(() => const AddNoteView());
+                      Get.to(
+                        () => const AddNoteView(),
+                        duration: const Duration(milliseconds: 600),
+                      );
                     },
                   ),
                   FloatingActionButton(
+                    heroTag: 'listButtonTag',
                     child: const Icon(Icons.add_task_outlined),
                     onPressed: () {
-                      Get.to(() => const AddListView());
+                      Get.to(
+                        () => const AddListView(),
+                        duration: const Duration(milliseconds: 600),
+                      );
                     },
                   ),
                   FloatingActionButton(
+                    heroTag: 'expenseButtonTag',
                     child: const Icon(Icons.request_page_outlined),
                     onPressed: () {
-                      Get.to(() => const AddExpenseTrackerView());
+                      Get.to(
+                        () => const AddExpenseTrackerView(),
+                        duration: const Duration(milliseconds: 600),
+                      );
                     },
                   ),
                 ],

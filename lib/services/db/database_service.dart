@@ -69,7 +69,9 @@ class DatabaseService {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const NotesLoadingAndroid(),
+          const NotesLoadingAndroid(
+            strokeWidth: 4,
+          ),
           const SizedBox(
             width: 10,
           ),

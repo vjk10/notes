@@ -22,6 +22,104 @@
           }
         },
         {
+          "client_id": "93929877833-pbtsd174ukp7hrldorrhd03p7d4l721r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vlabs.notes",
+            "certificate_hash": "a9e2d566c7ea683ea79a02568b4753449b6b0bf6"
+          }
+        },
+        {
+          "client_id": "93929877833-q45osgbrlmu9udoq3b5pag1adrmgp6a4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo8G7b3GTJlfsVaUlOdUkyX2kqkh-gNak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93929877833-q45osgbrlmu9udoq3b5pag1adrmgp6a4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93929877833:android:359ce45aa1107bad432a98",
+        "android_client_info": {
+          "package_name": "com.vlabs.notes.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93929877833-j541g47boc944pi4rca41tlf2ma3ph3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vlabs.notes.beta",
+            "certificate_hash": "c479418c1cfd6a58c22b408e7ece26b665709be8"
+          }
+        },
+        {
+          "client_id": "93929877833-k08m1hv9odgdd99qjih6h8ioln9tkajo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vlabs.notes.beta",
+            "certificate_hash": "32317c8d5dca0e6bbdbf10d2015a5bd677399652"
+          }
+        },
+        {
+          "client_id": "93929877833-q45osgbrlmu9udoq3b5pag1adrmgp6a4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo8G7b3GTJlfsVaUlOdUkyX2kqkh-gNak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93929877833-q45osgbrlmu9udoq3b5pag1adrmgp6a4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93929877833:android:6bb615a9e19ea506432a98",
+        "android_client_info": {
+          "package_name": "com.vlabs.notes.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93929877833-jf9k63rqvuiom1cs97tvf082hbmqocl8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vlabs.notes.debug",
+            "certificate_hash": "32317c8d5dca0e6bbdbf10d2015a5bd677399652"
+          }
+        },
+        {
+          "client_id": "93929877833-jlqb3jgurht7fn4rbfjl1ugodsg3jlte.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vlabs.notes.debug",
+            "certificate_hash": "c479418c1cfd6a58c22b408e7ece26b665709be8"
+          }
+        },
+        {
           "client_id": "93929877833-q45osgbrlmu9udoq3b5pag1adrmgp6a4.apps.googleusercontent.com",
           "client_type": 3
         }

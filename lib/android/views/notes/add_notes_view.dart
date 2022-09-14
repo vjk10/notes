@@ -140,7 +140,7 @@ class _AddNoteViewState extends State<AddNoteView> {
           ),
           actions: [
             Hero(
-              tag: 'option1',
+              tag: 'expenseButtonTag',
               child: IconButton(
                 onPressed: () {
                   Get.offAll(() => const AddExpenseTrackerView());
@@ -152,7 +152,7 @@ class _AddNoteViewState extends State<AddNoteView> {
               ),
             ),
             Hero(
-              tag: 'option2',
+              tag: 'listButtonTag',
               child: IconButton(
                 onPressed: () {
                   Get.offAll(() => const AddListView());
@@ -164,7 +164,7 @@ class _AddNoteViewState extends State<AddNoteView> {
               ),
             ),
             Hero(
-              tag: 'saveButton',
+              tag: 'noteButtonTag',
               child: IconButton(
                 onPressed: () async {
                   if (titleController.text.isNotEmpty ||
