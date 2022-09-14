@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:about/about.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:filesize/filesize.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
-import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/android/widgets/user_details.dart';
 import 'package:notes/services/db/database_notes.dart';
@@ -20,7 +18,6 @@ import 'package:notes/services/db/database_service.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/google_sign_in.dart';
 import 'package:notes/services/utils.dart';
-import 'package:notes/theme/colors.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
@@ -64,6 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   late TextStyle topBarTextStyle;
 
   bool styleExpanded = true;
+  late String icon;
 
   @override
   void initState() {
@@ -74,7 +72,20 @@ class _SettingsScreenState extends State<SettingsScreen>
     getSaveStatus();
     getUserStatus();
     getCacheMemory();
+    getAppIcon();
     super.initState();
+  }
+
+  getAppIcon() async {
+    await Utils().fetchPlaystoreData(packageName).then((value) {
+      setState(() {
+        icon = value.icon;
+      });
+    }, onError: (error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
   }
 
   _initPrefs() async {
@@ -203,7 +214,9 @@ class _SettingsScreenState extends State<SettingsScreen>
           backgroundColor: c.background,
           body: _isLoading
               ? const Center(
-                  child: NotesLoadingAndroid(),
+                  child: NotesLoadingAndroid(
+                    strokeWidth: 4,
+                  ),
                 )
               : CustomScrollView(
                   slivers: <Widget>[
@@ -617,7 +630,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       child: Center(
         child: ListTile(
           onTap: () {
-            showAbout();
+            // #47
+            Utils().showAbout(context, packageName, version, buildNumber, icon);
           },
           leading: Icon(
             Icons.tips_and_updates_outlined,
@@ -797,46 +811,5 @@ class _SettingsScreenState extends State<SettingsScreen>
       selectedThemeId = index;
     });
     DynamicTheme.of(context)!.setTheme(index);
-  }
-
-  void showAbout() {
-    showAboutPage(
-      context: context,
-      title: const Text('about'),
-      applicationName: Utils().getAppName(packageName),
-      applicationVersion: 'v $version (build $buildNumber)',
-      children: <Widget>[
-        const MarkdownPageListTile(
-          shrinkWrap: true,
-          icon: Icon(
-            Icons.notes_outlined,
-          ),
-          title: Text('View Readme'),
-          filename: 'README.md',
-        ),
-        const MarkdownPageListTile(
-          shrinkWrap: true,
-          icon: Icon(
-            Icons.track_changes_outlined,
-          ),
-          title: Text('Read Changelog'),
-          filename: 'CHANGELOG.md',
-        ),
-        const LicensesPageListTile(
-          title: Text("View Licenses"),
-          icon: Icon(
-            Icons.public,
-          ),
-        ),
-        const MarkdownPageListTile(
-          shrinkWrap: true,
-          icon: Icon(
-            Icons.handshake_outlined,
-          ),
-          title: Text('View Contributing'),
-          filename: 'CONTRIBUTING.md',
-        ),
-      ],
-    );
   }
 }

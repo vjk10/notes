@@ -80,7 +80,9 @@ class _FolderViewState extends State<FolderView> {
                       case ConnectionState.waiting:
                         {
                           return const Center(
-                            child: NotesLoadingAndroid(),
+                            child: NotesLoadingAndroid(
+                              strokeWidth: 4,
+                            ),
                           );
                         }
                       case ConnectionState.done:
@@ -102,7 +104,9 @@ class _FolderViewState extends State<FolderView> {
                       default:
                         {
                           return const Center(
-                            child: NotesLoadingAndroid(),
+                            child: NotesLoadingAndroid(
+                              strokeWidth: 4,
+                            ),
                           );
                         }
                     }

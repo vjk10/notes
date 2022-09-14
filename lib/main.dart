@@ -77,7 +77,13 @@ class MyApp extends StatelessWidget {
                         useMaterial3: true,
                         backgroundColor: m3Light!.background,
                         scaffoldBackgroundColor: m3Light!.background,
+                        iconTheme: IconThemeData(color: m3Light!.onBackground),
+                        listTileTheme:
+                            ListTileThemeData(iconColor: m3Light!.onBackground),
                         appBarTheme: AppBarTheme(
+                          toolbarHeight: 80,
+                          iconTheme:
+                              IconThemeData(color: m3Light!.onBackground),
                           backgroundColor: m3Light!.background,
                           surfaceTintColor: m3Light!.surfaceTint,
                         ),
@@ -91,7 +97,12 @@ class MyApp extends StatelessWidget {
                         useMaterial3: true,
                         backgroundColor: m3Dark!.background,
                         scaffoldBackgroundColor: m3Dark!.background,
+                        iconTheme: IconThemeData(color: m3Dark!.onBackground),
+                        listTileTheme:
+                            ListTileThemeData(iconColor: m3Dark!.onBackground),
                         appBarTheme: AppBarTheme(
+                          toolbarHeight: 80,
+                          iconTheme: IconThemeData(color: m3Dark!.onBackground),
                           backgroundColor: m3Dark!.background,
                           surfaceTintColor: m3Dark!.surfaceTint,
                         ),

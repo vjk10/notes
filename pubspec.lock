@@ -517,7 +517,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.5"
   http_parser:
     dependency: transitive
     description:
@@ -525,6 +525,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  in_app_review:
+    dependency: "direct main"
+    description:
+      name: in_app_review
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
+  in_app_review_platform_interface:
+    dependency: transitive
+    description:
+      name: in_app_review_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
+  in_app_update:
+    dependency: "direct main"
+    description:
+      name: in_app_update
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   intl:
     dependency: "direct main"
     description:
@@ -735,6 +756,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
+  peekanapp:
+    dependency: "direct main"
+    description:
+      name: peekanapp
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   permission_handler:
     dependency: "direct main"
     description:

@@ -84,7 +84,9 @@ class _AllFoldersViewState extends State<AllFoldersView> {
               case ConnectionState.waiting:
                 {
                   return const Center(
-                    child: NotesLoadingAndroid(),
+                    child: NotesLoadingAndroid(
+                      strokeWidth: 4,
+                    ),
                   );
                 }
               case ConnectionState.done:

@@ -7,13 +7,35 @@
     *--------------------------*
     *      Public Release      *
     *--------------------------*
-    * Current Version: | 1.1.3 *
-    * Build:           | 17    *
+    * Current Version: | 1.1.4 *
+    * Build:           | 26    *
     *--------------------------*
 
-## **1.1.3+19 (Public Release)**
+## **1.1.4+26 (Public Release)**
 
-     Minor Bug Fixes
+      1. New Settings Page 💄
+      2. In App Updates ✨
+      3. Improved Documentation 📝
+      4. Fixed Notification Permission 🐛
+      5. Fixed Quick Action Rendering  🐛
+
+### *1.1.4+26 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+25 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+24 (Internal Release)*
+
+      In App Update Testing
+
+### *1.1.4+23 (Internal Release)*
+
+      In App Update Testing
 
 ### *1.1.4+22 (Beta Release)*
 

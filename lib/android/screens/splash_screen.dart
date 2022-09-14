@@ -90,7 +90,9 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const NotesLoadingAndroid(),
+                const NotesLoadingAndroid(
+                  strokeWidth: 4,
+                ),
                 const SizedBox(
                   height: 10,
                 ),

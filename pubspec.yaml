@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none'
 
-version: 1.1.4+23
+version: 1.1.4+26
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -69,6 +69,9 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   flutter_expandable_fab: ^1.5.1
   about: ^2.1.1
+  in_app_update: ^3.0.0
+  in_app_review: ^2.0.4
+  peekanapp: ^0.0.1
 
 dev_dependencies:
   flutter_test:
