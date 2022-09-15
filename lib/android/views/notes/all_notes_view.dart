@@ -66,49 +66,49 @@ class _AllNotesViewState extends State<AllNotesView>
         }
       }
     });
-    quickActions.initialize((String shortcutType) {
-      setState(() {
-        shortcut = shortcutType;
-      });
-      if (shortcutType == 'action_one') {
-        Get.to(
-          () => const AddNoteView(),
-        );
-      }
-      if (shortcutType == 'action_two') {
-        Get.to(
-          () => const AddListView(),
-        );
-      }
-      if (shortcutType == 'action_three') {
-        Get.to(
-          () => const AddExpenseTrackerView(),
-        );
-      }
-    });
-    quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(
-        type: 'action_one',
-        localizedTitle: 'Add Note',
-        icon: 'ic_add_note',
-      ),
-      const ShortcutItem(
-        type: 'action_two',
-        localizedTitle: 'Add List',
-        icon: 'ic_add_list',
-      ),
-      const ShortcutItem(
-        type: 'action_three',
-        localizedTitle: 'Add Expense',
-        icon: 'ic_add_expense',
-      ),
-    ]).then((value) {
-      setState(() {
-        if (shortcut == 'no action set') {
-          shortcut = 'actions ready';
-        }
-      });
-    });
+    // quickActions.initialize((String shortcutType) {
+    //   setState(() {
+    //     shortcut = shortcutType;
+    //   });
+    //   if (shortcutType == 'action_one') {
+    //     Get.to(
+    //       () => const AddNoteView(),
+    //     );
+    //   }
+    //   if (shortcutType == 'action_two') {
+    //     Get.to(
+    //       () => const AddListView(),
+    //     );
+    //   }
+    //   if (shortcutType == 'action_three') {
+    //     Get.to(
+    //       () => const AddExpenseTrackerView(),
+    //     );
+    //   }
+    // });
+    // quickActions.setShortcutItems(<ShortcutItem>[
+    //   const ShortcutItem(
+    //     type: 'action_one',
+    //     localizedTitle: 'Add Note',
+    //     icon: 'ic_add_note',
+    //   ),
+    //   const ShortcutItem(
+    //     type: 'action_two',
+    //     localizedTitle: 'Add List',
+    //     icon: 'ic_add_list',
+    //   ),
+    //   const ShortcutItem(
+    //     type: 'action_three',
+    //     localizedTitle: 'Add Expense',
+    //     icon: 'ic_add_expense',
+    //   ),
+    // ]).then((value) {
+    //   setState(() {
+    //     if (shortcut == 'no action set') {
+    //       shortcut = 'actions ready';
+    //     }
+    //   });
+    // });
     super.initState();
     if (kDebugMode) {
       print("ALL NOTES INIT STATE");

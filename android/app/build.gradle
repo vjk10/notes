@@ -79,13 +79,14 @@ android {
            applicationIdSuffix ".debug"
            signingConfig signingConfigs.debug
        }
-       profile{
+       profile {
            applicationIdSuffix ".beta"
            signingConfig signingConfigs.beta
            debuggable false
        }
        release {
            signingConfig signingConfigs.release
+           debuggable false
        }
    }
 
