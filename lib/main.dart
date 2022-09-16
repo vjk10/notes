@@ -1,5 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:dynamic_colorscheme/dynamic_colorscheme.dart';
+// import 'package:dynamic_colorscheme/dynamic_colorscheme.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:material_color_utilities/material_color_utilities.dart';
+// import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:notes/android/data/data.dart';
 import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/screens/onboarding/onboarding_four.dart';
@@ -61,12 +61,15 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeNotifier(),
           child: Consumer<ThemeNotifier>(
               builder: (context, ThemeNotifier notifier, child) {
-            return DynamicColorBuilder(builder: (CorePalette? palette1) {
-              if (palette1 != null) {
-                palette = palette1;
+            // return DynamicColorBuilder(builder: (CorePalette? palette1) {
+            return DynamicColorBuilder(builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+              if (lightDynamic != null && darkDynamic != null) {
+                // palette = palette1;
                 m3YouAvail = true;
-                m3Light = DynamicColorScheme.generate(palette1, dark: false);
-                m3Dark = DynamicColorScheme.generate(palette1, dark: true);
+                // m3Light = DynamicColorScheme.generate(palette1, dark: false);
+                // m3Dark = DynamicColorScheme.generate(palette1, dark: true);
+                m3Light = lightDynamic.harmonized();
+                m3Dark = darkDynamic.harmonized();
                 if (notifier.material3) {
                   return ScreenUtilInit(
                     builder: (_, widget) => GetMaterialApp(

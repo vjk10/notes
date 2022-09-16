@@ -414,11 +414,11 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             title: Text(
               "Material You",
-              style: t.textTheme.button,
+              style: t.textTheme.button?.copyWith(fontSize: 14),
             ),
             subtitle: Text(
               "Supported devices will pick the theme \ndynamically from your system wallpaper",
-              style: t.textTheme.labelSmall,
+              style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
             ),
             trailing: Switch(
                 activeColor: c.primary,
@@ -455,14 +455,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
           title: Text(
             "Autosave",
-            style: t.textTheme.button?.copyWith(
-              fontSize: 14,
-              color: c.onBackground,
-            ),
+            style: t.textTheme.button?.copyWith(fontSize: 14),
           ),
           subtitle: Text(
             "Disabling auto save will require you to \nmanually save notes",
-            style: t.textTheme.labelSmall,
+            style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
           ),
           trailing: Switch(
               activeColor: c.primary,
@@ -492,11 +489,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
           title: Text(
             "Choose Currency",
-            style: t.textTheme.button,
+            style: t.textTheme.button?.copyWith(fontSize: 14),
           ),
           subtitle: Text(
             "The currency to be used in Expense Tracker \ncan be selected here",
-            style: t.textTheme.labelSmall,
+            style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
           ),
           trailing: OutlinedButton(
             onPressed: () {
@@ -541,11 +538,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
           title: Text(
             "Cloud Backup",
-            style: t.textTheme.button,
+            style: t.textTheme.button?.copyWith(fontSize: 14),
           ),
           subtitle: Text(
             "Import notes from your Google Account to offline storage",
-            style: t.textTheme.labelSmall,
+            style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
           ),
           trailing: OutlinedButton(
             onPressed: () async {
@@ -575,11 +572,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
           title: Text(
             "Used Storage",
-            style: t.textTheme.button,
+            style: t.textTheme.button?.copyWith(fontSize: 14),
           ),
           subtitle: Text(
             "Total storage used by notes app \nas a whole",
-            style: t.textTheme.labelSmall,
+            style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
           ),
           trailing: Text(
             cacheMemorySize,
@@ -601,11 +598,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
           title: Text(
             "Clear All Notes",
-            style: t.textTheme.button,
+            style: t.textTheme.button?.copyWith(fontSize: 14),
           ),
           subtitle: Text(
             "On doing this all notes local and imported \nwill be cleared",
-            style: t.textTheme.labelSmall,
+            style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
           ),
           trailing: OutlinedButton(
             onPressed: () {
@@ -639,11 +636,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
           title: Text(
             "About and Info",
-            style: t.textTheme.button,
+            style: t.textTheme.button?.copyWith(fontSize: 14),
           ),
           subtitle: Text(
             "v$version \nbuild: $buildNumber",
-            style: t.textTheme.labelSmall,
+            style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
           ),
         ),
       ),
@@ -659,11 +656,11 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
         title: Text(
           "Choose Theme",
-          style: t.textTheme.button,
+          style: t.textTheme.button?.copyWith(fontSize: 14),
         ),
         subtitle: Text(
           "Choose from our list of themes to \nchange the look of notes",
-          style: t.textTheme.labelSmall,
+          style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
         ),
         trailing: GestureDetector(
           onTap: () {

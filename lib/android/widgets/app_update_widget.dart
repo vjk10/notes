@@ -261,8 +261,9 @@ class _AppUpdateState extends State<AppUpdate> {
                             ),
                             child: Text(
                               'Check for Update',
-                              style: t.textTheme.labelLarge?.copyWith(
+                              style: t.textTheme.button?.copyWith(
                                 color: c.onPrimaryContainer,
+                                fontSize: 12,
                               ),
                             ),
                             onPressed: () {
@@ -295,8 +296,9 @@ class _AppUpdateState extends State<AppUpdate> {
                         },
                         child: Text(
                           'Update Now',
-                          style: t.textTheme.labelLarge?.copyWith(
+                          style: t.textTheme.button?.copyWith(
                             color: c.onPrimaryContainer,
+                            fontSize: 12,
                           ),
                         ),
                       ),

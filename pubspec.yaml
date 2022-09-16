@@ -3,10 +3,10 @@ description: Simple note taking app
 
 publish_to: 'none'
 
-version: 1.1.4+32
+version: 1.1.5+34
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.16.0 <=3.3.1"
 
 dependencies:
   flutter:
@@ -31,10 +31,9 @@ dependencies:
   package_info_plus: ^1.4.0
   package_info_plus_web: ^1.0.4
   package_info_plus_windows: ^1.0.4
-  google_sign_in: ^5.2.4
-  google_sign_in_web: ^0.10.0+5
-  firebase_auth: ^3.3.9
-  firebase_auth_web: ^3.3.9
+  google_sign_in: ^5.4.1
+  firebase_auth: ^3.9.0
+  firebase_auth_web: ^4.4.1
   firebase_core: ^1.13.1
   firebase_core_web: ^1.6.1
   cloud_firestore: ^3.1.10
@@ -49,8 +48,8 @@ dependencies:
   meta: ^1.7.0
   url_launcher: ^6.0.20
   provider: ^6.0.2
-  dynamic_color: ^0.1.0
-  dynamic_colorscheme: ^1.0.0
+  dynamic_color: ^1.5.4
+#  dynamic_colorscheme: ^1.0.0
   material_color_utilities: ^0.1.4
   reorderables: ^0.5.0
   excel: ^2.0.0-null-safety-3

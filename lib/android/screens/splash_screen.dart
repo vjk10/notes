@@ -22,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
     getAppInfo();
     getNotificationPermission();
     checkOnboarding();
-
     super.initState();
   }
 
@@ -36,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
         print("ONBOARDING COMPLETED: ${_onboardingSnapshot.data["completed"]}");
       }
       if (_onboardingSnapshot.data["completed"] == true) {
+
         Get.offNamedUntil('/mainScreen', (route) => false);
       } else {
         Get.offNamedUntil('/onboarding1', (route) => false);
