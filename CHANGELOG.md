@@ -1,23 +1,55 @@
-# Releases
+# *1.1.5+36 (Public Release)*
 
-    Releases below are both from Play Store and GitHub for maintaining clear changelogs. Updates installed will defer based on the channel you have installed as GitHub would be a user choice by the version installed. Play Store will have updates pushed automatically as and when released.
+      1. Quick Action Deprecated Completely
+      2. Improved Dynamic Color (Android S+)
+      3. UI Bug Fixes
 
-    Play Store Beta Releases are logged in GitHub Releases and Not Play Store Changelog.
+## *1.1.6+37 (Beta Release)*
 
-    *--------------------------*
-    *      Public Release      *
-    *--------------------------*
-    * Current Version: | 1.1.4 *
-    * Build:           | 26    *
-    *--------------------------*
+      1. New quick action added
 
-## **1.1.4+26 (Public Release)**
+### *1.1.5+35 (Internal Release)*
 
-      1. New Settings Page 💄
-      2. In App Updates ✨
-      3. Improved Documentation 📝
-      4. Fixed Notification Permission 🐛
-      5. Fixed Quick Action Rendering  🐛
+      1. Quick Action Fix
+
+### *1.1.4+34 (Internal Release)*
+
+      1. Quick Action Fix
+
+### *1.1.4+33 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+32 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+31 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+30 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+29 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+28 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
+
+### *1.1.4+27 (Internal Release)*
+
+      1. In App Update Testing
+      2. Testing Release Notes
 
 ### *1.1.4+26 (Internal Release)*
 

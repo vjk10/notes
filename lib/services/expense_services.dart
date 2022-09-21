@@ -1,8 +1,14 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
-import 'package:notes/services/imports.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notes/services/db/note_expense_model.dart';
+import 'package:path/path.dart';
 // import 'package:open_document/open_document.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../android/data/data.dart';
 
 class ExpenseServices {
   List<String> headers = ["Row", "Type", "Amount", "Description"];

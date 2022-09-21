@@ -1,11 +1,14 @@
 // import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:get/get.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/services/db/database_notes.dart';
 // import 'package:locally/locally.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:notes/services/imports.dart';
 import 'package:timezone/timezone.dart';
 
 class NotificationService {

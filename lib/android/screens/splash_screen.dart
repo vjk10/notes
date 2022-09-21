@@ -35,7 +35,6 @@ class _SplashScreenState extends State<SplashScreen> {
         print("ONBOARDING COMPLETED: ${_onboardingSnapshot.data["completed"]}");
       }
       if (_onboardingSnapshot.data["completed"] == true) {
-
         Get.offNamedUntil('/mainScreen', (route) => false);
       } else {
         Get.offNamedUntil('/onboarding1', (route) => false);
@@ -70,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -62,7 +62,8 @@ class MyApp extends StatelessWidget {
           child: Consumer<ThemeNotifier>(
               builder: (context, ThemeNotifier notifier, child) {
             // return DynamicColorBuilder(builder: (CorePalette? palette1) {
-            return DynamicColorBuilder(builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+            return DynamicColorBuilder(
+                builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
               if (lightDynamic != null && darkDynamic != null) {
                 // palette = palette1;
                 m3YouAvail = true;

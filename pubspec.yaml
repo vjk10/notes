@@ -3,7 +3,7 @@ description: Simple note taking app
 
 publish_to: 'none'
 
-version: 1.1.5+34
+version: 1.1.5+37
 
 environment:
   sdk: ">=2.16.0 <=3.3.1"
@@ -49,7 +49,6 @@ dependencies:
   url_launcher: ^6.0.20
   provider: ^6.0.2
   dynamic_color: ^1.5.4
-#  dynamic_colorscheme: ^1.0.0
   material_color_utilities: ^0.1.4
   reorderables: ^0.5.0
   excel: ^2.0.0-null-safety-3
@@ -61,7 +60,6 @@ dependencies:
   google_fonts: ^3.0.1
   emojis: ^0.9.9
   currency_picker: ^2.0.9
-  quick_actions: ^1.0.0
   firebase_messaging: ^11.4.0
   flutter_local_notifications: ^9.4.1
   timezone: ^0.8.0
@@ -71,6 +69,7 @@ dependencies:
   in_app_update: ^3.0.0
   in_app_review: ^2.0.4
   peekanapp: ^0.0.1
+  flutter_shortcuts: ^1.3.0
 
 dev_dependencies:
   flutter_test:

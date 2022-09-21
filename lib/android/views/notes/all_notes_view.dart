@@ -12,7 +12,6 @@ import 'package:notes/android/views/expenses/add_expense_tracker.dart';
 import 'package:notes/android/views/list/add_list_view.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:quick_actions/quick_actions.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
@@ -38,55 +37,11 @@ class AllNotesViewState extends State<AllNotesView>
   late ScrollController _hideButtonController;
   bool _isVisible = true;
   final _key = GlobalKey<ExpandableFabState>();
-  QuickActions quickActions = const QuickActions();
-  String shortcut = 'no action set';
+
 
   @override
   void initState() {
     initUser();
-    quickActions.initialize((String shortcutType) {
-      setState(() {
-        shortcut = shortcutType;
-      });
-      if (shortcutType == 'action_one') {
-        Get.to(
-              () => const AddNoteView(),
-        );
-      }
-      if (shortcutType == 'action_two') {
-        Get.to(
-              () => const AddListView(),
-        );
-      }
-      if (shortcutType == 'action_three') {
-        Get.to(
-              () => const AddExpenseTrackerView(),
-        );
-      }
-    });
-    quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(
-        type: 'action_one',
-        localizedTitle: 'Add Note',
-        icon: 'ic_outline_note_add_24',
-      ),
-      const ShortcutItem(
-        type: 'action_two',
-        localizedTitle: 'Add List',
-        icon: 'ic_outline_add_task_24',
-      ),
-      const ShortcutItem(
-        type: 'action_three',
-        localizedTitle: 'Add Expense',
-        icon: 'ic_outline_request_page_24',
-      ),
-    ]).then((value) {
-      setState(() {
-        if (shortcut == 'no action set') {
-          shortcut = 'actions ready';
-        }
-      });
-    });
     _hideButtonController = ScrollController();
     _hideButtonController.addListener(() {
       if (_hideButtonController.position.userScrollDirection ==

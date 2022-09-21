@@ -1,7 +1,17 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/services/db/folders_model.dart';
+import 'package:notes/services/db/note_expense_model.dart';
+import 'package:notes/services/db/note_list_model.dart';
+import 'package:notes/services/db/notes_model.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
-import 'package:notes/services/imports.dart';
+import '../../android/data/data.dart';
+import '../../android/screens/main_screen.dart';
+import '../../android/views/folders/folder_view.dart';
 
 class NotesDatabase {
   //NOTES SECTION
