@@ -38,6 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     with SingleTickerProviderStateMixin {
   String userName = "Username";
   String profileUrl = "";
+  String userEmail = "";
   String cacheMemorySize = "0";
   String appMemorySize = "0";
   bool appMemoryFound = false;
@@ -83,8 +84,11 @@ class _SettingsScreenState extends State<SettingsScreen>
       });
     }, onError: (error) {
       if (kDebugMode) {
-        print(error.toString());
+        print("ICON ERROR: $error");
       }
+      setState(() {
+        icon = "";
+      });
     });
   }
 
@@ -141,6 +145,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         _accountLinked = true;
         profileUrl = user.photoURL.toString();
         userName = user.displayName.toString();
+        userEmail = user.email.toString();
       });
     } catch (e) {
       if (e is FirebaseAuthException) {
@@ -269,6 +274,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                             UserDetails(
                               userName: userName,
                               profileUrl: profileUrl,
+                              email: userEmail,
                             ),
                             const SizedBox(
                               height: 20,

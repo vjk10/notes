@@ -3,6 +3,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ import 'package:notes/under_construction.dart';
 import 'package:provider/provider.dart';
 
 import 'android/screens/splash_screen.dart';
+import 'windows/screens/splash_screen_win.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,32 +45,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // if (defaultTargetPlatform == TargetPlatform.windows && !kIsWeb) {
-    //   // Windows Application
-    //   return fluent_ui.FluentApp(
-    //     debugShowCheckedModeBanner: kDebugMode,
-    //     themeMode: fluent_ui.ThemeMode.system,
-    //     routes: {
-    //       '/splash': (context) => const SplashScreenWin(),
-    //     },
-    //     title: 'Notes',
-    //     home: const SplashScreenWin(),
-    //   );
-    // }
+    if (defaultTargetPlatform == TargetPlatform.windows && !kIsWeb) {
+      // Windows Application
+      return fluent_ui.FluentApp(
+        debugShowCheckedModeBanner: kDebugMode,
+        themeMode: fluent_ui.ThemeMode.system,
+        routes: {
+          '/splash': (context) => const SplashScreenWin(),
+        },
+        title: 'Notes',
+        home: const SplashScreenWin(),
+      );
+    }
     if (defaultTargetPlatform == TargetPlatform.android) {
       // Android Application
       return ChangeNotifierProvider(
           create: (_) => ThemeNotifier(),
           child: Consumer<ThemeNotifier>(
               builder: (context, ThemeNotifier notifier, child) {
-            // return DynamicColorBuilder(builder: (CorePalette? palette1) {
             return DynamicColorBuilder(
                 builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
               if (lightDynamic != null && darkDynamic != null) {
-                // palette = palette1;
                 m3YouAvail = true;
-                // m3Light = DynamicColorScheme.generate(palette1, dark: false);
-                // m3Dark = DynamicColorScheme.generate(palette1, dark: true);
                 m3Light = lightDynamic.harmonized();
                 m3Dark = darkDynamic.harmonized();
                 if (notifier.material3) {
