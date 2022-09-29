@@ -67,8 +67,6 @@ class _ListviewViewState extends State<ListviewView> {
         print(collectionSnapshot.data["text"].toString());
       }
       setState(() {
-        // rows.add(currentIndex);
-        // checked.add(false);
         NoteListItem item = NoteListItem(
             text: collectionSnapshot.data["text"].toString(),
             index: collectionSnapshot.data["index"],

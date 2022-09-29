@@ -1,139 +1,139 @@
-# Releases
+# Changelog
 
-    Releases below are both from Play Store and GitHub for maintaining clear changelogs. Updates installed will defer based on the channel you have installed as GitHub would be a user choice by the version installed. Play Store will have updates pushed automatically as and when released.
+All notable changes to this project will be documented in this file.
 
-    Play Store Beta Releases are logged in GitHub Releases and Not Play Store Changelog.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-    *--------------------------*
-    *      Public Release      *
-    *--------------------------*
-    * Current Version: | 1.1.4 *
-    * Build:           | 26    *
-    *--------------------------*
+## **[1.1.6]** - Unreleased
 
-## **1.1.4+26 (Public Release)**
+---
 
-      1. New Settings Page 💄
-      2. In App Updates ✨
-      3. Improved Documentation 📝
-      4. Fixed Notification Permission 🐛
-      5. Fixed Quick Action Rendering  🐛
+### Added ➕
 
-### *1.1.4+26 (Internal Release)*
+- New Quick Action Added ⬆️
+- New Changelog format 📝
+- Email ID displayed in Settings Screen
 
-      1. In App Update Testing
-      2. Testing Release Notes
+### Fixed 🐛
 
-### *1.1.4+25 (Internal Release)*
+- Issue [#56](https://github.com/vjk10/notes/issues/56) 🩹
+- Issue [#43](https://github.com/vjk10/notes/issues/43) 🩹
 
-      1. In App Update Testing
-      2. Testing Release Notes
+### Removed ➖
 
-### *1.1.4+24 (Internal Release)*
+- Dependency on quick actions plugin.
 
-      In App Update Testing
+## **[v1.1.5](https://github.com/vjk10/notes/releases/tag/v1.1.5)** - Sep 21, 2022
 
-### *1.1.4+23 (Internal Release)*
+---
 
-      In App Update Testing
+### Changed 🧱
 
-### *1.1.4+22 (Beta Release)*
+- Improved Dynamic Color (Android S+)
 
-      1. Play Safety Net Removed
-      2. Play Integrity API Added
+### Fixed 🐛
 
-### *1.1.4+21 (Internal)*
+- UI Bug Fixes
 
-      1. Quick Action Rendering Issue
-      2. Notification Permission Fix
+### Removed ➖
 
-### *1.1.4+20 (Internal)*
+- Quick Action Deprecated Completely
 
-      1. Quick Action Rendering Issue
-      2. Notification Permission Fix
+[View Request](https://github.com/vjk10/notes/compare/v1.1.1...v1.1.5)
 
-### *1.1.3+19 (Public Release)*
+## [v1.1.1](https://github.com/vjk10/notes/releases/tag/v1.1.1) - Apr 29, 2022
 
-     Minor Bug Fixes
+---
 
-### *1.1.3+18 (Public Release)*
+### Added ➕
 
-     🚑️ Bug Fix for Screen going Grey when user is not signed in.
+- 🚧 Clipboard manager (Offline)
+- ⬆️ Updated dependencies
 
-### *1.1.3+17 (Public Release)*
+### Changed 🧱
 
-     1. New UI for better navigation 💄
-     2. Android 13 compatibility ✅⬆️
-        - Added Material You Icon for supported devices (Android 13 Only)
-        - Material Widgets Updated
-     3. Alerts are here ✨
-        - Alerts can be created now with several intervals.
-        - Track all alerts at one place
-     4. Improvements to Reminders ♻️
-     5. Added Icon Tags for notes (🚧)
-     6. Added Material 3 Improvements ✨💄
-     7. Updated to Flutter 3.3 ⬆️ 📦️
-     8. Streamlined Settings Page 🎨
-     9.  Fixed Download Storage Scope 🐛
-     10. Added Changelog 📝
-     11. Removed M3 branch🔀
+- 🚀 Version Update
 
-### *1.1.2+16 (Internal Release)*
+### Fixed 🐛
 
-     1. Fixed #34
-     2. Fixed #33
-     3. Fixed #8 (🚧)
-     4. Added Material 3 Improvements
-     5. Updated to Flutter 3.3
+- 💄 🐛 UI Bug Fixed causing description to not be visible while picking a folder.
+- ⚡ 🐛 Pick Folder Not Showing New Folders.
 
-### *v1.1.1 (Play Store Release)*
+[View Request](https://github.com/vjk10/notes/compare/v1.0.5-beta.2-release.candidate-1...v1.1.1)
 
-     1. UI Bug Fixed causing description to not be visible while picking a folder.
-     2. Pick Folder Not Showing New Folders.
-     3. Clipboard manager (Offline)
-     4. Updated dependencies
-     5. Version Update
+## [v1.0.5-beta.2-release.candidate-1](https://github.com/vjk10/notes/releases/tag/v1.0.5-beta.2-release.candidate-1) - Apr 15, 2022
 
-### *Beta Release 2 (RC 1)*
+---
 
-    Changelog
-     1. Bug Fixes 🐛
-     2. Performance Improvements ⚡️
-     3. Code Optimization ♻️
-     4. Upgraded Dependencies ⬆️
-     5. Security Fixes 🔒️
+### Added ➕
 
-### *Beta Release 1*
+- Upgraded Dependencies ⬆️
 
-    1. List Item
-    2. Cloud Backup
-    3. Material You
-    4. Expense Tracker
+### Changed 🧱
 
-        Please note that this is a beta release and will have bugs to fix.
-        Create issues on the repository for squashing bugs 🐛.
+- Performance Improvements
+- Code Optimization ♻️
 
-### *Internal Testing v3 Pre-release*
+### Fixed 🐛
 
-     1. Cloud Import Hot Fix 🚑️
+- Security Fixes 🔒️
+- Bug Fixes 🐛
 
-### *Internal Testing v2 Pre-release*
+[View Request](https://github.com/vjk10/notes/compare/v1.0.2-alpha-build-2...v1.0.3-beta) 
 
-        FIRST INTERNAL TESTING RELEASE 🔖
-        🚨 This is not a stable release and is only meant for testers. Installing this will make 'notes' buggy to say the least 🚨
+## [v1.0.3-beta](https://github.com/vjk10/notes/tree/v1.0.3-beta) - Apr 12, 2022
 
-     1. Cloud Backup and Import
-     2. Folders
-     3. Dynamic Themes
-     4. Cloud Clipboard (In Progress)
+---
 
-### *Internal Testing Pre-release*
+### Added ➕
 
-        FIRST INTERNAL TESTING RELEASE 🔖
-        🚨 This is not a stable release and is only meant for testers. Installing this will make 'notes' buggy to say the least 🚨
+- List Item
+- Cloud Backup
+- Material You
+- Expense Tracker
 
-     1. Local Database Implemented
-     2. Onboarding Process Implemented
-     3. Share Option Implemented
-     4. Autosave Implemented
-     5. Cloud Backup (In Progress)
+[View Request](https://github.com/vjk10/notes/compare/v1.0.2-alpha-build-2...v1.0.3-beta)
+
+## [v1.0.2-alpha-build-2](https://github.com/vjk10/notes/releases/tag/v1.0.2-alpha-build-2) - Mar 26, 2022
+
+---
+
+### Added ➕
+
+- Cloud Import Hot Fix 🚑️
+
+[View Request](https://github.com/vjk10/notes/compare/v1.0.2-alpha...v1.0.2-alpha-build-2)
+
+## [v1.0.2-alpha](https://github.com/vjk10/notes/releases/tag/v1.0.2-alpha) - Mar 12, 2022 - (Pre-Release)
+
+---
+
+FIRST INTERNAL TESTING RELEASE 🔖
+🚨 This is not a stable release andis only meant for testers.Installing this will make 'notes' buggy to say the least 🚨
+
+### Added ➕
+
+- Cloud Backup and Import
+- Folders
+- Dynamic Themes
+- Cloud Clipboard (In Progress)
+
+[View Request](https://github.com/vjk10/notes/compare/v1.0.0-alpha...v1.0.2-alpha)
+
+## [v1.0.0-alpha](https://github.com/vjk10/notes/releases/tag/v1.0.0-alpha) - Feb 26, 2022 - (Pre-Release)
+
+---
+
+FIRST INTERNAL TESTING RELEASE 🔖
+🚨 This is not a stable release andis only meant for testers.Installing this will make 'notes' buggy to say the least 🚨
+
+### Added ➕
+
+- Local Database Implemented
+- Onboarding Process Implemented
+- Share Option Implemented
+- Autosave Implemented
+- Cloud Backup (In Progress)
+
+[View Request](https://github.com/vjk10/notes/compare/v1.0.0-alpha...v1.0.0-alpha)

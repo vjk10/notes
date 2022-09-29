@@ -52,6 +52,9 @@ class _AppUpdateState extends State<AppUpdate> {
       if (kDebugMode) {
         print(error.toString());
       }
+      releaseNotes = const Center(
+        child: Text('YOU ARE IN DEBUG MODE'),
+      );
     });
 
     Future.delayed(const Duration(milliseconds: 1000), () {
@@ -65,12 +68,10 @@ class _AppUpdateState extends State<AppUpdate> {
           setState(() {
             _isLoading = false;
             _updateInfo = AppUpdateInfo(
-              kDebugMode
-                  ? UpdateAvailability.updateAvailable
-                  : UpdateAvailability.updateNotAvailable,
+              UpdateAvailability.updateNotAvailable,
               false,
               false,
-              kDebugMode ? 25 : 0,
+              0,
               InstallStatus.unknown,
               packageName,
               null,
@@ -139,7 +140,9 @@ class _AppUpdateState extends State<AppUpdate> {
                                     UpdateAvailability.updateNotAvailable
                                 ? 'Your app is in the latest version'
                                 : 'Update available',
-                        style: t.textTheme.headlineSmall,
+                        style: t.textTheme.headlineSmall?.copyWith(
+                          fontSize: 20,
+                        ),
                       ),
                       Visibility(
                         visible: _updateInfo?.updateAvailability ==
@@ -222,8 +225,10 @@ class _AppUpdateState extends State<AppUpdate> {
                                 ),
                                 Text(
                                   "Current Version :  ${widget.currentVersion}",
-                                  style: t.textTheme.button
-                                      ?.copyWith(color: c.onBackground),
+                                  style: t.textTheme.button?.copyWith(
+                                    color: c.onBackground,
+                                    fontSize: 16,
+                                  ),
                                   textAlign: TextAlign.start,
                                 ),
                                 const SizedBox(
@@ -261,8 +266,9 @@ class _AppUpdateState extends State<AppUpdate> {
                             ),
                             child: Text(
                               'Check for Update',
-                              style: t.textTheme.labelLarge?.copyWith(
+                              style: t.textTheme.button?.copyWith(
                                 color: c.onPrimaryContainer,
+                                fontSize: 12,
                               ),
                             ),
                             onPressed: () {
@@ -288,85 +294,35 @@ class _AppUpdateState extends State<AppUpdate> {
                           InAppUpdate.performImmediateUpdate().catchError((e) {
                             Get.showSnackbar(
                               GetSnackBar(
-                                messageText: Text(e.toString()),
+                                shouldIconPulse: false,
+                                backgroundColor: Get.theme.colorScheme.surface,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                borderRadius: 10,
+                                icon: Icon(
+                                  Icons.warning_rounded,
+                                  color: c.tertiary,
+                                ),
+                                duration: const Duration(seconds: 2),
+                                messageText: Text(
+                                  e.toString(),
+                                  style: Get.textTheme.caption?.copyWith(
+                                      color: Get.theme.colorScheme.onSurface),
+                                ),
                               ),
                             );
                           });
                         },
                         child: Text(
                           'Update Now',
-                          style: t.textTheme.labelLarge?.copyWith(
+                          style: t.textTheme.button?.copyWith(
                             color: c.onPrimaryContainer,
+                            fontSize: 12,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  // const SizedBox(
-                  //   height: 20,
-                  // ),
-                  // Visibility(
-                  //   visible: _updateInfo?.updateAvailability ==
-                  //       UpdateAvailability.updateAvailable,
-                  //   child: SizedBox(
-                  //     width: 150,
-                  //     child: OutlinedButton(
-                  //       onPressed: () {
-                  //         InAppUpdate.startFlexibleUpdate().then((_) {
-                  //           setState(() {
-                  //             _flexibleUpdateAvailable = true;
-                  //           });
-                  //         }).catchError((e) {
-                  //           Get.showSnackbar(
-                  //             GetSnackBar(
-                  //               messageText: Text(e.toString()),
-                  //             ),
-                  //           );
-                  //         });
-                  //       },
-                  //       child: Text(
-                  //         'Start flexible update',
-                  //         style: t.textTheme.button?.copyWith(
-                  //           color: c.primary,
-                  //           fontSize: 12,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 20,
-                  // ),
-                  // Visibility(
-                  //   visible: !_flexibleUpdateAvailable,
-                  //   child: SizedBox(
-                  //     width: 150,
-                  //     child: OutlinedButton(
-                  //       onPressed: () {
-                  //         InAppUpdate.completeFlexibleUpdate().then((_) {
-                  //           Get.showSnackbar(
-                  //             const GetSnackBar(
-                  //               messageText: Text('Successfully Updated!'),
-                  //             ),
-                  //           );
-                  //         }).catchError((e) {
-                  //           Get.showSnackbar(
-                  //             GetSnackBar(
-                  //               messageText: Text(e.toString()),
-                  //             ),
-                  //           );
-                  //         });
-                  //       },
-                  //       child: Text(
-                  //         'Complete flexible update',
-                  //         style: t.textTheme.button?.copyWith(
-                  //           color: c.primary,
-                  //           fontSize: 12,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             )

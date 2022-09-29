@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/android/widgets/licenses_and_info.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/playstore/playstore_data_model.dart';
@@ -234,17 +235,26 @@ class Utils {
 
   // #47
   showAbout(BuildContext context, String package, String version,
-      String buildNumber, String icon) async {
+      String buildNumber, String? icon) async {
     showAboutPage(
       context: context,
       title: const Text('about'),
       applicationName: getAppName(package),
       applicationVersion: 'v $version (build $buildNumber)',
-      applicationIcon: Image.network(
-        icon,
-        width: Get.width / 4,
-        height: Get.width / 4,
-      ),
+      applicationIcon: icon!.isNotEmpty
+          ? Image.network(
+              icon,
+              width: Get.width / 4,
+              height: Get.width / 4,
+              loadingBuilder: (context, child, loadingProgress) {
+                return CircularProgressIndicator(
+                  value: loadingProgress?.cumulativeBytesLoaded.toDouble(),
+                  color: c.primaryContainer,
+                  valueColor: AlwaysStoppedAnimation(c.primaryContainer),
+                );
+              },
+            )
+          : const SizedBox(),
       children: <Widget>[
         // #48
         const MarkdownPageListTile(

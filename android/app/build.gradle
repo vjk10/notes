@@ -50,7 +50,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.vlabs.notes'
+        applicationId 'com.notes.app'
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -79,13 +79,14 @@ android {
            applicationIdSuffix ".debug"
            signingConfig signingConfigs.debug
        }
-       profile{
+       profile {
            applicationIdSuffix ".beta"
            signingConfig signingConfigs.beta
            debuggable false
        }
        release {
            signingConfig signingConfigs.release
+           debuggable false
        }
    }
 

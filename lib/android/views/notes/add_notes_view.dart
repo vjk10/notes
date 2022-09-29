@@ -12,11 +12,10 @@ class AddNoteView extends StatefulWidget {
   const AddNoteView({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AddNoteViewState createState() => _AddNoteViewState();
+  AddNoteViewState createState() => AddNoteViewState();
 }
 
-class _AddNoteViewState extends State<AddNoteView> {
+class AddNoteViewState extends State<AddNoteView> {
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
   late Note note;

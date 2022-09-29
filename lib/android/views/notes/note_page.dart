@@ -16,11 +16,10 @@ class NotePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _NotePageState createState() => _NotePageState();
+  NotePageState createState() => NotePageState();
 }
 
-class _NotePageState extends State<NotePage> {
+class NotePageState extends State<NotePage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
 

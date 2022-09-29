@@ -21,29 +21,30 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     getAppInfo();
     getNotificationPermission();
-    Future.delayed(const Duration(seconds: 2), () async {
-      try {
-        _onboardingSnapshot = await ScientISSTdb.instance
-            .collection("userPref")
-            .document("onboarding")
-            .get();
-        if (kDebugMode) {
-          print(
-              "ONBOARDING COMPLETED: ${_onboardingSnapshot.data["completed"]}");
-        }
-        if (_onboardingSnapshot.data["completed"] == true) {
-          Get.offNamedUntil('/mainScreen', (route) => false);
-        } else {
-          Get.offNamedUntil('/onboarding1', (route) => false);
-        }
-      } catch (e) {
-        if (kDebugMode) {
-          print(e.toString());
-        }
+    checkOnboarding();
+    super.initState();
+  }
+
+  checkOnboarding() async {
+    try {
+      _onboardingSnapshot = await ScientISSTdb.instance
+          .collection("userPref")
+          .document("onboarding")
+          .get();
+      if (kDebugMode) {
+        print("ONBOARDING COMPLETED: ${_onboardingSnapshot.data["completed"]}");
+      }
+      if (_onboardingSnapshot.data["completed"] == true) {
+        Get.offNamedUntil('/mainScreen', (route) => false);
+      } else {
         Get.offNamedUntil('/onboarding1', (route) => false);
       }
-    });
-    super.initState();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      Get.offNamedUntil('/onboarding1', (route) => false);
+    }
   }
 
   getAppInfo() async {
@@ -68,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

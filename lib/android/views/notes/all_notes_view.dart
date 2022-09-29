@@ -12,7 +12,6 @@ import 'package:notes/android/views/expenses/add_expense_tracker.dart';
 import 'package:notes/android/views/list/add_list_view.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:provider/provider.dart';
-import 'package:quick_actions/quick_actions.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 
@@ -24,11 +23,10 @@ class AllNotesView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AllNotesViewState createState() => _AllNotesViewState();
+  AllNotesViewState createState() => AllNotesViewState();
 }
 
-class _AllNotesViewState extends State<AllNotesView>
+class AllNotesViewState extends State<AllNotesView>
     with SingleTickerProviderStateMixin {
   bool isLoading = false;
   bool userSignedIn = false;
@@ -36,12 +34,10 @@ class _AllNotesViewState extends State<AllNotesView>
   late fire_store.DocumentSnapshot firebaseUserDetails;
   late User user;
 
-  final QuickActions quickActions = const QuickActions();
-  String shortcut = 'no action set';
-
   late ScrollController _hideButtonController;
   bool _isVisible = true;
   final _key = GlobalKey<ExpandableFabState>();
+
 
   @override
   void initState() {
@@ -65,49 +61,6 @@ class _AllNotesViewState extends State<AllNotesView>
           }
         }
       }
-    });
-    quickActions.initialize((String shortcutType) {
-      setState(() {
-        shortcut = shortcutType;
-      });
-      if (shortcutType == 'action_one') {
-        Get.to(
-          () => const AddNoteView(),
-        );
-      }
-      if (shortcutType == 'action_two') {
-        Get.to(
-          () => const AddListView(),
-        );
-      }
-      if (shortcutType == 'action_three') {
-        Get.to(
-          () => const AddExpenseTrackerView(),
-        );
-      }
-    });
-    quickActions.setShortcutItems(<ShortcutItem>[
-      const ShortcutItem(
-        type: 'action_one',
-        localizedTitle: 'Add Note',
-        icon: 'ic_add_note',
-      ),
-      const ShortcutItem(
-        type: 'action_two',
-        localizedTitle: 'Add List',
-        icon: 'ic_add_list',
-      ),
-      const ShortcutItem(
-        type: 'action_three',
-        localizedTitle: 'Add Expense',
-        icon: 'ic_add_expense',
-      ),
-    ]).then((value) {
-      setState(() {
-        if (shortcut == 'no action set') {
-          shortcut = 'actions ready';
-        }
-      });
     });
     super.initState();
     if (kDebugMode) {

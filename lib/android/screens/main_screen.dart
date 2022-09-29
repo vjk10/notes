@@ -3,7 +3,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shortcuts/flutter_shortcuts.dart';
+import 'package:get/get.dart';
 import 'package:notes/android/data/data.dart';
+import 'package:notes/android/views/expenses/add_expense_tracker.dart';
+import 'package:notes/android/views/list/add_list_view.dart';
+import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
 import 'package:notes/services/utils.dart';
@@ -52,6 +57,7 @@ class _MainScreenState extends State<MainScreen>
   late User user;
 
   int selectedIndex = 0;
+  final FlutterShortcuts flutterShortcuts = FlutterShortcuts();
 
   NavigationDestination clipBoardDest = NavigationDestination(
       key: clipboardPageKey,
@@ -93,21 +99,12 @@ class _MainScreenState extends State<MainScreen>
           Icons.notifications_outlined,
         ),
         label: 'alerts'),
-    // const NavigationDestination(
-    //     selectedIcon: Icon(
-    //       Icons.assignment,
-    //     ),
-    //     icon: Icon(
-    //       Icons.assignment_outlined,
-    //     ),
-    //     label: 'clipboard'),
   ];
 
   List<Widget> destinations = [
     const AllNotesView(),
     const AllFoldersView(),
     const AllAlertsView(),
-    // const ClipBoard(),
   ];
 
   @override
@@ -119,6 +116,8 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void initState() {
+    setShortCuts();
+
     initUser();
     _tabController = TabController(
       length: myTabs.length,
@@ -133,6 +132,68 @@ class _MainScreenState extends State<MainScreen>
       print("SELECTED INDEX: ${widget.selectedIndex}");
     }
     super.initState();
+  }
+
+  setShortCuts() {
+    flutterShortcuts.initialize(debug: kDebugMode);
+    flutterShortcuts.clearShortcutItems();
+    flutterShortcuts.setShortcutItems(
+      shortcutItems: <ShortcutItem>[
+        const ShortcutItem(
+          id: "1",
+          action: noteAction,
+          shortLabel: 'Add Note',
+          icon: 'assets/images/note_add_shortcut.png',
+        ),
+        const ShortcutItem(
+          id: "2",
+          action: expenseAction,
+          shortLabel: 'Add Expense',
+          icon: 'assets/images/expense_add_shortcut.png',
+        ),
+        const ShortcutItem(
+          id: "3",
+          action: listAction,
+          shortLabel: 'Add List',
+          icon: 'assets/images/task_add_shortcut.png',
+        ),
+      ],
+    );
+    flutterShortcuts.listenAction((action) {
+      switch (action) {
+        case noteAction:
+          {
+            if (kDebugMode) {
+              print("ACTION: $noteAction");
+            }
+            Get.to(() => const AddNoteView());
+          }
+          break;
+        case expenseAction:
+          {
+            if (kDebugMode) {
+              print("ACTION: $expenseAction");
+            }
+            Get.to(() => const AddExpenseTrackerView());
+          }
+          break;
+        case listAction:
+          {
+            if (kDebugMode) {
+              print("ACTION: $listAction");
+              // #56
+              Get.to(() => const AddListView());
+            }
+          }
+          break;
+        default:
+          {
+            if (kDebugMode) {
+              print("ACTION: DEFAULT");
+            }
+          }
+      }
+    });
   }
 
   checkTerms() async {

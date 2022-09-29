@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:notes/android/data/data.dart';
 
 class UserDetails extends StatefulWidget {
-  const UserDetails({Key? key, required this.userName, this.profileUrl = ""})
+  const UserDetails(
+      {Key? key,
+      required this.userName,
+      this.profileUrl = "",
+      required this.email})
       : super(key: key);
 
-  final String userName, profileUrl;
+  final String userName, profileUrl, email;
 
   @override
   State<UserDetails> createState() => _UserDetailsState();
@@ -37,7 +41,17 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             child: Text(
               widget.userName,
-              style: t.textTheme.button,
+              style: t.textTheme.bodyMedium?.copyWith(color: c.onBackground),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 10.0,
+            ),
+            child: Text(
+              widget.email,
+              style: t.textTheme.bodySmall?.copyWith(color: c.onBackground),
+              // style: t.textTheme.button,
             ),
           ),
         ],

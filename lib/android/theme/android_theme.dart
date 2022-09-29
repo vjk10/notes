@@ -1,6 +1,7 @@
 //ANDROID THEME SECTION//
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:notes/services/imports.dart';
+import 'package:notes/android/data/data.dart';
 import 'package:notes/theme/colors.dart';
 
 ThemeData androidThemeDark = ThemeData(
