@@ -75,15 +75,15 @@ android {
         }
    }
    buildTypes {
-       debug {
-           applicationIdSuffix ".debug"
-           signingConfig signingConfigs.debug
-       }
-       profile {
-           applicationIdSuffix ".beta"
-           signingConfig signingConfigs.beta
-           debuggable false
-       }
+      debug {
+          applicationIdSuffix ".debug"
+          signingConfig signingConfigs.debug
+      }
+    //   profile {
+    //       applicationIdSuffix ".beta"
+    //       signingConfig signingConfigs.beta
+    //       debuggable false
+    //   }
        release {
            signingConfig signingConfigs.release
            debuggable false

@@ -70,7 +70,7 @@ class Utils {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        // backgroundColor: c.background,
+        backgroundColor: c.background,
         title: const Text(
           "Confirm",
         ),
@@ -238,7 +238,7 @@ class Utils {
       String buildNumber, String? icon) async {
     showAboutPage(
       context: context,
-      title: const Text('about'),
+      title: const Text(aboutTitle),
       applicationName: getAppName(package),
       applicationVersion: 'v $version (build $buildNumber)',
       applicationIcon: icon!.isNotEmpty
@@ -345,6 +345,43 @@ class Utils {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load PlaystoreData');
+    }
+  }
+
+  getPrimaryColor(int color) {
+    switch (color) {
+      case 1:
+        {
+          return Colors.purpleAccent;
+        }
+      case 2:
+        {
+          return Colors.yellowAccent;
+        }
+      case 3:
+        {
+          return Colors.greenAccent;
+        }
+      case 4:
+        {
+          return Colors.redAccent;
+        }
+      case 5:
+        {
+          return Colors.pinkAccent;
+        }
+      case 6:
+        {
+          return Colors.orangeAccent;
+        }
+      // case 7:
+      //   {
+      //     return ash;
+      //   }
+      default:
+        {
+          return Colors.blueAccent;
+        }
     }
   }
 }

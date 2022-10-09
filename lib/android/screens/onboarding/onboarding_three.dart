@@ -72,27 +72,33 @@ class _OnBoarding3State extends State<OnBoarding3> {
                 ),
                 FlutterSwitch(
                   activeColor: c.primary,
-                  activeIcon: Icon(
-                    Icons.save_outlined,
-                    color: c.primary,
+                  activeIcon: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.save_outlined,
+                      color: c.onPrimaryContainer,
+                    ),
                   ),
                   activeTextColor: c.onPrimary,
                   activeToggleColor: c.onPrimary,
                   inactiveColor: c.secondary,
-                  inactiveIcon: Icon(
-                    Icons.highlight_off_rounded,
-                    color: c.onError,
+                  inactiveIcon: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.highlight_off_rounded,
+                      color: c.surfaceVariant,
+                    ),
                   ),
-                  inactiveTextColor: c.onSecondary,
-                  inactiveToggleColor: c.error,
+                  inactiveTextColor: c.surfaceVariant,
+                  inactiveToggleColor: c.outline,
                   width: 150.w,
                   height: 70.h,
                   valueFontSize: 18.0,
-                  toggleSize: 35.0,
+                  toggleSize: 48.0,
                   value: _autoSave,
                   borderRadius: 50.0,
                   padding: 8.0,
-                  showOnOff: true,
+                  // showOnOff: true,
                   onToggle: (val) {
                     HapticFeedback.heavyImpact();
                     setState(() {
@@ -111,9 +117,6 @@ class _OnBoarding3State extends State<OnBoarding3> {
                       backgroundColor: c.primary,
                       elevation: 20,
                       shadowColor: c.background,
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: BorderRadius.circular(50),
-                      // ),
                     ),
                     onPressed: () async {
                       await NotesDatabase().setAutoSave(_autoSave);

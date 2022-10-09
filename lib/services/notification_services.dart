@@ -160,8 +160,14 @@ class NotificationService {
         .whenComplete(() {
       if (kDebugMode) {
         print("Alert Scheduled!");
+        print("Interval: $interval");
       }
-      NotesDatabase().storeAlerts(notificationId, title, message);
+      NotesDatabase().storeAlerts(
+        notificationId,
+        title,
+        message,
+        interval!,
+      );
       Get.showSnackbar(
         GetSnackBar(
           backgroundColor: c.surface,
@@ -186,9 +192,6 @@ class NotificationService {
   }
 
   endReminder(int notificationId, String title) async {
-    // if (kDebugMode) {
-    //   // print("$notificationId Cancelled");
-    // }
     FlutterLocalNotificationsPlugin().cancel(notificationId).whenComplete(() {
       NotesDatabase().deleteAlert(notificationId);
       Get.showSnackbar(

@@ -704,7 +704,8 @@ class NotesDatabase {
     }
   }
 
-  storeAlerts(int notificationId, String title, String description) async {
+  storeAlerts(int notificationId, String title, String description,
+      String intervals) async {
     await ScientISSTdb.instance
         .collection("alerts")
         .document(notificationId.toString())
@@ -712,6 +713,7 @@ class NotesDatabase {
       "notificationID": notificationId,
       "title": title,
       "description": description,
+      "interval": intervals,
     });
   }
 

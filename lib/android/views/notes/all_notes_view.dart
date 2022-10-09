@@ -38,7 +38,6 @@ class AllNotesViewState extends State<AllNotesView>
   bool _isVisible = true;
   final _key = GlobalKey<ExpandableFabState>();
 
-
   @override
   void initState() {
     initUser();
@@ -110,7 +109,7 @@ class AllNotesViewState extends State<AllNotesView>
           appBar: AppBar(
             backgroundColor: c.background,
             toolbarHeight: 80,
-            title: const Text('notes'),
+            title: const Text(notesTitle),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(

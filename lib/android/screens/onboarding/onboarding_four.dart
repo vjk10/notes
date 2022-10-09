@@ -1,4 +1,3 @@
-import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,6 @@ import 'package:notes/services/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../services/providers/android_app_themes.dart';
 
 class OnBoarding4 extends StatefulWidget {
   const OnBoarding4({Key? key}) : super(key: key);
@@ -41,38 +38,8 @@ class _OnBoarding4State extends State<OnBoarding4> {
         });
       }
     }
-    try {
-      var themeID = DynamicTheme.of(context)!.themeId;
-      setState(() {
-        selectedThemeId = themeID;
-        selectedTheme = AppThemes().getThemeName(themeID);
-      });
-
-      if (kDebugMode) {
-        print("SELECTED THEME: $selectedTheme");
-      }
-    } catch (e) {
-      var pref = await SharedPreferences.getInstance();
-      selectedThemeId = pref.getInt('selectedThemeId')!;
-      if (kDebugMode) {
-        print("Selected Theme: $selectedThemeId");
-      }
-      if (selectedTheme.isEmpty) {
-        setState(() {
-          selectedTheme = AppThemes().getThemeName(selectedThemeId);
-        });
-      }
-    }
-  }
-
-  void changeTheme(int index, BuildContext context) {
-    HapticFeedback.heavyImpact();
-    Get.back();
-    setState(() {
-      selectedTheme = AppThemes().getThemeName(index);
-      selectedThemeId = index;
-    });
-    DynamicTheme.of(context)!.setTheme(index);
+    var pref = await SharedPreferences.getInstance();
+    selectedThemeId = pref.getInt(primaryKey) ?? 1;
   }
 
   @override
@@ -114,7 +81,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                         height: (Get.statusBarHeight).h,
                       ),
                       Text(
-                        "hey! your device supports dynamic color :)",
+                        "Hey, Your device supports dynamic color!",
                         style: t.textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
@@ -132,15 +99,15 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           ),
                           activeTextColor: c.onPrimary,
                           activeToggleColor: c.onPrimary,
-                          inactiveColor: c.tertiary,
+                          inactiveColor: c.secondary,
                           inactiveIcon: Center(
                             child: Icon(
                               Icons.highlight_off_rounded,
-                              color: c.onError,
+                              color: c.surfaceVariant,
                             ),
                           ),
-                          inactiveTextColor: c.onTertiary,
-                          inactiveToggleColor: c.error,
+                          inactiveTextColor: c.surfaceVariant,
+                          inactiveToggleColor: c.outline,
                           width: 150.w,
                           height: 70.h,
                           valueFontSize: 18.0.sp,
@@ -148,7 +115,7 @@ class _OnBoarding4State extends State<OnBoarding4> {
                           value: notifier.material3,
                           borderRadius: 50.0,
                           padding: 8.0.w,
-                          showOnOff: true,
+                          // showOnOff: true,
                           onToggle: (val) {
                             HapticFeedback.heavyImpact();
                             notifier.toggleTheme();
@@ -159,13 +126,13 @@ class _OnBoarding4State extends State<OnBoarding4> {
                         height: 20,
                       ),
                       Text(
-                        "switch on to use dynamic color",
+                        "Switch on to use dynamic color",
                         style: t.textTheme.bodyLarge,
                       )
                     ],
                   ),
                 const SizedBox(
-                  height: 30,
+                  height: 50,
                 ),
                 Consumer<ThemeNotifier>(
                   builder: (context, notifier, child) => Visibility(
@@ -175,79 +142,74 @@ class _OnBoarding4State extends State<OnBoarding4> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "choose themes",
+                          "Pick a Primary",
                           style: t.textTheme.headline4?.copyWith(
                             fontFamily: 'Theme Black',
                           ),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 0,
                         ),
-                        SizedBox(
-                          width: Get.width.w,
-                          height: (Get.bottomBarHeight + 200).h,
-                          child: Center(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: themesList.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.0.w),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      changeTheme(index, context);
-                                    },
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Center(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(5.0.w),
-                                            child: Image.asset(
-                                              themesList[index]["url"]
-                                                  .toString(),
-                                              width: 60.w,
-                                              height: 60.h,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
+                        Consumer<ColorNotifier>(
+                          builder: (context, notifier, child) {
+                            return SizedBox(
+                              width: Get.width.w,
+                              height: (Get.bottomBarHeight + 100).h,
+                              child: Center(
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: primaryList.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.0.w),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          HapticFeedback.heavyImpact();
+                                          // Get.back();
+                                          if (kDebugMode) {
+                                            print(index);
+                                          }
+                                          setState(() {
+                                            selectedThemeId = index;
+                                            notifier.toggleColor(index + 1);
+                                          });
+                                        },
+                                        child: Container(
                                           decoration: BoxDecoration(
-                                            color: selectedThemeId == index
-                                                ? c.primary.withOpacity(0.2)
-                                                : c.secondary.withOpacity(0.2),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              themesList[index]["name"]
-                                                  .toString(),
-                                              style:
-                                                  t.textTheme.button?.copyWith(
-                                                color: selectedThemeId == index
-                                                    ? c.primary
-                                                    : c.onSecondary,
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: c.onBackground,
+                                                width: 2,
+                                              )),
+                                          child: CircleAvatar(
+                                            backgroundColor: Theme.of(context)
+                                                        .brightness ==
+                                                    Brightness.dark
+                                                ? primaryList[index]["primary"]
+                                                : primaryList[index]
+                                                    ["primaryDark"],
+                                            minRadius: 24,
+                                            child: Visibility(
+                                              visible: selectedThemeId == index,
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons
+                                                      .check_circle_outline_outlined,
+                                                  color: c.onBackground,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:currency_picker/currency_picker.dart';
-import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:filesize/filesize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -23,8 +21,6 @@ import 'package:provider/provider.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../services/providers/android_app_themes.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -57,7 +53,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   late fire_store.DocumentSnapshot firebaseUserDetails;
   late User user;
 
-  late AnimationController _bottomSheetController;
+  // late AnimationController _bottomSheetController;
 
   late TextStyle topBarTextStyle;
 
@@ -66,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   void initState() {
-    _bottomSheetController = AnimationController(vsync: this);
+    // _bottomSheetController = AnimationController(vsync: this);
     themesList = themes.toList();
     _initPrefs();
     getTheme();
@@ -97,27 +93,10 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   getTheme() async {
-    try {
-      var themeID = DynamicTheme.of(context)!.themeId;
-      setState(() {
-        selectedThemeId = themeID;
-        selectedTheme = AppThemes().getThemeName(themeID);
-      });
-
-      if (kDebugMode) {
-        print("SELECTED THEME: $selectedTheme");
-      }
-    } catch (e) {
-      var pref = await SharedPreferences.getInstance();
-      selectedThemeId = pref.getInt('selectedThemeId')!;
-      if (kDebugMode) {
-        print("Selected Theme: $selectedThemeId");
-      }
-      if (selectedTheme.isEmpty) {
-        setState(() {
-          selectedTheme = AppThemes().getThemeName(selectedThemeId);
-        });
-      }
+    _pref = await SharedPreferences.getInstance();
+    selectedThemeId = (_pref.getInt(primaryKey) ?? 0) - 1;
+    if (kDebugMode) {
+      print("Selected Theme: $selectedThemeId");
     }
   }
 
@@ -239,7 +218,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                         ),
                       ),
                       title: const Text(
-                        "settings",
+                        settingsTitle,
                       ),
                       actions: [
                         Visibility(
@@ -433,15 +412,12 @@ class _SettingsScreenState extends State<SettingsScreen>
                 value: notifier.material3,
                 onChanged: (value) async {
                   HapticFeedback.heavyImpact();
-                  notifier.toggleTheme();
-                  selectedThemeId = _pref.getInt('selectedThemeId')!;
+                  setState(() {
+                    notifier.toggleTheme();
+                  });
+                  selectedThemeId = _pref.getInt('primaryColor')!;
                   if (kDebugMode) {
                     print("Selected Theme: $selectedThemeId");
-                  }
-                  if (selectedTheme.isEmpty) {
-                    setState(() {
-                      selectedTheme = AppThemes().getThemeName(selectedThemeId);
-                    });
                   }
                 }),
           ),
@@ -661,11 +637,11 @@ class _SettingsScreenState extends State<SettingsScreen>
           color: c.onBackground,
         ),
         title: Text(
-          "Choose Theme",
+          "Choose Primary",
           style: t.textTheme.button?.copyWith(fontSize: 14),
         ),
         subtitle: Text(
-          "Choose from our list of themes to \nchange the look of notes",
+          "Choose from our list of colors to \nchange the look of notes",
           style: t.textTheme.labelSmall?.copyWith(fontSize: 10),
         ),
         trailing: GestureDetector(
@@ -673,10 +649,9 @@ class _SettingsScreenState extends State<SettingsScreen>
             HapticFeedback.heavyImpact();
             showThemeSheet();
           },
-          child: Image.asset(
-            selectedTheme,
-            width: 36,
-            height: 36,
+          child: CircleAvatar(
+            backgroundColor: c.primary,
+            radius: 20,
           ),
         ),
       ),
@@ -685,134 +660,99 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   void showThemeSheet() {
     Get.bottomSheet(
-      SizedBox(
-        height: Get.height / 2,
-        child: BottomSheet(
-          animationController: _bottomSheetController,
-          enableDrag: true,
-          backgroundColor: c.background,
+      Consumer<ColorNotifier>(builder: (context, notifier, child) {
+        return Material(
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+              topRight: Radius.circular(15),
+              topLeft: Radius.circular(15),
             ),
           ),
-          onClosing: () {
-            HapticFeedback.heavyImpact();
-          },
-          builder: (context) => Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Text(
-                    "Choose Theme",
-                    style: t.textTheme.headline6,
+          color: c.surface,
+          surfaceTintColor: c.surfaceTint,
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  width: Get.width,
-                  height: Get.height / 3,
-                  child: Center(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            dragStartBehavior: DragStartBehavior.start,
-                            itemCount: themesList.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0, vertical: 50.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    changeTheme(index, context);
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Image.asset(
-                                            themesList[index]["url"].toString(),
-                                            width: 80,
-                                            height: 80,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: selectedThemeId == index
-                                              ? c.primary.withOpacity(0.2)
-                                              : c.onBackground.withOpacity(0.2),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            themesList[index]["name"]
-                                                .toString(),
-                                            style: t.textTheme.button?.copyWith(
-                                              color: selectedThemeId == index
-                                                  ? c.primary
-                                                  : c.onSecondary,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                  Container(
+                    width: 32,
+                    height: 4,
+                    color: c.onSurfaceVariant,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Pick a Primary",
+                    style: t.textTheme.headlineSmall,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    width: Get.width - 30,
+                    height: Get.height / 2,
+                    child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                crossAxisCount: 3),
+                        itemCount: primaryList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              HapticFeedback.heavyImpact();
+                              Get.back();
+                              if (kDebugMode) {
+                                print(index);
+                              }
+                              selectedThemeId = index;
+                              notifier.toggleColor(index + 1);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: c.onBackground,
+                                    width: 2,
+                                  )),
+                              child: CircleAvatar(
+                                backgroundColor: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? primaryList[index]["primary"]
+                                    : primaryList[index]["primaryDark"],
+                                minRadius: 24,
+                                child: Visibility(
+                                  visible: selectedThemeId == index,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.check_circle_outline_outlined,
+                                      color: c.onBackground,
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              Icons.arrow_left,
-                              color: c.onBackground,
+                              ),
                             ),
-                            Icon(
-                              Icons.arrow_right,
-                              color: c.onBackground,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          );
+                        }),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
+      enableDrag: true,
     );
-  }
-
-  void changeTheme(int index, BuildContext context) {
-    HapticFeedback.heavyImpact();
-    Get.back();
-    setState(() {
-      selectedTheme = AppThemes().getThemeName(index);
-      selectedThemeId = index;
-    });
-    DynamicTheme.of(context)!.setTheme(index);
   }
 }

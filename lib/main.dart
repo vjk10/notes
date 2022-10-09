@@ -1,6 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
 // import 'package:dynamic_colorscheme/dynamic_colorscheme.dart';
-import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent_ui;
@@ -21,9 +20,10 @@ import 'package:notes/android/theme/android_theme.dart';
 import 'package:notes/android/views/folders/add_folders_view.dart';
 import 'package:notes/android/views/notes/add_notes_view.dart';
 import 'package:notes/android/views/clipboard/clipboard_view.dart';
+import 'package:notes/firebase_options.dart';
 import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/notifier.dart';
-import 'package:notes/services/providers/android_app_themes.dart';
+import 'package:notes/theme/colors.dart';
 import 'package:notes/under_construction.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +33,9 @@ import 'windows/screens/splash_screen_win.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScreenUtil.ensureScreenSize();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   token = await FirebaseMessaging.instance.getToken();
   await NotificationService().initialize();
   runApp(const MyApp());
@@ -67,9 +69,17 @@ class MyApp extends StatelessWidget {
                 builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
               if (lightDynamic != null && darkDynamic != null) {
                 m3YouAvail = true;
-                m3Light = lightDynamic.harmonized();
-                m3Dark = darkDynamic.harmonized();
+                if (m3YouAvail) {
+                  palette = Theme.of(context).brightness == Brightness.dark
+                      ? darkDynamic
+                      : lightDynamic;
+                }
+                if (kDebugMode) {
+                  print("MATERIAL 3: ${notifier.material3}");
+                }
                 if (notifier.material3) {
+                  m3Dark = darkDynamic.harmonized();
+                  m3Light = lightDynamic.harmonized();
                   return ScreenUtilInit(
                     builder: (_, widget) => GetMaterialApp(
                       themeMode: ThemeMode.system,
@@ -133,62 +143,155 @@ class MyApp extends StatelessWidget {
                     designSize: const Size(360, 800),
                   );
                 } else {
-                  return DynamicTheme(
-                    themeCollection: themeCollection,
-                    defaultThemeId: AppThemes.regular,
-                    builder: (context, theme) => ScreenUtilInit(
-                      builder: (_, widget) => GetMaterialApp(
-                        debugShowCheckedModeBanner: kDebugMode,
-                        theme: theme,
-                        routes: {
-                          '/splash': (context) => const SplashScreen(),
-                          '/mainScreen': (context) => const MainScreen(
-                                selectedIndex: 0,
-                              ),
-                          '/onboarding1': (context) => const OnBoarding1(),
-                          '/onboarding2': (context) => const OnBoarding2(),
-                          '/onboarding3': (context) => const OnBoarding3(),
-                          '/onboarding4': (context) => const OnBoarding4(),
-                          '/addFolder': (context) => const AddFolderView(),
-                          '/addNote': (context) => const AddNoteView(),
-                          '/settings': (contex) => const SettingsScreen(),
-                          '/clipboard': (contex) => const ClipBoard(),
-                        },
-                        title: 'Notes',
-                        home: const SplashScreen(),
-                      ),
-                      designSize: const Size(360, 800),
-                    ),
+                  return ChangeNotifierProvider(
+                    create: (_) => ColorNotifier(),
+                    child: Consumer<ColorNotifier>(
+                        builder: (context, ColorNotifier notifier, child) {
+                      m3Light = ColorScheme.fromSeed(
+                        seedColor: notifier.primaryColor,
+                        brightness: Brightness.light,
+                      );
+                      m3Dark = ColorScheme.fromSeed(
+                        seedColor: notifier.primaryColor,
+                        brightness: Brightness.dark,
+                      );
+                      return ScreenUtilInit(
+                        builder: (_, widget) => GetMaterialApp(
+                          themeMode: ThemeMode.system,
+                          debugShowCheckedModeBanner: kDebugMode,
+                          theme: androidThemeDark.copyWith(
+                            colorScheme: m3Light,
+                            useMaterial3: true,
+                            backgroundColor: m3Light!.background,
+                            scaffoldBackgroundColor: m3Light!.background,
+                            iconTheme:
+                                IconThemeData(color: m3Light!.onBackground),
+                            listTileTheme: ListTileThemeData(
+                                iconColor: m3Light!.onBackground),
+                            appBarTheme: AppBarTheme(
+                              toolbarHeight: 80,
+                              iconTheme:
+                                  IconThemeData(color: m3Light!.onBackground),
+                              backgroundColor: m3Light!.background,
+                              surfaceTintColor: m3Light!.surfaceTint,
+                            ),
+                            brightness: Brightness.light,
+                            dialogTheme: DialogTheme(
+                              backgroundColor: m3Light!.background,
+                            ),
+                          ),
+                          darkTheme: androidThemeRegular.copyWith(
+                            colorScheme: m3Dark,
+                            useMaterial3: true,
+                            backgroundColor: m3Dark!.background,
+                            scaffoldBackgroundColor: m3Dark!.background,
+                            iconTheme:
+                                IconThemeData(color: m3Dark!.onBackground),
+                            listTileTheme: ListTileThemeData(
+                                iconColor: m3Dark!.onBackground),
+                            appBarTheme: AppBarTheme(
+                              toolbarHeight: 80,
+                              iconTheme:
+                                  IconThemeData(color: m3Dark!.onBackground),
+                              backgroundColor: m3Dark!.background,
+                              surfaceTintColor: m3Dark!.surfaceTint,
+                            ),
+                            brightness: Brightness.dark,
+                            dialogTheme: DialogTheme(
+                              backgroundColor: m3Dark!.background,
+                            ),
+                          ),
+                          routes: {
+                            '/splash': (context) => const SplashScreen(),
+                            '/mainScreen': (context) => const MainScreen(
+                                  selectedIndex: 0,
+                                ),
+                            '/onboarding1': (context) => const OnBoarding1(),
+                            '/onboarding2': (context) => const OnBoarding2(),
+                            '/onboarding3': (context) => const OnBoarding3(),
+                            '/onboarding4': (context) => const OnBoarding4(),
+                            '/addFolder': (context) => const AddFolderView(),
+                            '/addNote': (context) => const AddNoteView(),
+                            '/settings': (contex) => const SettingsScreen(),
+                            '/clipboard': (contex) => const ClipBoard(),
+                          },
+                          title: 'Notes',
+                          home: const SplashScreen(),
+                        ),
+                        designSize: const Size(360, 800),
+                      );
+                    }),
                   );
                 }
               } else {
-                return DynamicTheme(
-                  themeCollection: themeCollection,
-                  defaultThemeId: AppThemes.regular,
-                  builder: (context, theme) => ScreenUtilInit(
-                    builder: (_, widget) => GetMaterialApp(
-                      debugShowCheckedModeBanner: kDebugMode,
-                      theme: theme,
-                      routes: {
-                        '/splash': (context) => const SplashScreen(),
-                        '/mainScreen': (context) => const MainScreen(
-                              selectedIndex: 0,
-                            ),
-                        '/onboarding1': (context) => const OnBoarding1(),
-                        '/onboarding2': (context) => const OnBoarding2(),
-                        '/onboarding3': (context) => const OnBoarding3(),
-                        '/onboarding4': (context) => const OnBoarding4(),
-                        '/addFolder': (context) => const AddFolderView(),
-                        '/addNote': (context) => const AddNoteView(),
-                        '/settings': (contex) => const SettingsScreen(),
-                        '/clipboard': (contex) => const ClipBoard(),
-                      },
-                      title: 'Notes',
-                      home: const SplashScreen(),
+                m3Light = ColorScheme.fromSeed(
+                  seedColor: purple,
+                  brightness: Brightness.light,
+                );
+                m3Dark = ColorScheme.fromSeed(
+                  seedColor: purple,
+                  brightness: Brightness.dark,
+                );
+                return ScreenUtilInit(
+                  builder: (_, widget) => GetMaterialApp(
+                    themeMode: ThemeMode.system,
+                    debugShowCheckedModeBanner: kDebugMode,
+                    theme: androidThemeDark.copyWith(
+                      colorScheme: m3Light,
+                      useMaterial3: true,
+                      backgroundColor: m3Light!.background,
+                      scaffoldBackgroundColor: m3Light!.background,
+                      iconTheme: IconThemeData(color: m3Light!.onBackground),
+                      listTileTheme:
+                          ListTileThemeData(iconColor: m3Light!.onBackground),
+                      appBarTheme: AppBarTheme(
+                        toolbarHeight: 80,
+                        iconTheme: IconThemeData(color: m3Light!.onBackground),
+                        backgroundColor: m3Light!.background,
+                        surfaceTintColor: m3Light!.surfaceTint,
+                      ),
+                      brightness: Brightness.light,
+                      dialogTheme: DialogTheme(
+                        backgroundColor: m3Light!.background,
+                      ),
                     ),
-                    minTextAdapt: true,
-                    designSize: const Size(360, 800),
+                    darkTheme: androidThemeRegular.copyWith(
+                      colorScheme: m3Dark,
+                      useMaterial3: true,
+                      backgroundColor: m3Dark!.background,
+                      scaffoldBackgroundColor: m3Dark!.background,
+                      iconTheme: IconThemeData(color: m3Dark!.onBackground),
+                      listTileTheme:
+                          ListTileThemeData(iconColor: m3Dark!.onBackground),
+                      appBarTheme: AppBarTheme(
+                        toolbarHeight: 80,
+                        iconTheme: IconThemeData(color: m3Dark!.onBackground),
+                        backgroundColor: m3Dark!.background,
+                        surfaceTintColor: m3Dark!.surfaceTint,
+                      ),
+                      brightness: Brightness.dark,
+                      dialogTheme: DialogTheme(
+                        backgroundColor: m3Dark!.background,
+                      ),
+                    ),
+                    routes: {
+                      '/splash': (context) => const SplashScreen(),
+                      '/mainScreen': (context) => const MainScreen(
+                            selectedIndex: 0,
+                          ),
+                      '/onboarding1': (context) => const OnBoarding1(),
+                      '/onboarding2': (context) => const OnBoarding2(),
+                      '/onboarding3': (context) => const OnBoarding3(),
+                      '/onboarding4': (context) => const OnBoarding4(),
+                      '/addFolder': (context) => const AddFolderView(),
+                      '/addNote': (context) => const AddNoteView(),
+                      '/settings': (contex) => const SettingsScreen(),
+                      '/clipboard': (contex) => const ClipBoard(),
+                    },
+                    title: 'Notes',
+                    home: const SplashScreen(),
                   ),
+                  designSize: const Size(360, 800),
                 );
               }
             });

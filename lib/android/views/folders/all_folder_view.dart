@@ -62,7 +62,7 @@ class _AllFoldersViewState extends State<AllFoldersView> {
         appBar: AppBar(
           backgroundColor: c.background,
           toolbarHeight: 80,
-          title: const Text('folders'),
+          title: const Text(foldersTitle),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(

@@ -120,7 +120,7 @@ class _ClipBoardState extends State<ClipBoard> {
               ? AppBar(
                   primary: true,
                   backgroundColor: c.background,
-                  title: const Text("clipboard"),
+                  title: const Text(clipboardTitle),
                   leading: IconButton(
                     onPressed: () {
                       setState(() {
@@ -204,7 +204,7 @@ class _ClipBoardState extends State<ClipBoard> {
                 )
               : AppBar(
                   backgroundColor: c.background,
-                  title: const Text("clipboard"),
+                  title: const Text(clipboardTitle),
                   automaticallyImplyLeading: false,
                   actions: [
                     IconButton(
@@ -260,7 +260,7 @@ class _ClipBoardState extends State<ClipBoard> {
                                     ),
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.all(
-                                        Radius.circular(25),
+                                        Radius.circular(12), //#55
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(0.0),

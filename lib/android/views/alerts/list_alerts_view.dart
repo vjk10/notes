@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/views/alerts/add_alert_view.dart';
-import 'package:notes/services/notification_services.dart';
 import 'package:notes/services/utils.dart';
 import 'package:scientisst_db/scientisst_db.dart';
 
+import '../../../services/notification_services.dart';
 import '../../data/data.dart';
 import '../../screens/settings_screen.dart';
 
@@ -20,9 +21,13 @@ class _AllAlertsViewState extends State<AllAlertsView> {
   bool alertsAvailable = false;
   late ScrollController _hideButtonController;
   bool _isVisible = true;
+  late int alertsN = 0, _selectedIndex = 0;
+  bool _optionsVisible = false;
+  late String _notificationId, _notificationTitle;
 
   @override
   void initState() {
+    getAlertsN();
     _hideButtonController = ScrollController();
     _hideButtonController.addListener(() {
       if (_hideButtonController.position.userScrollDirection ==
@@ -45,6 +50,14 @@ class _AllAlertsViewState extends State<AllAlertsView> {
     });
     checkIfAlertsAvailable();
     super.initState();
+  }
+
+  getAlertsN() async {
+    ScientISSTdb.instance.collection("alerts").getDocuments().then((value) {
+      setState(() {
+        alertsN = value.length;
+      });
+    });
   }
 
   checkIfAlertsAvailable() async {
@@ -74,82 +87,97 @@ class _AllAlertsViewState extends State<AllAlertsView> {
         padding: const EdgeInsets.only(bottom: 20.0),
         child: Visibility(
           visible: _isVisible,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Visibility(
-                visible: alertsAvailable,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Utils().confirmationForAlertsDeletion(context, t, c);
-                  },
-                  backgroundColor: c.errorContainer,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Icon(
-                          Icons.delete_outline,
-                          color: c.onErrorContainer,
-                        ),
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 3.0),
-                          child: Icon(
-                            Icons.notifications,
-                            color: c.onErrorContainer,
-                            size: 10,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+          child: FloatingActionButton(
+            heroTag: "fabTag",
+            onPressed: () {
+              Get.bottomSheet(
+                SizedBox(
+                  height: Get.height / 1.8,
+                  child: const AddAlertView(),
                 ),
+                elevation: 10,
+                enableDrag: true,
+                isScrollControlled: true,
+              );
+            },
+            backgroundColor: c.primaryContainer,
+            child: Center(
+              child: Icon(
+                Icons.add_alert_outlined,
+                color: c.onPrimaryContainer,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              FloatingActionButton(
-                heroTag: "fabTag",
-                onPressed: () {
-                  Get.bottomSheet(
-                    SizedBox(
-                      height: Get.height / 1.8,
-                      child: const AddAlertView(),
-                    ),
-                    elevation: 10,
-                    enableDrag: true,
-                    isScrollControlled: true,
-                  );
-                },
-                backgroundColor: c.primaryContainer,
-                child: Center(
-                  child: Icon(
-                    Icons.add_alert_outlined,
-                    color: c.onPrimaryContainer,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
       appBar: AppBar(
         backgroundColor: c.background,
         toolbarHeight: 80,
-        title: const Text('alerts'),
+        title: const Text(alertsTitle),
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-            onPressed: () {
-              Get.to(() => const SettingsScreen());
-            },
-            icon: Icon(
-              Icons.settings_outlined,
-              color: c.onSurface,
+          //#54
+          Visibility(
+            visible: _optionsVisible,
+            child: IconButton(
+              onPressed: () {
+                setState(() {
+                  _optionsVisible = !_optionsVisible;
+                  _notificationId = _notificationTitle = '';
+                });
+              },
+              icon: Icon(
+                Icons.clear,
+                color: c.onBackground,
+              ),
             ),
-          )
+          ),
+          Visibility(
+            visible: _optionsVisible,
+            child: IconButton(
+              onPressed: () async {
+                checkIfAlertsAvailable();
+                await NotificationService().endReminder(
+                    int.parse(_notificationId), _notificationTitle);
+                setState(() {
+                  _optionsVisible = !_optionsVisible;
+                  _notificationId = _notificationTitle = '';
+                });
+              },
+              icon: Icon(
+                Icons.delete_outline,
+                color: c.error,
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !_optionsVisible && alertsN > 0,
+            child: IconButton(
+              onPressed: () async {
+                await Utils()
+                    .confirmationForAlertsDeletion(context, t, c)
+                    .whenComplete(() {
+                  getAlertsN();
+                });
+              },
+              icon: Icon(
+                Icons.delete_forever_outlined,
+                color: c.error,
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !_optionsVisible,
+            child: IconButton(
+              onPressed: () {
+                Get.to(() => const SettingsScreen());
+              },
+              icon: Icon(
+                Icons.settings_outlined,
+                color: c.onSurface,
+              ),
+            ),
+          ),
         ],
       ),
       body: StreamBuilder<List<DocumentSnapshot>>(
@@ -176,57 +204,70 @@ class _AllAlertsViewState extends State<AllAlertsView> {
             (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 5.0,
-                  vertical: 5.0,
+                  vertical: 10.0,
+                  horizontal: 15.0,
                 ),
                 child: Card(
                   color: c.surfaceVariant,
                   elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    side: _optionsVisible
+                        ? _selectedIndex == index
+                            ? BorderSide(color: c.primary, width: 3)
+                            : BorderSide(color: c.surfaceVariant, width: 2)
+                        : BorderSide(color: c.surfaceVariant, width: 2),
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
                   ),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 15.0,
-                      horizontal: 15.0,
-                    ),
-                    leading: Icon(
-                      Icons.alarm_on_rounded,
-                      color: c.onBackground,
-                      size: 36,
-                    ),
-                    title: Text(
-                      alertsData.data![index].data["title"].toString(),
-                      textAlign: TextAlign.start,
-                      style: t.textTheme.headline6,
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        alertsData.data![index].data["description"].toString(),
-                        style: t.textTheme.subtitle1?.copyWith(
-                          color: c.onSecondaryContainer,
+                  child: GestureDetector(
+                    onLongPress: () {
+                      HapticFeedback.heavyImpact();
+                      setState(() {
+                        _optionsVisible = !_optionsVisible;
+                        _selectedIndex = index;
+                        _notificationId = alertsData
+                            .data![index].data["notificationID"]
+                            .toString();
+                        _notificationTitle =
+                            alertsData.data![index].data["title"].toString();
+                      });
+                    },
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                        horizontal: 20.0,
+                      ),
+                      title: Text(
+                        alertsData.data![index].data["title"].toString(),
+                        textAlign: TextAlign.start,
+                        style: t.textTheme.headline6,
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          alertsData.data![index].data["description"]
+                              .toString(),
+                          style: t.textTheme.subtitle1?.copyWith(
+                            color: c.onSecondaryContainer,
+                          ),
                         ),
                       ),
-                    ),
-                    trailing: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: IconButton(
-                        onPressed: () {
-                          checkIfAlertsAvailable();
-                          var id = alertsData
-                              .data![index].data["notificationID"]
-                              .toString();
-                          NotificationService().endReminder(int.parse(id),
-                              alertsData.data![index].data["title"].toString());
-                        },
-                        icon: Icon(
-                          Icons.delete_outline_rounded,
-                          color: c.error,
-                        ),
+                      trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.repeat_outlined,
+                            color: c.onSurfaceVariant,
+                            size: 12,
+                          ),
+                          Text(
+                            alertsData.data![index].data["interval"].toString(),
+                            style: t.textTheme.bodyMedium?.copyWith(
+                              color: c.onSurfaceVariant,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

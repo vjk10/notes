@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen>
         icon: const Icon(
           Icons.description_outlined,
         ),
-        label: 'notes'),
+        label: notesTitle),
     NavigationDestination(
         key: foldersPageKey,
         selectedIcon: const Icon(
@@ -89,7 +89,7 @@ class _MainScreenState extends State<MainScreen>
         icon: const Icon(
           Icons.folder_outlined,
         ),
-        label: 'folders'),
+        label: foldersTitle),
     NavigationDestination(
         key: alertsPageKey,
         selectedIcon: const Icon(
@@ -98,7 +98,7 @@ class _MainScreenState extends State<MainScreen>
         icon: const Icon(
           Icons.notifications_outlined,
         ),
-        label: 'alerts'),
+        label: alertsTitle),
   ];
 
   List<Widget> destinations = [

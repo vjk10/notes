@@ -16,6 +16,7 @@ class OnBoarding2 extends StatefulWidget {
 
 class _OnBoarding2State extends State<OnBoarding2> {
   final TextEditingController _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
@@ -86,64 +87,76 @@ class _OnBoarding2State extends State<OnBoarding2> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        width: (Get.width - 40),
-                        child: Semantics(
-                          textField: true,
-                          attributedHint: AttributedString("name text field"),
-                          child: TextFormField(
-                            controller: _nameController,
-                            textInputAction: TextInputAction.done,
-                            keyboardType: TextInputType.name,
-                            textCapitalization: TextCapitalization.words,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
+                      Semantics(
+                        textField: true,
+                        attributedHint: AttributedString("name text field"),
+                        child: Form(
+                          key: _formKey,
+                          child: SizedBox(
+                            width: Get.width - 40,
+                            child: TextFormField(
+                              controller: _nameController,
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.name,
+                              textCapitalization: TextCapitalization.words,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Name cannot be emtpy";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    10,
+                                  ),
+                                  borderSide: BorderSide(
+                                    color: c.surfaceVariant,
+                                    width: 2,
+                                  ),
                                 ),
-                                borderSide: BorderSide(
-                                  color: c.surface,
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    10,
+                                  ),
+                                  borderSide: BorderSide(
+                                    color: c.surfaceVariant,
+                                    width: 2,
+                                  ),
                                 ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
+                                errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    10,
+                                  ),
+                                  borderSide: BorderSide(
+                                    color: c.error,
+                                    width: 2,
+                                  ),
                                 ),
-                                borderSide: BorderSide(
-                                  color: c.surface,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    10,
+                                  ),
+                                  borderSide: BorderSide(
+                                    color: c.primary,
+                                    width: 2,
+                                  ),
                                 ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
+                                hintText: 'Your name here...',
+                                hintStyle: t.textTheme.bodyText1?.copyWith(
+                                  color: c.onSurfaceVariant,
                                 ),
-                                borderSide: BorderSide(
-                                  color: c.surface,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
-                                borderSide: BorderSide(
-                                  color: c.surface,
-                                ),
-                              ),
-                              hintText: 'Your name here...',
-                              hintStyle: t.textTheme.bodyText1?.copyWith(
-                                color: c.onSurface,
-                              ),
-                              filled: true,
-                              fillColor: c.surface,
-                              contentPadding: EdgeInsets.all(
-                                20.0.w,
+                                filled: true,
+                                fillColor: c.surfaceVariant,
+                                contentPadding: const EdgeInsets.all(25),
                               ),
                             ),
                           ),
                         ),
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
                       SizedBox(
                         width: 130.w,
@@ -153,11 +166,9 @@ class _OnBoarding2State extends State<OnBoarding2> {
                             backgroundColor: c.primary,
                             elevation: 20,
                             shadowColor: c.background,
-                            // shape: RoundedRectangleBorder(
-                            //   borderRadius: BorderRadius.circular(50),
-                            // ),
                           ),
                           onPressed: () async {
+                            _formKey.currentState?.validate();
                             if (_nameController.text.isNotEmpty) {
                               await ScientISSTdb.instance
                                   .collection("userPref")
