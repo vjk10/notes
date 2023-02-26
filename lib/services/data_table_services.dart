@@ -23,8 +23,8 @@ class DataTableServices {
             ),
             Text(
               "Label",
-              style:
-                  t.textTheme.subtitle1?.copyWith(color: c.onPrimaryContainer),
+              style: t.textTheme.titleMedium
+                  ?.copyWith(color: c.onPrimaryContainer),
             )
           ],
         ),
@@ -44,8 +44,8 @@ class DataTableServices {
             ),
             Text(
               "Amount",
-              style:
-                  t.textTheme.subtitle1?.copyWith(color: c.onPrimaryContainer),
+              style: t.textTheme.titleMedium
+                  ?.copyWith(color: c.onPrimaryContainer),
             )
           ],
         ),
@@ -65,8 +65,8 @@ class DataTableServices {
             ),
             Text(
               "Description",
-              style:
-                  t.textTheme.subtitle1?.copyWith(color: c.onPrimaryContainer),
+              style: t.textTheme.titleMedium
+                  ?.copyWith(color: c.onPrimaryContainer),
             )
           ],
         ),

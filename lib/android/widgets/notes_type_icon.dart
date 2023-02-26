@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/data.dart';
+import '../../data/data.dart';
 
 class NotesTypeIcon extends StatefulWidget {
   final String type;
@@ -13,8 +13,8 @@ class NotesTypeIcon extends StatefulWidget {
 class _NotesTypeIconState extends State<NotesTypeIcon> {
   @override
   void didChangeDependencies() {
-    t = Theme.of(context);
-    c = t.colorScheme;
+    StaticData.t = Theme.of(context);
+    StaticData.c = StaticData.t.colorScheme;
     super.didChangeDependencies();
   }
 
@@ -25,7 +25,7 @@ class _NotesTypeIconState extends State<NotesTypeIcon> {
         {
           return Icon(
             Icons.description,
-            color: c.outline,
+            color: StaticData.c.outline,
             size: 14,
           );
         }
@@ -33,7 +33,7 @@ class _NotesTypeIconState extends State<NotesTypeIcon> {
         {
           return Icon(
             Icons.add_task,
-            color: c.outline,
+            color: StaticData.c.outline,
             size: 14,
           );
         }
@@ -41,14 +41,14 @@ class _NotesTypeIconState extends State<NotesTypeIcon> {
         {
           return Icon(
             Icons.request_page,
-            color: c.outline,
+            color: StaticData.c.outline,
             size: 14,
           );
         }
       default:
         return Icon(
           Icons.description,
-          color: c.outline,
+          color: StaticData.c.outline,
           size: 12,
         );
     }

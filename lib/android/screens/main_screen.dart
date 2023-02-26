@@ -1,26 +1,20 @@
 import 'dart:io';
 
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_shortcuts/flutter_shortcuts.dart';
 import 'package:get/get.dart';
-import 'package:notes/android/data/data.dart';
-import 'package:notes/android/views/expenses/add_expense_tracker.dart';
-import 'package:notes/android/views/list/add_list_view.dart';
-import 'package:notes/android/views/notes/add_notes_view.dart';
-import 'package:notes/services/notification_services.dart';
-import 'package:notes/services/notifier.dart';
-import 'package:notes/services/utils.dart';
-import 'package:provider/provider.dart';
-import 'package:scientisst_db/scientisst_db.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart' as fire_store;
-
-import '../views/alerts/list_alerts_view.dart';
-import '../views/folders/all_folder_view.dart';
-import '../views/clipboard/clipboard_view.dart';
-import '../views/notes/all_notes_view.dart';
+import 'package:notes/android/screens/onboarding/onboarding_one.dart';
+import 'package:notes/android/views/boards_view.dart';
+import 'package:notes/android/views/tasks_view.dart';
+import 'package:notes/data/data.dart';
+import 'package:notes/services/firestore_db/google_sign_in.dart';
+import 'package:notes/services/isar_db/boards_local_schema.dart';
+import 'package:notes/services/other/auth_services.dart';
+import 'package:notes/theme/colors.dart';
+import 'package:intl/intl.dart';
 
 class MainScreen extends StatefulWidget {
   // final MainScreenArgument argument;
@@ -28,7 +22,6 @@ class MainScreen extends StatefulWidget {
 
   const MainScreen({
     Key? key,
-    // required this.argument,
     required this.selectedIndex,
   }) : super(key: key);
 
@@ -38,100 +31,64 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
-  String userName = "Username";
+  String? userName = "Username";
   String cacheMemorySize = "0";
   String appMemorySize = "0";
   String userProfile = "";
   bool appMemoryFound = false;
   bool cacheFound = false;
+  late String day;
+
+  String boardscount = "0";
+  String taskcount = "0";
 
   late Directory tempDir;
   late Directory appDir;
-  late DocumentSnapshot userSnapshot;
-  late TabController _tabController;
 
   bool isLoading = false;
   bool userSignedIn = false;
 
-  late fire_store.DocumentSnapshot firebaseUserDetails;
-  late User user;
+  User? user;
 
   int selectedIndex = 0;
   final FlutterShortcuts flutterShortcuts = FlutterShortcuts();
 
-  NavigationDestination clipBoardDest = NavigationDestination(
-      key: clipboardPageKey,
-      selectedIcon: const Icon(
-        Icons.assignment,
-      ),
-      icon: const Icon(
-        Icons.assignment_outlined,
-      ),
-      label: 'clipboard');
+  late TabController tabController;
 
-  Widget clipBoardBody = const ClipBoard();
-
-  List<NavigationDestination> mainScreenDestination = [
-    NavigationDestination(
-        key: notesPageKey,
-        selectedIcon: const Icon(
-          Icons.description_rounded,
-        ),
-        icon: const Icon(
-          Icons.description_outlined,
-        ),
-        label: notesTitle),
-    NavigationDestination(
-        key: foldersPageKey,
-        selectedIcon: const Icon(
-          Icons.folder_rounded,
-        ),
-        icon: const Icon(
-          Icons.folder_outlined,
-        ),
-        label: foldersTitle),
-    NavigationDestination(
-        key: alertsPageKey,
-        selectedIcon: const Icon(
-          Icons.notifications,
-        ),
-        icon: const Icon(
-          Icons.notifications_outlined,
-        ),
-        label: alertsTitle),
-  ];
-
-  List<Widget> destinations = [
-    const AllNotesView(),
-    const AllFoldersView(),
-    const AllAlertsView(),
-  ];
+  int crossAxisCount = 1;
 
   @override
   void didChangeDependencies() {
-    t = Theme.of(context);
-    c = t.colorScheme;
+    StaticData.t = Theme.of(context);
+    StaticData.c = StaticData.t.colorScheme;
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    setShortCuts();
-
-    initUser();
-    _tabController = TabController(
-      length: myTabs.length,
+    // setShortCuts();
+    tabController = TabController(
+      length: 2,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
     selectedIndex = widget.selectedIndex;
-    NotificationService().initialize();
-    checkTerms();
+    AuthServices().authChanges();
+    setState(() {});
+    selectedIndex = widget.selectedIndex;
+    // checkTerms();
+    getCounts();
     if (kDebugMode) {
       print("MAIN SCREEN INIT STATE");
       print("SELECTED INDEX: ${widget.selectedIndex}");
     }
     super.initState();
+  }
+
+  getCounts() async {
+    setState(() {
+      boardscount = StaticData.isarDb.boardsLocals.count().toString();
+    });
   }
 
   setShortCuts() {
@@ -141,19 +98,19 @@ class _MainScreenState extends State<MainScreen>
       shortcutItems: <ShortcutItem>[
         const ShortcutItem(
           id: "1",
-          action: noteAction,
+          action: StaticData.noteAction,
           shortLabel: 'Add Note',
           icon: 'assets/images/note_add_shortcut.png',
         ),
         const ShortcutItem(
           id: "2",
-          action: expenseAction,
+          action: StaticData.expenseAction,
           shortLabel: 'Add Expense',
           icon: 'assets/images/expense_add_shortcut.png',
         ),
         const ShortcutItem(
           id: "3",
-          action: listAction,
+          action: StaticData.listAction,
           shortLabel: 'Add List',
           icon: 'assets/images/task_add_shortcut.png',
         ),
@@ -161,28 +118,25 @@ class _MainScreenState extends State<MainScreen>
     );
     flutterShortcuts.listenAction((action) {
       switch (action) {
-        case noteAction:
+        case StaticData.noteAction:
           {
             if (kDebugMode) {
-              print("ACTION: $noteAction");
+              print("ACTION: $StaticData.noteAction");
             }
-            Get.to(() => const AddNoteView());
           }
           break;
-        case expenseAction:
+        case StaticData.expenseAction:
           {
             if (kDebugMode) {
-              print("ACTION: $expenseAction");
+              print("ACTION: $StaticData.expenseAction");
             }
-            Get.to(() => const AddExpenseTrackerView());
           }
           break;
-        case listAction:
+        case StaticData.listAction:
           {
             if (kDebugMode) {
-              print("ACTION: $listAction");
+              print("ACTION: $StaticData.listAction");
               // #56
-              Get.to(() => const AddListView());
             }
           }
           break;
@@ -196,78 +150,170 @@ class _MainScreenState extends State<MainScreen>
     });
   }
 
-  checkTerms() async {
-    bool conditions = await Utils().checkTerms();
-    if (conditions == false) {
-      // ignore: use_build_context_synchronously
-      Utils().licenseDialog(context, t, c, false);
-    }
-  }
-
-  initUser() async {
-    try {
-      user = FirebaseAuth.instance.currentUser!;
-      if (user.uid.isNotEmpty) {
-        userSignedIn = true;
-      }
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        if (kDebugMode) {
-          print(e.message);
-        }
-      }
-    }
-    // Fix for #39
-    addClipBoardView();
-  }
-
-// Fix for #39
-  addClipBoardView() {
-    if (userSignedIn) {
-      if (mainScreenDestination.length <= 3) {
-        mainScreenDestination.add(clipBoardDest);
-        destinations.add(clipBoardBody);
-      }
-    } else {
-      if (mainScreenDestination.length >= 4) {
-        mainScreenDestination.removeWhere(
-          (element) {
-            return element.key == clipboardPageKey;
-          },
-        );
-        destinations.removeAt(3);
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  final myTabs = [
-    const Tab(text: "all"),
-    const Tab(text: "folders"),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeNotifier>(builder: (context, notifier, child) {
-      return Scaffold(
-        backgroundColor: c.background,
-        body: destinations[selectedIndex],
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: selectedIndex,
-          animationDuration: const Duration(milliseconds: 250),
-          onDestinationSelected: (value) {
-            setState(() {
-              selectedIndex = value;
-            });
-          },
-          destinations: mainScreenDestination,
+    return Scaffold(
+        backgroundColor: popBlack600,
+        appBar: AppBar(
+          backgroundColor: popBlack400,
+          toolbarHeight: 150,
+          title: CircularProfileAvatar(
+            StaticData.photourl,
+            backgroundColor: poliPurple500,
+            radius: 20,
+            onTap: () {
+              switch (StaticData.cameSignedIn) {
+                case true:
+                  {
+                    signOutGoogle(context);
+                    Get.offAll(() => const OnBoarding1());
+                  }
+                  break;
+                default:
+                  {
+                    AuthServices().signOutLocalUser();
+                    Get.offAll(() => const OnBoarding1());
+                  }
+              }
+            },
+            borderColor: poliPurple500,
+            initialsText: Text(
+              StaticData.displayname[0].toString(),
+            ),
+          ),
+          automaticallyImplyLeading: false,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(150),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "hey! ${StaticData.displayname.split(' ')[0]}",
+                    style: StaticData.t.textTheme.headlineLarge?.copyWith(),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Today's ${DateFormat(DateFormat.WEEKDAY).format(DateTime.now())}",
+                    style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                      fontFamily: 'Cirka',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY).format(
+                      DateTime.now(),
+                    ),
+                    style: StaticData.t.textTheme.bodySmall?.copyWith(
+                      fontFamily: 'Cirka',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  TabBar(
+                      controller: tabController,
+                      isScrollable: false,
+                      indicatorWeight: 1,
+                      indicatorColor: popBlack400,
+                      dividerColor: popBlack400,
+                      enableFeedback: true,
+                      indicator: BoxDecoration(color: popBlack400),
+                      onTap: (value) {
+                        if (kDebugMode) {
+                          print(value);
+                        }
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      },
+                      tabs: [
+                        Tab(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 28,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: selectedIndex == 0
+                                        ? poliPurple500
+                                        : popWhite500,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: selectedIndex == 0
+                                      ? poliPurple500
+                                      : popBlack400,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    taskcount,
+                                    style: StaticData.t.textTheme.bodySmall,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Boards',
+                                style: StaticData.t.textTheme.headlineSmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Tab(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 28,
+                                height: 18,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: selectedIndex == 1
+                                        ? poliPurple500
+                                        : popWhite500,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: selectedIndex == 1
+                                      ? poliPurple500
+                                      : popBlack400,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    taskcount,
+                                    style: StaticData.t.textTheme.bodySmall,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Tasks',
+                                style: StaticData.t.textTheme.headlineSmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ])
+                ],
+              ),
+            ),
+          ),
         ),
-      );
-    });
+        body: TabBarView(controller: tabController, children: const [
+          BoardsView(),
+          TasksView(),
+        ]));
   }
 }
