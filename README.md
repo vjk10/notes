@@ -1,17 +1,32 @@
-# notes
+# NOTES 2.0 (Productive) 🔥
 
-## **NOTICE: WE ARE COMING UP WITH NEW IMPROVEMENTS FACE LIFTS AND MANY MORE**
+We are bringing a Hella lotta changes to our app. We are letting go of our previous features that carried us to improve or rather move on to new ventures and taste for the app. By deprecating old features in a phased manner, we are planning to deprecate _Notes_ to bring the updated and fit for the feature name **Productive**. The change log will be cleared to start fresh and to be the new and advanced **Productive** App
 
-<!-- ![Getting Started](https://play-lh.googleusercontent.com/-Q4vLsL1VesT7IS4qVSpI07HCMYxmN9Q3dkG-izJ0LbTp_f7CIrYnLDR0CeAh8TJcQY=w2247-h1264-rw) -->
+![Cover](./assets/file%20cover%20-%201.png)
 
-<!-- <a href="https://play.google.com/store/apps/details?id=com.vlabs.notes"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=80px /></a> -->
+More on this soon! Read Me will be updated as and when the new changes are completed and current changes are deprecated.
 
-<!-- ![Image 1](https://play-lh.googleusercontent.com/jDTTVEqZ5bswMS4LV8xJRRNHpPrXy2m0eXWxfhaRgWKSQNASlpVtOUS_rrn35G-kyPcu=w720-h310-rw) ![Image 2](https://play-lh.googleusercontent.com/z0eRQuqotJP2OVc_V7-6ovnRlIJ6fvdTUNQpquDxekdORf7exczew4paePKxA7m0gYSr=w720-h310-rw) ![Image 3](https://play-lh.googleusercontent.com/lU1iszGeOaCWNG5qa3PshhHxN24eCfatGdItJzC5aBcnnuZ3D3-KKTQS6E9LirrZ8cM=w720-h310-rw) ![Image 4](https://play-lh.googleusercontent.com/N32UzxIMCLPNkRaHZV7TW931XBBgENfB25jyKbvXc3XLqg25QcD2-olycVsxP9iCuSGB=w720-h310-rw) -->
+## NEW CHANGES ✨
 
-Simple Note Taking App Built Using Flutter
+--------------------------------------------------------------------
 
-## Getting Started
+- [ ] 1. NeoPop UI
+- [ ] 2. Isar DB migration for powerful local DB
+- [ ] 3. Traditional Firebase Firestore to FlutterFire CLI
+- [ ] 4. Traditional features migration to Boards and Tasks
+- [ ] 5. Shared User Data
+- [ ] 6. Online syncing and user features
+- [ ] 7. Calendar and Clock features
+- [ ] 8. Better Accessibility Features
 
-<!-- Install notes to enjoy all you notes locally and cloud bakcups with a choice -->
+## DEPRECATING CHANGES
 
-"notes" is the next best app to the glorious note-taking experience of paper! Notes are your own personal app that manages your reminders and tasks, lists, and expenses all in the comfort of your device’s storage. With notes, you can also back up notes to your google account. Keep your notes safe, and enjoy the delight of ad-free user experience
+--------------------------------------------------------------------
+
+- [ ] 1. Scientisst DB will be deprecated.
+- [ ] 2. Material Design Language replaced.
+- [ ] 3. Online and Offline are separated.
+- [ ] 4. Clipboards will be deprecated for shared notes.
+- [ ] 5. Alerts are deprecated for Tasks and Calendars.
+- [ ] 6. Notes and Expenses are deprecated for Boards
+- [ ] 7. Backup will be removed to migration as part of deprecating change [3].
