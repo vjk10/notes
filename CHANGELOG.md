@@ -1,139 +1,32 @@
-# Changelog
+# NOTES 2.0 (Productive) 🔥
 
-All notable changes to this project will be documented in this file.
+We are bringing a Hella lotta changes to our app. We are letting go of our previous features that carried us to improve or rather move on to new ventures and taste for the app. By deprecating old features in a phased manner, we are planning to deprecate _Notes_ to bring the updated and fit for the feature name **Productive**. The change log will be cleared to start fresh and to be the new and advanced **Productive** App
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+![Cover](./assets/file%20cover%20-%201.png)
 
-## **[1.1.6]** - Unreleased
+More on this soon! Read Me will be updated as and when the new changes are completed and current changes are deprecated.
 
----
+## NEW CHANGES ✨
 
-### Added ➕
+--------------------------------------------------------------------
 
-- New Quick Action Added ⬆️
-- New Changelog format 📝
-- Email ID displayed in Settings Screen
+- [ ] 1. NeoPop UI
+- [ ] 2. Isar DB migration for powerful local DB
+- [ ] 3. Traditional Firebase Firestore to FlutterFire CLI
+- [ ] 4. Traditional features migration to Boards and Tasks
+- [ ] 5. Shared User Data
+- [ ] 6. Online syncing and user features
+- [ ] 7. Calendar and Clock features
+- [ ] 8. Better Accessibility Features
 
-### Fixed 🐛
+## DEPRECATING CHANGES
 
-- Issue [#56](https://github.com/vjk10/notes/issues/56) 🩹
-- Issue [#43](https://github.com/vjk10/notes/issues/43) 🩹
+--------------------------------------------------------------------
 
-### Removed ➖
-
-- Dependency on quick actions plugin.
-
-## **[v1.1.5](https://github.com/vjk10/notes/releases/tag/v1.1.5)** - Sep 21, 2022
-
----
-
-### Changed 🧱
-
-- Improved Dynamic Color (Android S+)
-
-### Fixed 🐛
-
-- UI Bug Fixes
-
-### Removed ➖
-
-- Quick Action Deprecated Completely
-
-[View Request](https://github.com/vjk10/notes/compare/v1.1.1...v1.1.5)
-
-## [v1.1.1](https://github.com/vjk10/notes/releases/tag/v1.1.1) - Apr 29, 2022
-
----
-
-### Added ➕
-
-- 🚧 Clipboard manager (Offline)
-- ⬆️ Updated dependencies
-
-### Changed 🧱
-
-- 🚀 Version Update
-
-### Fixed 🐛
-
-- 💄 🐛 UI Bug Fixed causing description to not be visible while picking a folder.
-- ⚡ 🐛 Pick Folder Not Showing New Folders.
-
-[View Request](https://github.com/vjk10/notes/compare/v1.0.5-beta.2-release.candidate-1...v1.1.1)
-
-## [v1.0.5-beta.2-release.candidate-1](https://github.com/vjk10/notes/releases/tag/v1.0.5-beta.2-release.candidate-1) - Apr 15, 2022
-
----
-
-### Added ➕
-
-- Upgraded Dependencies ⬆️
-
-### Changed 🧱
-
-- Performance Improvements
-- Code Optimization ♻️
-
-### Fixed 🐛
-
-- Security Fixes 🔒️
-- Bug Fixes 🐛
-
-[View Request](https://github.com/vjk10/notes/compare/v1.0.2-alpha-build-2...v1.0.3-beta) 
-
-## [v1.0.3-beta](https://github.com/vjk10/notes/tree/v1.0.3-beta) - Apr 12, 2022
-
----
-
-### Added ➕
-
-- List Item
-- Cloud Backup
-- Material You
-- Expense Tracker
-
-[View Request](https://github.com/vjk10/notes/compare/v1.0.2-alpha-build-2...v1.0.3-beta)
-
-## [v1.0.2-alpha-build-2](https://github.com/vjk10/notes/releases/tag/v1.0.2-alpha-build-2) - Mar 26, 2022
-
----
-
-### Added ➕
-
-- Cloud Import Hot Fix 🚑️
-
-[View Request](https://github.com/vjk10/notes/compare/v1.0.2-alpha...v1.0.2-alpha-build-2)
-
-## [v1.0.2-alpha](https://github.com/vjk10/notes/releases/tag/v1.0.2-alpha) - Mar 12, 2022 - (Pre-Release)
-
----
-
-FIRST INTERNAL TESTING RELEASE 🔖
-🚨 This is not a stable release andis only meant for testers.Installing this will make 'notes' buggy to say the least 🚨
-
-### Added ➕
-
-- Cloud Backup and Import
-- Folders
-- Dynamic Themes
-- Cloud Clipboard (In Progress)
-
-[View Request](https://github.com/vjk10/notes/compare/v1.0.0-alpha...v1.0.2-alpha)
-
-## [v1.0.0-alpha](https://github.com/vjk10/notes/releases/tag/v1.0.0-alpha) - Feb 26, 2022 - (Pre-Release)
-
----
-
-FIRST INTERNAL TESTING RELEASE 🔖
-🚨 This is not a stable release andis only meant for testers.Installing this will make 'notes' buggy to say the least 🚨
-
-### Added ➕
-
-- Local Database Implemented
-- Onboarding Process Implemented
-- Share Option Implemented
-- Autosave Implemented
-- Cloud Backup (In Progress)
-
-[View Request](https://github.com/vjk10/notes/compare/v1.0.0-alpha...v1.0.0-alpha)
+- [ ] 1. Scientisst DB will be deprecated.
+- [ ] 2. Material Design Language replaced.
+- [ ] 3. Online and Offline are separated.
+- [ ] 4. Clipboards will be deprecated for shared notes.
+- [ ] 5. Alerts are deprecated for Tasks and Calendars.
+- [ ] 6. Notes and Expenses are deprecated for Boards
+- [ ] 7. Backup will be removed to migration as part of deprecating change [3].
