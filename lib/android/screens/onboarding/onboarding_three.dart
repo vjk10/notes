@@ -1,137 +1,280 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
-import 'package:notes/services/db/database_notes.dart';
-import '../../data/data.dart';
+import 'package:neopop/widgets/buttons/neopop_button/neopop_button.dart';
+import 'package:notes/android/widgets/notes_snackbar.dart';
+import 'package:notes/data/data.dart';
+import 'package:notes/services/firestore_db/google_sign_in.dart';
+import 'package:notes/services/other/auth_services.dart';
 
-class OnBoarding3 extends StatefulWidget {
-  const OnBoarding3({Key? key}) : super(key: key);
+import '../../../notes_icon_icons.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../theme/colors.dart';
+import '../main_screen.dart';
+
+class Onboarding3 extends StatefulWidget {
+  final bool cameSignedIn;
+  const Onboarding3({Key? key, required this.cameSignedIn}) : super(key: key);
 
   @override
-  State<OnBoarding3> createState() => _OnBoarding3State();
+  State<Onboarding3> createState() => _Onboarding3State();
 }
 
-class _OnBoarding3State extends State<OnBoarding3> {
-  bool _autoSave = true;
+class _Onboarding3State extends State<Onboarding3> {
+  User? user;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  TextEditingController phoneNumController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController useridController = TextEditingController();
+  late String returnValue;
 
   @override
   void initState() {
+    if (widget.cameSignedIn) {
+      initUser();
+    }
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    t = Theme.of(context);
-    c = t.colorScheme;
-    super.didChangeDependencies();
+  initUser() async {
+    user = FirebaseAuth.instance.currentUser;
+    nameController.text = user!.displayName.toString();
+    phoneNumController.text = user!.phoneNumber.toString();
+    emailController.text = user!.email.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c.background,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Image.asset(
-              "assets/images/onboarding3.png",
-              width: Get.width.w,
-              fit: BoxFit.fitWidth,
-            ),
+      resizeToAvoidBottomInset: true,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            NotesIcon.button_arrow_left,
+            size: 12,
+            color: StaticData.c.primary,
           ),
-          Positioned(
-            top: Get.height / 8.h,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "auto save notes",
-                  style: t.textTheme.headline4?.copyWith(
-                    fontFamily: 'Theme Black',
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: Get.width - 30,
-                  child: Text(
-                    onBoarding3Message,
-                    style: t.textTheme.bodyText1?.copyWith(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                FlutterSwitch(
-                  activeColor: c.primary,
-                  activeIcon: Icon(
-                    Icons.save_outlined,
-                    color: c.primary,
-                  ),
-                  activeTextColor: c.onPrimary,
-                  activeToggleColor: c.onPrimary,
-                  inactiveColor: c.secondary,
-                  inactiveIcon: Icon(
-                    Icons.highlight_off_rounded,
-                    color: c.onError,
-                  ),
-                  inactiveTextColor: c.onSecondary,
-                  inactiveToggleColor: c.error,
-                  width: 150.w,
-                  height: 70.h,
-                  valueFontSize: 18.0,
-                  toggleSize: 35.0,
-                  value: _autoSave,
-                  borderRadius: 50.0,
-                  padding: 8.0,
-                  showOnOff: true,
-                  onToggle: (val) {
-                    HapticFeedback.heavyImpact();
-                    setState(() {
-                      _autoSave = val;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: 30.h,
-                ),
-                SizedBox(
-                  width: 150.w,
-                  height: 70.h,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: c.primary,
-                      elevation: 20,
-                      shadowColor: c.background,
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: BorderRadius.circular(50),
-                      // ),
-                    ),
-                    onPressed: () async {
-                      await NotesDatabase().setAutoSave(_autoSave);
-                      Get.offNamedUntil('/onboarding4', (route) => false);
-                    },
-                    child: Text(
-                      "Next",
-                      style: t.textTheme.button?.copyWith(
-                        fontSize: 18.sp,
-                        color: c.onPrimary,
+          color: StaticData.c.primary,
+          onPressed: () {
+            signOutGoogle(context);
+            Get.back();
+          },
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+      ),
+      body: WillPopScope(
+        onWillPop: () async {
+          if (widget.cameSignedIn) {
+            if (user!.uid.isNotEmpty) {
+              await signOutGoogle(context);
+              return true;
+            } else {
+              return true;
+            }
+          } else {
+            return true;
+          }
+        },
+        child: SingleChildScrollView(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            clipBehavior: Clip.hardEdge,
+            children: [
+              SvgPicture.asset("assets/images/waves_orange.svg"),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 30.0, vertical: 80),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'setup your profile',
+                            style: StaticData.t.textTheme.headlineSmall
+                                ?.copyWith(fontFamily: 'Cirka'),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SvgPicture.asset("assets/images/error.svg"),
+                        ],
                       ),
-                    ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Form(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            TextFormField(
+                              controller: nameController,
+                              keyboardType: TextInputType.name,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                hintText: 'John Doe',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                prefixText: 'Hey! ',
+                                prefixStyle: StaticData.t.textTheme.bodyLarge,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            TextFormField(
+                              controller: dobController,
+                              keyboardType: TextInputType.datetime,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                hintText: 'DD/MM/YYYY',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                prefixText: 'DOB: ',
+                                prefixStyle: StaticData.t.textTheme.bodyLarge,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            TextFormField(
+                              controller: phoneNumController,
+                              keyboardType: TextInputType.phone,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                hintText: '987456321',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                prefixText: '+91   ',
+                                prefixStyle: StaticData.t.textTheme.bodyLarge,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            TextFormField(
+                              controller: emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                hintText: 'johndoe@email.com',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                prefixText: 'to:    ',
+                                prefixStyle: StaticData.t.textTheme.bodyLarge,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            TextFormField(
+                              controller: useridController,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.done,
+                              maxLength: 20,
+                              decoration: InputDecoration(
+                                hintText: '@johndoe',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                prefixText: '@      ',
+                                prefixStyle: StaticData.t.textTheme.bodyLarge,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            Hero(
+                              tag: StaticData.mainButtonTag,
+                              child: SizedBox(
+                                width: 189,
+                                height: 48,
+                                child: NeoPopButton(
+                                  animationDuration:
+                                      const Duration(milliseconds: 250),
+                                  color: popWhite500,
+                                  onTapDown: () => HapticFeedback.vibrate(),
+                                  onTapUp: () async {
+                                    if (widget.cameSignedIn) {
+                                      returnValue = await AuthServices()
+                                          .createFirebaseUser(
+                                        StaticData.uid,
+                                        nameController.text,
+                                        dobController.text,
+                                        phoneNumController.text,
+                                        emailController.text,
+                                        useridController.text,
+                                      );
+                                    } else {
+                                      returnValue =
+                                          await AuthServices().createLocalUser(
+                                        nameController.text,
+                                        dobController.text,
+                                        phoneNumController.text,
+                                        emailController.text,
+                                        useridController.text,
+                                      );
+                                    }
+                                    if (kDebugMode) {
+                                      print("Return Status: $returnValue");
+                                    }
+                                    if (returnValue ==
+                                        StaticData.successStatus) {
+                                      NotesSnackBar().successSnackBar(
+                                          'Successfully signed into notes!');
+                                      Get.offAll(() =>
+                                          const MainScreen(selectedIndex: 0));
+                                    } else {
+                                      NotesSnackBar().errorSnackBar(
+                                          'Something went wrong. Please try again!');
+                                    }
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "create user",
+                                        style: StaticData.t.textTheme.bodyMedium
+                                            ?.copyWith(
+                                          color: popBlack600,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      Icon(
+                                        NotesIcon.button_arrow_right,
+                                        color: popBlack500,
+                                        size: 6,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          )
-        ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

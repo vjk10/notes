@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes/android/data/data.dart';
+import 'package:notes/data/data.dart';
 
 class NotesLoadingAndroid extends StatefulWidget {
   final double strokeWidth;
@@ -15,8 +15,8 @@ class NotesLoadingAndroid extends StatefulWidget {
 class _NotesLoadingAndroidState extends State<NotesLoadingAndroid> {
   @override
   void didChangeDependencies() {
-    t = Theme.of(context);
-    c = t.colorScheme;
+    StaticData.t = Theme.of(context);
+    StaticData.c = StaticData.t.colorScheme;
     super.didChangeDependencies();
   }
 
@@ -24,8 +24,8 @@ class _NotesLoadingAndroidState extends State<NotesLoadingAndroid> {
   Widget build(BuildContext context) {
     return CircularProgressIndicator.adaptive(
       strokeWidth: widget.strokeWidth,
-      backgroundColor: c.onBackground.withOpacity(0.2),
-      valueColor: AlwaysStoppedAnimation(c.onBackground),
+      backgroundColor: StaticData.c.onBackground.withOpacity(0.2),
+      valueColor: AlwaysStoppedAnimation(StaticData.c.onBackground),
     );
   }
 }

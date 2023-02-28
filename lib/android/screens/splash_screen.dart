@@ -1,11 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes/android/data/data.dart';
+import 'package:notes/android/screens/main_screen.dart';
+import 'package:notes/android/screens/onboarding/onboarding_one.dart';
+import 'package:notes/data/data.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
+import 'package:notes/services/other/auth_services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scientisst_db/scientisst_db.dart';
+
+import '../../services/isar_db/onboarding_schema.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,8 +18,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late DocumentSnapshot _onboardingSnapshot;
-
+  String? onboarded = "false";
   @override
   void initState() {
     getAppInfo();
@@ -26,33 +28,34 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkOnboarding() async {
-    try {
-      _onboardingSnapshot = await ScientISSTdb.instance
-          .collection("userPref")
-          .document("onboarding")
-          .get();
-      if (kDebugMode) {
-        print("ONBOARDING COMPLETED: ${_onboardingSnapshot.data["completed"]}");
-      }
-      if (_onboardingSnapshot.data["completed"] == true) {
-        Get.offNamedUntil('/mainScreen', (route) => false);
-      } else {
-        Get.offNamedUntil('/onboarding1', (route) => false);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      Get.offNamedUntil('/onboarding1', (route) => false);
+    await StaticData.isarDb.onboardings.get(1).then((value) {
+      onboarded = value?.onboarding;
+    });
+    if (onboarded == "true") {
+      AuthServices().authChanges();
+      Get.offAll(() => const MainScreen(selectedIndex: 0));
+    } else {
+      startOnboarding();
     }
+  }
+
+  startOnboarding() async {
+    final Onboarding onboarding = Onboarding();
+    onboarding.id = 1;
+    onboarding.onboarding = "false";
+    await StaticData.isarDb.writeTxn(() async {
+      await StaticData.isarDb.onboardings.put(onboarding); // insert & update
+    }).whenComplete(() {
+      Get.to(() => const OnBoarding1());
+    });
   }
 
   getAppInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    appName = packageInfo.appName;
-    packageName = packageInfo.packageName;
-    version = packageInfo.version;
-    buildNumber = packageInfo.buildNumber;
+    StaticData.appName = packageInfo.appName;
+    StaticData.packageName = packageInfo.packageName;
+    StaticData.version = packageInfo.version;
+    StaticData.buildNumber = packageInfo.buildNumber;
   }
 
   getNotificationPermission() async {
@@ -61,8 +64,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void didChangeDependencies() {
-    t = Theme.of(context);
-    c = t.colorScheme;
+    StaticData.t = Theme.of(context);
+    StaticData.c = StaticData.t.colorScheme;
     super.didChangeDependencies();
   }
 
@@ -80,7 +83,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 tag: "logoTag",
                 child: Text(
                   "notes",
-                  style: t.textTheme.headline6?.copyWith(fontSize: 24),
+                  style:
+                      StaticData.t.textTheme.titleLarge?.copyWith(fontSize: 24),
                 ),
               ),
             ),
@@ -100,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Center(
                   child: Text(
                     "loading your notes",
-                    style: t.textTheme.headline6,
+                    style: StaticData.t.textTheme.titleLarge,
                   ),
                 )
               ],

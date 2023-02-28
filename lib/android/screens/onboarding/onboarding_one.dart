@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:notes/services/utils.dart';
-import 'package:scientisst_db/scientisst_db.dart';
+import 'package:neopop/widgets/buttons/neopop_button/neopop_button.dart';
+import 'package:notes/android/screens/onboarding/onboarding_two.dart';
+import 'package:notes/notes_icon_icons.dart';
+import 'package:notes/theme/colors.dart';
 
-import '../../data/data.dart';
+import '../../../data/data.dart';
 
 class OnBoarding1 extends StatefulWidget {
   const OnBoarding1({Key? key}) : super(key: key);
@@ -16,113 +19,99 @@ class OnBoarding1 extends StatefulWidget {
 class _OnBoarding1State extends State<OnBoarding1> {
   @override
   void initState() {
-    startOnboarding();
     super.initState();
-  }
-
-  startOnboarding() async {
-    await ScientISSTdb.instance
-        .collection("userPref")
-        .document("onboarding")
-        .set(
-      {
-        "completed": false,
-        "conditions": false,
-      },
-    );
   }
 
   @override
   void didChangeDependencies() {
-    t = Theme.of(context);
-    c = t.colorScheme;
+    StaticData.t = Theme.of(context);
+    StaticData.c = StaticData.t.colorScheme;
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: c.background,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/images/onboarding1.png",
-              width: (Get.statusBarHeight - 100).isNegative
-                  ? Get.width - 50
-                  : Get.width.w,
-              fit: (Get.statusBarHeight - 100).isNegative
-                  ? BoxFit.scaleDown
-                  : BoxFit.fitWidth,
-            ),
-          ),
-          Positioned(
-            top: Get.height / 9.h,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "notes",
-                    style: t.textTheme.headline4,
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  SizedBox(
-                    width: Get.width - 30.w,
-                    child: Text(
-                      onBoarding1Message,
-                      style: t.textTheme.bodyText1?.copyWith(
-                        fontSize: 14.sp,
-                        color: c.onBackground,
+        body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+          SvgPicture.asset("assets/images/waves.svg"),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: Get.bottomBarHeight + 80, horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Icon(
+                        NotesIcon.logo,
+                        color: popWhite500,
+                        size: 80,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: 130.w,
-                    height: 60.h,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: c.primary,
-                        elevation: 20,
-                        shadowColor: c.background,
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: BorderRadius.circular(50),
-                        // ),
-                      ),
-                      onPressed: () async {
-                        bool conditions = await Utils().checkTerms();
-                        if (conditions == false) {
-                          // ignore: use_build_context_synchronously
-                          Utils().licenseDialog(context, t, c, true);
-                        } else {
-                          Get.toNamed('/onboarding2');
-                        }
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Text(
+                      ' Build all kinds of tasks, routines, schedules etc.',
+                      style: StaticData.t.textTheme.bodySmall,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'NOTES',
+                      style: StaticData.t.textTheme.displayLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Hero(
+                  tag: StaticData.mainButtonTag,
+                  child: SizedBox(
+                    width: 115,
+                    height: 48,
+                    child: NeoPopButton(
+                      animationDuration: const Duration(milliseconds: 250),
+                      color: popWhite500,
+                      onTapDown: () => HapticFeedback.vibrate(),
+                      onTapUp: () {
+                        Get.to(
+                          () => const OnBoarding2(),
+                        );
                       },
-                      child: Text(
-                        "Get Started",
-                        style: t.textTheme.button?.copyWith(
-                          fontSize: 14.sp,
-                          color: c.onPrimary,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "let's begin",
+                            style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                              color: popBlack600,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Icon(
+                            NotesIcon.button_arrow_right,
+                            color: popBlack500,
+                            size: 6,
+                          )
+                        ],
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )
-        ],
-      ),
-    );
+        ]));
   }
 }

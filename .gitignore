@@ -49,3 +49,6 @@ app.*.map.json
 /android/app/release
 /android/key.properties
 /android/app/upload-keystore.jks
+/ios/Runner/GoogleService-Info.plist
+/ios/Runner/Info.plist
+/ios/firebase_app_id_file.json
