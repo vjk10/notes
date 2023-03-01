@@ -17,23 +17,33 @@ const BoardsLocalSchema = CollectionSchema(
   name: r'BoardsLocal',
   id: 4214883672164069265,
   properties: {
-    r'boardname': PropertySchema(
+    r'boardcolor': PropertySchema(
       id: 0,
+      name: r'boardcolor',
+      type: IsarType.long,
+    ),
+    r'boardname': PropertySchema(
+      id: 1,
       name: r'boardname',
       type: IsarType.string,
     ),
+    r'boardtextcolor': PropertySchema(
+      id: 2,
+      name: r'boardtextcolor',
+      type: IsarType.long,
+    ),
     r'createdby': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'createdby',
       type: IsarType.string,
     ),
     r'createdon': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'createdon',
       type: IsarType.string,
     ),
     r'notesLocal': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'notesLocal',
       type: IsarType.object,
       target: r'NotesLocal',
@@ -97,11 +107,13 @@ void _boardsLocalSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.boardname);
-  writer.writeString(offsets[1], object.createdby);
-  writer.writeString(offsets[2], object.createdon);
+  writer.writeLong(offsets[0], object.boardcolor);
+  writer.writeString(offsets[1], object.boardname);
+  writer.writeLong(offsets[2], object.boardtextcolor);
+  writer.writeString(offsets[3], object.createdby);
+  writer.writeString(offsets[4], object.createdon);
   writer.writeObject<NotesLocal>(
-    offsets[3],
+    offsets[5],
     allOffsets,
     NotesLocalSchema.serialize,
     object.notesLocal,
@@ -115,12 +127,14 @@ BoardsLocal _boardsLocalDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = BoardsLocal();
-  object.boardname = reader.readStringOrNull(offsets[0]);
-  object.createdby = reader.readStringOrNull(offsets[1]);
-  object.createdon = reader.readStringOrNull(offsets[2]);
+  object.boardcolor = reader.readLongOrNull(offsets[0]);
+  object.boardname = reader.readStringOrNull(offsets[1]);
+  object.boardtextcolor = reader.readLongOrNull(offsets[2]);
+  object.createdby = reader.readStringOrNull(offsets[3]);
+  object.createdon = reader.readStringOrNull(offsets[4]);
   object.id = id;
   object.notesLocal = reader.readObjectOrNull<NotesLocal>(
-    offsets[3],
+    offsets[5],
     NotesLocalSchema.deserialize,
     allOffsets,
   );
@@ -135,12 +149,16 @@ P _boardsLocalDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 3:
+      return (reader.readStringOrNull(offset)) as P;
+    case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
       return (reader.readObjectOrNull<NotesLocal>(
         offset,
         NotesLocalSchema.deserialize,
@@ -244,6 +262,80 @@ extension BoardsLocalQueryWhere
 
 extension BoardsLocalQueryFilter
     on QueryBuilder<BoardsLocal, BoardsLocal, QFilterCondition> {
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardcolorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'boardcolor',
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardcolorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'boardcolor',
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardcolorEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'boardcolor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardcolorGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'boardcolor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardcolorLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'boardcolor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardcolorBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'boardcolor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
       boardnameIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -394,6 +486,80 @@ extension BoardsLocalQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'boardname',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardtextcolorIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'boardtextcolor',
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardtextcolorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'boardtextcolor',
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardtextcolorEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'boardtextcolor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardtextcolorGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'boardtextcolor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardtextcolorLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'boardtextcolor',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      boardtextcolorBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'boardtextcolor',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -793,6 +959,18 @@ extension BoardsLocalQueryLinks
 
 extension BoardsLocalQuerySortBy
     on QueryBuilder<BoardsLocal, BoardsLocal, QSortBy> {
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> sortByBoardcolor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardcolor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> sortByBoardcolorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardcolor', Sort.desc);
+    });
+  }
+
   QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> sortByBoardname() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'boardname', Sort.asc);
@@ -802,6 +980,19 @@ extension BoardsLocalQuerySortBy
   QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> sortByBoardnameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'boardname', Sort.desc);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> sortByBoardtextcolor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardtextcolor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy>
+      sortByBoardtextcolorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardtextcolor', Sort.desc);
     });
   }
 
@@ -832,6 +1023,18 @@ extension BoardsLocalQuerySortBy
 
 extension BoardsLocalQuerySortThenBy
     on QueryBuilder<BoardsLocal, BoardsLocal, QSortThenBy> {
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> thenByBoardcolor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardcolor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> thenByBoardcolorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardcolor', Sort.desc);
+    });
+  }
+
   QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> thenByBoardname() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'boardname', Sort.asc);
@@ -841,6 +1044,19 @@ extension BoardsLocalQuerySortThenBy
   QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> thenByBoardnameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'boardname', Sort.desc);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy> thenByBoardtextcolor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardtextcolor', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterSortBy>
+      thenByBoardtextcolorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardtextcolor', Sort.desc);
     });
   }
 
@@ -883,10 +1099,22 @@ extension BoardsLocalQuerySortThenBy
 
 extension BoardsLocalQueryWhereDistinct
     on QueryBuilder<BoardsLocal, BoardsLocal, QDistinct> {
+  QueryBuilder<BoardsLocal, BoardsLocal, QDistinct> distinctByBoardcolor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'boardcolor');
+    });
+  }
+
   QueryBuilder<BoardsLocal, BoardsLocal, QDistinct> distinctByBoardname(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'boardname', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QDistinct> distinctByBoardtextcolor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'boardtextcolor');
     });
   }
 
@@ -913,9 +1141,21 @@ extension BoardsLocalQueryProperty
     });
   }
 
+  QueryBuilder<BoardsLocal, int?, QQueryOperations> boardcolorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'boardcolor');
+    });
+  }
+
   QueryBuilder<BoardsLocal, String?, QQueryOperations> boardnameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'boardname');
+    });
+  }
+
+  QueryBuilder<BoardsLocal, int?, QQueryOperations> boardtextcolorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'boardtextcolor');
     });
   }
 

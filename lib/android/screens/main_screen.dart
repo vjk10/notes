@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shortcuts/flutter_shortcuts.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/screens/onboarding/onboarding_one.dart';
+import 'package:notes/android/views/boards/create_board_view.dart';
 import 'package:notes/android/views/boards_view.dart';
 import 'package:notes/android/views/tasks_view.dart';
 import 'package:notes/data/data.dart';
@@ -220,12 +221,11 @@ class _MainScreenState extends State<MainScreen>
                   ),
                   TabBar(
                       controller: tabController,
-                      isScrollable: false,
                       indicatorWeight: 1,
                       indicatorColor: popBlack400,
                       dividerColor: popBlack400,
                       enableFeedback: true,
-                      indicator: BoxDecoration(color: popBlack400),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       onTap: (value) {
                         if (kDebugMode) {
                           print(value);
@@ -236,73 +236,15 @@ class _MainScreenState extends State<MainScreen>
                       },
                       tabs: [
                         Tab(
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 28,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: selectedIndex == 0
-                                        ? poliPurple500
-                                        : popWhite500,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: selectedIndex == 0
-                                      ? poliPurple500
-                                      : popBlack400,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    taskcount,
-                                    style: StaticData.t.textTheme.bodySmall,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Boards',
-                                style: StaticData.t.textTheme.headlineSmall,
-                              ),
-                            ],
+                          child: Text(
+                            'Boards',
+                            style: StaticData.t.textTheme.headlineSmall,
                           ),
                         ),
                         Tab(
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 28,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: selectedIndex == 1
-                                        ? poliPurple500
-                                        : popWhite500,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: selectedIndex == 1
-                                      ? poliPurple500
-                                      : popBlack400,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    taskcount,
-                                    style: StaticData.t.textTheme.bodySmall,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Tasks',
-                                style: StaticData.t.textTheme.headlineSmall,
-                              ),
-                            ],
+                          child: Text(
+                            'Tasks',
+                            style: StaticData.t.textTheme.headlineSmall,
                           ),
                         ),
                       ])
@@ -310,6 +252,27 @@ class _MainScreenState extends State<MainScreen>
               ),
             ),
           ),
+          actions: [
+            Container(
+              decoration: BoxDecoration(
+                color: yoyo500.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                color: yoyo500,
+                onPressed: () {
+                  Get.to(() => const CreateBoardView());
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: popWhite500,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+          ],
         ),
         body: TabBarView(controller: tabController, children: const [
           BoardsView(),

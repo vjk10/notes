@@ -18,7 +18,7 @@ class NotesSnackBar {
           Icons.check_circle_outline_outlined,
           color: popWhite500,
         ),
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
         shouldIconPulse: false,
       ),
     );
@@ -37,7 +37,7 @@ class NotesSnackBar {
           Icons.error_outline,
           color: popWhite500,
         ),
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
         shouldIconPulse: false,
       ),
     );
@@ -56,7 +56,7 @@ class NotesSnackBar {
           Icons.warning_amber_outlined,
           color: popWhite500,
         ),
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
         shouldIconPulse: false,
       ),
     );
@@ -75,7 +75,7 @@ class NotesSnackBar {
           NotesIcon.info,
           color: popWhite500,
         ),
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
         shouldIconPulse: false,
       ),
     );
@@ -94,7 +94,7 @@ class NotesSnackBar {
           NotesIcon.info,
           color: popBlack600,
         ),
-        duration: const Duration(seconds: 1),
+        duration: const Duration(seconds: 2),
         shouldIconPulse: false,
       ),
     );

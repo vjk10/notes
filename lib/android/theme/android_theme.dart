@@ -69,6 +69,21 @@ ThemeData productiveTheme = ThemeData(
       color: popWhite500,
       fontWeight: FontWeight.bold,
     ),
+    titleLarge: TextStyle(
+      fontFamily: 'Gilroy',
+      color: popWhite500,
+      fontWeight: FontWeight.bold,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: 'Gilroy',
+      color: popWhite500,
+      fontWeight: FontWeight.bold,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: 'Cirka',
+      color: popWhite500,
+      fontWeight: FontWeight.bold,
+    ),
   ),
   colorScheme: ColorScheme(
     brightness: Brightness.dark,

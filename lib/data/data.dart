@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
+import 'package:notes/theme/colors.dart';
 
 class StaticData {
   StaticData._();
@@ -52,4 +53,56 @@ class StaticData {
   static const String mainButtonTag = "mainButtonTag";
 
   static late bool cameSignedIn;
+
+  static List<Map<String, dynamic>> boardcolors = [
+    {
+      "color": poliPurple500,
+      "text": "poli purple",
+      "textcolor": popWhite500,
+      "value": 0xFF6A35FF,
+      "textvalue": 0xFFFFFFFF,
+    },
+    {
+      "color": rss500,
+      "text": "red",
+      "textcolor": popWhite500,
+      "value": 0xFFFF8744,
+      "textvalue": 0xFFFFFFFF,
+    },
+    {
+      "color": pinkPong500,
+      "text": "pink pong",
+      "textcolor": popWhite500,
+      "value": 0xFFFF426F,
+      "textvalue": 0xFFFFFFFF,
+    },
+    {
+      "color": manna500,
+      "text": "manna",
+      "textcolor": popBlack500,
+      "value": 0xFFFFCB45,
+      "textvalue": 0xFF0D0D0D,
+    },
+    {
+      "color": neoPacha500,
+      "text": "neo pacha",
+      "textcolor": popBlack500,
+      "value": 0xFFE5FE40,
+      "textvalue": 0xFF0D0D0D,
+    },
+    {
+      "color": yoyo500,
+      "text": "yoyo",
+      "textcolor": popWhite500,
+      "value": 0xFFAA3FFF,
+      "textvalue": 0xFFFFFFFF,
+    },
+    {
+      "color": pakGreen500,
+      "text": "pak green",
+      "textcolor": popBlack500,
+      "value": 0xFF3BFFAD,
+      "textvalue": 0xFF0D0D0D,
+    },
+  ];
 }
