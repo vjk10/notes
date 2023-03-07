@@ -32,8 +32,10 @@ class _SplashScreenState extends State<SplashScreen> {
       onboarded = value?.onboarding;
     });
     if (onboarded == "true") {
-      AuthServices().authChanges();
-      Get.offAll(() => const MainScreen(selectedIndex: 0));
+      await AuthServices().authChanges().whenComplete(() {
+        setState(() {});
+        Get.offAll(() => const MainScreen(selectedIndex: 0));
+      });
     } else {
       startOnboarding();
     }

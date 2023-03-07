@@ -17,7 +17,7 @@ ThemeData productiveTheme = ThemeData(
     bodyMedium: TextStyle(
       fontFamily: 'Gilroy',
       color: popWhite500,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.normal,
     ),
     bodySmall: TextStyle(
       fontFamily: 'Gilroy',
@@ -38,6 +38,7 @@ ThemeData productiveTheme = ThemeData(
       fontFamily: 'Gilroy',
       color: popWhite500,
       fontWeight: FontWeight.bold,
+      fontSize: 14,
     ),
     labelSmall: TextStyle(
       fontFamily: 'Cirka',
@@ -95,7 +96,7 @@ ThemeData productiveTheme = ThemeData(
     onError: popWhite500,
     background: popBlack500,
     onBackground: popWhite500,
-    surface: popWhite500,
+    surface: popBlack400,
     onSurface: popBlack500,
     errorContainer: error.shade500,
     tertiary: success,

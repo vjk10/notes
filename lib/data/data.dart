@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:isar/isar.dart';
+import 'package:notes/android/views/items/create_notes_view.dart';
+import 'package:notes/notes_icon_icons.dart';
+import 'package:notes/services/other/local_model.dart';
 import 'package:notes/theme/colors.dart';
 
 class StaticData {
@@ -43,12 +47,12 @@ class StaticData {
 
   static late Isar isarDb;
   static late String uid;
-  static late String displayname;
+  static String displayname = "";
   static late String dob;
   static late String phonenumber;
   static late String email;
   static late String username;
-  static late String photourl;
+  static String photourl = "";
 
   static const String mainButtonTag = "mainButtonTag";
 
@@ -56,53 +60,75 @@ class StaticData {
 
   static List<Map<String, dynamic>> boardcolors = [
     {
-      "color": poliPurple500,
-      "text": "poli purple",
-      "textcolor": popWhite500,
-      "value": 0xFF6A35FF,
-      "textvalue": 0xFFFFFFFF,
-    },
-    {
-      "color": rss500,
+      "color": bgRed,
       "text": "red",
-      "textcolor": popWhite500,
-      "value": 0xFFFF8744,
-      "textvalue": 0xFFFFFFFF,
-    },
-    {
-      "color": pinkPong500,
-      "text": "pink pong",
-      "textcolor": popWhite500,
-      "value": 0xFFFF426F,
-      "textvalue": 0xFFFFFFFF,
-    },
-    {
-      "color": manna500,
-      "text": "manna",
       "textcolor": popBlack500,
-      "value": 0xFFFFCB45,
+      "value": 0xFFFED5C4,
       "textvalue": 0xFF0D0D0D,
     },
     {
-      "color": neoPacha500,
-      "text": "neo pacha",
+      "color": bgBrown,
+      "text": "brown",
       "textcolor": popBlack500,
-      "value": 0xFFE5FE40,
+      "value": 0xFFFFEED5,
       "textvalue": 0xFF0D0D0D,
     },
     {
-      "color": yoyo500,
-      "text": "yoyo",
-      "textcolor": popWhite500,
-      "value": 0xFFAA3FFF,
-      "textvalue": 0xFFFFFFFF,
-    },
-    {
-      "color": pakGreen500,
-      "text": "pak green",
+      "color": bgCyan,
+      "text": "cyan",
       "textcolor": popBlack500,
-      "value": 0xFF3BFFAD,
+      "value": 0xFFC4FEF0,
       "textvalue": 0xFF0D0D0D,
     },
+    {
+      "color": bgPurple,
+      "text": "purple",
+      "textcolor": popBlack500,
+      "value": 0xFFDDDCFF,
+      "textvalue": 0xFF0D0D0D,
+    },
+    {
+      "color": bgGreen,
+      "text": "green",
+      "textcolor": popBlack500,
+      "value": 0xFFEFFEC4,
+      "textvalue": 0xFF0D0D0D,
+    },
+    {
+      "color": bgYellow,
+      "text": "yellow",
+      "textcolor": popBlack500,
+      "value": 0xFFFFECA8,
+      "textvalue": 0xFF0D0D0D,
+    },
+    {
+      "color": bgPink,
+      "text": "pink",
+      "textcolor": popBlack500,
+      "value": 0xFFFFCAF3,
+      "textvalue": 0xFF0D0D0D,
+    },
+  ];
+
+  static List<CreateItemOptions> createOptions = [
+    CreateItemOptions(
+        title: "create note",
+        icon: NotesIcon.note,
+        description:
+            "create notes, attach images, add comments and powerful styling!",
+        mainColor: yoyo500,
+        subColor: yoyo100,
+        onTap: () {
+          Get.to(() => const CreateNotesView());
+        }),
+    CreateItemOptions(
+      title: "create list",
+      icon: NotesIcon.lists,
+      description:
+          "create a list with a bunch of tasks or just some things you want to keep in mind!",
+      mainColor: orangeSunshine500,
+      subColor: orangeSunshine100,
+      onTap: () {},
+    )
   ];
 }

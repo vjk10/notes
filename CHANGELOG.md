@@ -6,27 +6,16 @@ We are bringing a Hella lotta changes to our app. We are letting go of our previ
 
 More on this soon! Read Me will be updated as and when the new changes are completed and current changes are deprecated.
 
-## NEW CHANGES ✨
+## CHANGELOG
 
 --------------------------------------------------------------------
 
-- [ ] 1. NeoPop UI
-- [ ] 2. Isar DB migration for powerful local DB
-- [ ] 3. Traditional Firebase Firestore to FlutterFire CLI
-- [ ] 4. Traditional features migration to Boards and Tasks
-- [ ] 5. Shared User Data
-- [ ] 6. Online syncing and user features
-- [ ] 7. Calendar and Clock features
-- [ ] 8. Better Accessibility Features
-
-## DEPRECATING CHANGES
+### ![1.1.6](https://img.shields.io/badge/Version-1.1.6-blue?style=for-the-badge&logo=android)
 
 --------------------------------------------------------------------
 
-- [ ] 1. Scientisst DB will be deprecated.
-- [ ] 2. Material Design Language replaced.
-- [ ] 3. Online and Offline are separated.
-- [ ] 4. Clipboards will be deprecated for shared notes.
-- [ ] 5. Alerts are deprecated for Tasks and Calendars.
-- [ ] 6. Notes and Expenses are deprecated for Boards
-- [ ] 7. Backup will be removed to migration as part of deprecating change [3].
+- In Progress for [#64](https://github.com/vjk10/notes/issues/64)
+- In Progress for [#65](https://github.com/vjk10/notes/issues/65)
+- In Progress for [#66](https://github.com/vjk10/notes/issues/66)
+- In Progress for [#67](https://github.com/vjk10/notes/issues/67)
+- In Progress for [#68](https://github.com/vjk10/notes/issues/68)

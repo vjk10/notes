@@ -157,7 +157,7 @@ class _MainScreenState extends State<MainScreen>
         backgroundColor: popBlack600,
         appBar: AppBar(
           backgroundColor: popBlack400,
-          toolbarHeight: 150,
+          toolbarHeight: 80,
           title: CircularProfileAvatar(
             StaticData.photourl,
             backgroundColor: poliPurple500,
@@ -217,7 +217,7 @@ class _MainScreenState extends State<MainScreen>
                     ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: 10,
                   ),
                   TabBar(
                       controller: tabController,

@@ -12,7 +12,7 @@ class BoardsLocal {
   String? createdon;
   int? boardcolor;
   int? boardtextcolor;
-  NotesLocal? notesLocal;
+  List<NotesLocal>? notesLocal;
 }
 
 @embedded
@@ -24,7 +24,7 @@ class NotesLocal {
   bool? backedup;
   int? boardid;
   String? boardname;
-  ImagesNoteLocal? imagesNoteLocal;
+  List<ImagesNoteLocal>? imagesNoteLocal;
 }
 
 @embedded
@@ -47,6 +47,16 @@ class BoardsLocalServices {
       board.boardcolor = boardcolor;
       board.boardtextcolor = boardtextcolor;
       await StaticData.isarDb.boardsLocals.put(board).whenComplete(() {
+        returnStatus = StaticData.successStatus;
+      });
+    });
+    return returnStatus;
+  }
+
+  Future<String> deleteBoard(int id) async {
+    String returnStatus = StaticData.errorStatus;
+    await StaticData.isarDb.writeTxn(() async {
+      await StaticData.isarDb.boardsLocals.delete(id).whenComplete(() {
         returnStatus = StaticData.successStatus;
       });
     });

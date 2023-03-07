@@ -45,7 +45,7 @@ const BoardsLocalSchema = CollectionSchema(
     r'notesLocal': PropertySchema(
       id: 5,
       name: r'notesLocal',
-      type: IsarType.object,
+      type: IsarType.objectList,
       target: r'NotesLocal',
     )
   },
@@ -91,11 +91,17 @@ int _boardsLocalEstimateSize(
     }
   }
   {
-    final value = object.notesLocal;
-    if (value != null) {
-      bytesCount += 3 +
-          NotesLocalSchema.estimateSize(
-              value, allOffsets[NotesLocal]!, allOffsets);
+    final list = object.notesLocal;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[NotesLocal]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              NotesLocalSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
     }
   }
   return bytesCount;
@@ -112,7 +118,7 @@ void _boardsLocalSerialize(
   writer.writeLong(offsets[2], object.boardtextcolor);
   writer.writeString(offsets[3], object.createdby);
   writer.writeString(offsets[4], object.createdon);
-  writer.writeObject<NotesLocal>(
+  writer.writeObjectList<NotesLocal>(
     offsets[5],
     allOffsets,
     NotesLocalSchema.serialize,
@@ -133,10 +139,11 @@ BoardsLocal _boardsLocalDeserialize(
   object.createdby = reader.readStringOrNull(offsets[3]);
   object.createdon = reader.readStringOrNull(offsets[4]);
   object.id = id;
-  object.notesLocal = reader.readObjectOrNull<NotesLocal>(
+  object.notesLocal = reader.readObjectList<NotesLocal>(
     offsets[5],
     NotesLocalSchema.deserialize,
     allOffsets,
+    NotesLocal(),
   );
   return object;
 }
@@ -159,10 +166,11 @@ P _boardsLocalDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readObjectOrNull<NotesLocal>(
+      return (reader.readObjectList<NotesLocal>(
         offset,
         NotesLocalSchema.deserialize,
         allOffsets,
+        NotesLocal(),
       )) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -942,12 +950,101 @@ extension BoardsLocalQueryFilter
       ));
     });
   }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'notesLocal',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'notesLocal',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'notesLocal',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'notesLocal',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'notesLocal',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'notesLocal',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
 }
 
 extension BoardsLocalQueryObject
     on QueryBuilder<BoardsLocal, BoardsLocal, QFilterCondition> {
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition> notesLocal(
-      FilterQuery<NotesLocal> q) {
+  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
+      notesLocalElement(FilterQuery<NotesLocal> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'notesLocal');
     });
@@ -1171,7 +1268,7 @@ extension BoardsLocalQueryProperty
     });
   }
 
-  QueryBuilder<BoardsLocal, NotesLocal?, QQueryOperations>
+  QueryBuilder<BoardsLocal, List<NotesLocal>?, QQueryOperations>
       notesLocalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'notesLocal');
@@ -1223,7 +1320,7 @@ const NotesLocalSchema = Schema(
     r'imagesNoteLocal': PropertySchema(
       id: 6,
       name: r'imagesNoteLocal',
-      type: IsarType.object,
+      type: IsarType.objectList,
       target: r'ImagesNoteLocal',
     ),
     r'title': PropertySchema(
@@ -1269,11 +1366,17 @@ int _notesLocalEstimateSize(
     }
   }
   {
-    final value = object.imagesNoteLocal;
-    if (value != null) {
-      bytesCount += 3 +
-          ImagesNoteLocalSchema.estimateSize(
-              value, allOffsets[ImagesNoteLocal]!, allOffsets);
+    final list = object.imagesNoteLocal;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[ImagesNoteLocal]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              ImagesNoteLocalSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
     }
   }
   {
@@ -1297,7 +1400,7 @@ void _notesLocalSerialize(
   writer.writeString(offsets[3], object.body);
   writer.writeString(offsets[4], object.createdby);
   writer.writeString(offsets[5], object.createdon);
-  writer.writeObject<ImagesNoteLocal>(
+  writer.writeObjectList<ImagesNoteLocal>(
     offsets[6],
     allOffsets,
     ImagesNoteLocalSchema.serialize,
@@ -1319,10 +1422,11 @@ NotesLocal _notesLocalDeserialize(
   object.body = reader.readStringOrNull(offsets[3]);
   object.createdby = reader.readStringOrNull(offsets[4]);
   object.createdon = reader.readStringOrNull(offsets[5]);
-  object.imagesNoteLocal = reader.readObjectOrNull<ImagesNoteLocal>(
+  object.imagesNoteLocal = reader.readObjectList<ImagesNoteLocal>(
     offsets[6],
     ImagesNoteLocalSchema.deserialize,
     allOffsets,
+    ImagesNoteLocal(),
   );
   object.title = reader.readStringOrNull(offsets[7]);
   return object;
@@ -1348,10 +1452,11 @@ P _notesLocalDeserializeProp<P>(
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readObjectOrNull<ImagesNoteLocal>(
+      return (reader.readObjectList<ImagesNoteLocal>(
         offset,
         ImagesNoteLocalSchema.deserialize,
         allOffsets,
+        ImagesNoteLocal(),
       )) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
@@ -2080,6 +2185,95 @@ extension NotesLocalQueryFilter
     });
   }
 
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'imagesNoteLocal',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'imagesNoteLocal',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'imagesNoteLocal',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'imagesNoteLocal',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'imagesNoteLocal',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'imagesNoteLocal',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition> titleIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2230,8 +2424,8 @@ extension NotesLocalQueryFilter
 
 extension NotesLocalQueryObject
     on QueryBuilder<NotesLocal, NotesLocal, QFilterCondition> {
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition> imagesNoteLocal(
-      FilterQuery<ImagesNoteLocal> q) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      imagesNoteLocalElement(FilterQuery<ImagesNoteLocal> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'imagesNoteLocal');
     });

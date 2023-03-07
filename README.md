@@ -6,6 +6,18 @@ We are bringing a Hella lotta changes to our app. We are letting go of our previ
 
 More on this soon! Read Me will be updated as and when the new changes are completed and current changes are deprecated.
 
+## CHANGE STATUS
+
+--------------------------------------------------------------------
+
+![Issues](https://img.shields.io/github/issues/vjk10/notes?style=for-the-badge&logo=github) ![Current Release](https://img.shields.io/badge/CURRENT%20RELEASE-Release%202-brightgreen?style=for-the-badge&logo=github) ![Current Version](https://img.shields.io/badge/Current%20Version-1.1.6-blue?style=for-the-badge&logo=github)
+
+## SDK DETAILS
+
+--------------------------------------------------------------------
+
+![Flutter SDK](https://img.shields.io/badge/Flutter%20-3.7.3-blue?style=for-the-badge&logo=flutter) ![Dart SDK](https://img.shields.io/badge/Firebase%20-2.7.0-blue?style=for-the-badge&logo=firebase) ![Firebase](https://img.shields.io/badge/Dart%20-2.19.2-blue?style=for-the-badge&logo=dart) ![NeoPop](https://img.shields.io/badge/NeoPop%20-1.0.2-blue?style=for-the-badge)
+
 ## NEW CHANGES ✨
 
 --------------------------------------------------------------------

@@ -37,6 +37,17 @@ MaterialColor warning = MaterialColor(0xFFF08D32, color);
 MaterialColor info = MaterialColor(0xFF144CC7, color);
 MaterialColor success = MaterialColor(0xFF06C270, color);
 
+//-------------------//
+// BACKGROUND-COLORS //
+//-------------------//
+MaterialColor bgRed = MaterialColor(0xFFFED5C4, color);
+MaterialColor bgBrown = MaterialColor(0xFFFFEED5, color);
+MaterialColor bgCyan = MaterialColor(0xFFC4FEF0, color);
+MaterialColor bgPurple = MaterialColor(0xFFDDDCFF, color);
+MaterialColor bgGreen = MaterialColor(0xFFEFFEC4, color);
+MaterialColor bgYellow = MaterialColor(0xFFFFECA8, color);
+MaterialColor bgPink = MaterialColor(0xFFFFCAF3, color);
+
 //-------------//
 // MORE-COLORS //
 //-------------//
@@ -48,6 +59,15 @@ MaterialColor poliPurple400 = MaterialColor(0xFF9772FF, color);
 MaterialColor poliPurple300 = MaterialColor(0xFFB49AFF, color);
 MaterialColor poliPurple200 = MaterialColor(0xFFD2C2FF, color);
 MaterialColor poliPurple100 = MaterialColor(0xFFE8DFFF, color);
+
+MaterialColor orangeSunshine800 = MaterialColor(0xFF4D2914, color);
+MaterialColor orangeSunshine700 = MaterialColor(0xFF804322, color);
+MaterialColor orangeSunshine600 = MaterialColor(0xFFB35F30, color);
+MaterialColor orangeSunshine500 = MaterialColor(0xFFFF8744, color);
+MaterialColor orangeSunshine400 = MaterialColor(0xFFFFAB7C, color);
+MaterialColor orangeSunshine300 = MaterialColor(0xFFFFC3A2, color);
+MaterialColor orangeSunshine200 = MaterialColor(0xFFFFDBC7, color);
+MaterialColor orangeSunshine100 = MaterialColor(0xFFFFEFE6, color);
 
 MaterialColor rss800 = MaterialColor(0xFF4D2914, color);
 MaterialColor rss700 = MaterialColor(0xFF804322, color);

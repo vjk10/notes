@@ -1,6 +1,4 @@
-import 'dart:ffi';
-
-import 'package:avatar_stack/positions.dart';
+import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:isar/isar.dart';
 import 'package:neopop/neopop.dart';
 import 'package:notes/android/views/boards/create_board_view.dart';
+import 'package:notes/android/views/boards/display_board_view.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/data/data.dart';
 import 'package:notes/services/isar_db/boards_local_schema.dart';
@@ -43,9 +42,10 @@ class _BoardsViewState extends State<BoardsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: dataCount > 0
-          ? StreamBuilder<List<BoardsLocal>>(
+    return dataCount > 0
+        ? Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: StreamBuilder<List<BoardsLocal>>(
               stream: StaticData.isarDb.boardsLocals
                   .where()
                   .watch(fireImmediately: true),
@@ -61,7 +61,7 @@ class _BoardsViewState extends State<BoardsView> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 20.0),
+                                horizontal: 20.0, vertical: 5),
                             child: BoardsListItem(
                               boardsLocal: boards![index],
                             ),
@@ -79,9 +79,9 @@ class _BoardsViewState extends State<BoardsView> {
                     }
                 }
               },
-            )
-          : const NoBoardsCreated(),
-    );
+            ),
+          )
+        : const Center(child: NoBoardsCreated());
   }
 }
 
@@ -113,40 +113,53 @@ class BoardsListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  children: [
-                    AvatarStack(
-                      width: Get.width / 3,
-                      height: 42,
-                      borderWidth: 0,
-                      avatars: [
-                        NetworkImage(StaticData.photourl, scale: 2),
-                        NetworkImage(StaticData.photourl, scale: 2),
-                        NetworkImage(StaticData.photourl, scale: 2),
-                        NetworkImage(StaticData.photourl, scale: 2),
-                        NetworkImage(StaticData.photourl, scale: 2),
-                        NetworkImage(StaticData.photourl, scale: 2),
-                      ],
-                      infoWidgetBuilder: (surplus) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: popWhite500,
+                StaticData.photourl.isNotEmpty
+                    ? Row(
+                        children: [
+                          AvatarStack(
+                            width: Get.width / 3,
+                            height: 42,
+                            borderWidth: 1,
+                            borderColor: Color(boardsLocal.boardtextcolor!),
+                            avatars: [
+                              NetworkImage(StaticData.photourl, scale: 2),
+                              NetworkImage(StaticData.photourl, scale: 2),
+                              NetworkImage(StaticData.photourl, scale: 2),
+                              NetworkImage(StaticData.photourl, scale: 2),
+                              NetworkImage(StaticData.photourl, scale: 2),
+                              NetworkImage(StaticData.photourl, scale: 2),
+                            ],
+                            infoWidgetBuilder: (surplus) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: popWhite500,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "+${surplus.toString()}",
+                                    style: StaticData.t.textTheme.titleMedium
+                                        ?.copyWith(
+                                      color: poliPurple500,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                          child: Center(
-                            child: Text(
-                              "+${surplus.toString()}",
-                              style:
-                                  StaticData.t.textTheme.titleMedium?.copyWith(
-                                color: poliPurple500,
-                              ),
-                            ),
+                        ],
+                      )
+                    : Row(children: [
+                        CircularProfileAvatar(
+                          StaticData.photourl,
+                          backgroundColor: poliPurple500,
+                          radius: 20,
+                          borderColor: poliPurple500,
+                          initialsText: Text(
+                            StaticData.displayname[0].toString(),
                           ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                        ),
+                      ]),
                 const SizedBox(
                   height: 20,
                 ),
@@ -174,7 +187,13 @@ class BoardsListItem extends StatelessWidget {
               children: [
                 NeoPopButton(
                   color: popWhite500,
-                  onTapUp: () => HapticFeedback.vibrate(),
+                  onTapUp: () {
+                    Get.to(
+                      () => DisplayBoardView(
+                        boardid: boardsLocal.id,
+                      ),
+                    );
+                  },
                   onTapDown: () => HapticFeedback.vibrate(),
                   parentColor: Colors.transparent,
                   buttonPosition: Position.center,

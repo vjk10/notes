@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       // Android Application
       return GetMaterialApp(
         defaultTransition: Transition.circularReveal,
-        transitionDuration: const Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 800),
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: kDebugMode,
         theme: productiveTheme,

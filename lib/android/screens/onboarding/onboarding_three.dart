@@ -36,6 +36,9 @@ class _Onboarding3State extends State<Onboarding3> {
   void initState() {
     if (widget.cameSignedIn) {
       initUser();
+      setState(() {
+        StaticData.cameSignedIn = widget.cameSignedIn;
+      });
     }
     super.initState();
   }

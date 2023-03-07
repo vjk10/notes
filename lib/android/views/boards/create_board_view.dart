@@ -59,7 +59,7 @@ class _CreateBoardViewState extends State<CreateBoardView> {
         appBar: AppBar(
           toolbarHeight: 150,
           title: Text(
-            "create new board",
+            "back",
             style: StaticData.t.textTheme.headlineSmall?.copyWith(
               fontFamily: 'Cirka',
             ),
@@ -74,6 +74,26 @@ class _CreateBoardViewState extends State<CreateBoardView> {
             onPressed: () {
               Get.back();
             },
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: Text(
+                    "create board",
+                    textAlign: TextAlign.start,
+                    style: StaticData.t.textTheme.headlineMedium?.copyWith(
+                      color: popWhite500,
+                      fontFamily: 'Cirka',
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           automaticallyImplyLeading: false,
           backgroundColor: popBlack600,

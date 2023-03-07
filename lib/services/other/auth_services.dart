@@ -7,8 +7,8 @@ import '../isar_db/onboarding_schema.dart';
 import '../isar_db/user_schema.dart';
 
 class AuthServices {
-  String authChanges() {
-    String change = StaticData.warningStatus;
+  Future<String> authChanges() async {
+    late String change = StaticData.warningStatus;
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
@@ -17,7 +17,7 @@ class AuthServices {
         change = StaticData.errorStatus;
         StaticData.cameSignedIn = false;
         await StaticData.isarDb.userLocals.get(1).then((value) {
-          StaticData.cameSignedIn = true;
+          StaticData.cameSignedIn = false;
           StaticData.uid = value!.id.toString();
           StaticData.displayname = value.displayname.toString();
           StaticData.email = value.email.toString();
@@ -52,6 +52,7 @@ class AuthServices {
   Future<String> createFirebaseUser(String uid, String displayname, String dob,
       String phonenumber, String email, String username) async {
     late String returnStatus;
+    StaticData.cameSignedIn = true;
     UserModel userModel = UserModel(
         id: uid,
         displayname: displayname,
@@ -74,6 +75,7 @@ class AuthServices {
   Future<String> createLocalUser(String displayname, String dob,
       String phonenumber, String email, String username) async {
     late String returnStatus;
+    StaticData.cameSignedIn = false;
     Onboarding onboarding = Onboarding();
     onboarding.id = 1;
     onboarding.onboarding = "true";
