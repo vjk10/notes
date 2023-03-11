@@ -74,16 +74,20 @@ class _MainScreenState extends State<MainScreen>
       initialIndex: widget.selectedIndex,
     );
     selectedIndex = widget.selectedIndex;
-    AuthServices().authChanges();
-    setState(() {});
+    checkAuthState();
     selectedIndex = widget.selectedIndex;
-    // checkTerms();
     getCounts();
     if (kDebugMode) {
       print("MAIN SCREEN INIT STATE");
       print("SELECTED INDEX: ${widget.selectedIndex}");
     }
     super.initState();
+  }
+
+  checkAuthState() async {
+    await AuthServices().authChanges().whenComplete(() {
+      setState(() {});
+    });
   }
 
   getCounts() async {
@@ -154,9 +158,9 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: popBlack600,
+        backgroundColor: popBlack500,
         appBar: AppBar(
-          backgroundColor: popBlack400,
+          backgroundColor: popBlack500,
           toolbarHeight: 80,
           title: CircularProfileAvatar(
             StaticData.photourl,

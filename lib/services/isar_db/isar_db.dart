@@ -10,6 +10,7 @@ class IsarDB {
         UserLocalSchema,
         OnboardingSchema,
         BoardsLocalSchema,
+        NotesLocalSchema,
       ],
       inspector: true,
     );

@@ -110,6 +110,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                                 style:
                                     StaticData.t.textTheme.bodyMedium?.copyWith(
                                   color: popBlack600,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(width: 15),
@@ -145,7 +146,10 @@ class _OnBoarding2State extends State<OnBoarding2> {
                           children: [
                             Text(
                               "go offline",
-                              style: StaticData.t.textTheme.bodyMedium,
+                              style:
+                                  StaticData.t.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),

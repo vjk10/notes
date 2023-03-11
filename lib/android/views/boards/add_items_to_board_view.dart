@@ -9,9 +9,12 @@ import 'package:scrollable/exports.dart';
 
 import '../../../data/data.dart';
 import '../../../services/other/local_model.dart';
+import '../items/create_notes_view.dart';
 
 class AddItemsToBoard extends StatefulWidget {
-  const AddItemsToBoard({Key? key}) : super(key: key);
+  final int boardid;
+
+  const AddItemsToBoard({Key? key, required this.boardid}) : super(key: key);
 
   @override
   State<AddItemsToBoard> createState() => _AddItemsToBoardState();
@@ -35,6 +38,29 @@ class _AddItemsToBoardState extends State<AddItemsToBoard> {
 
   @override
   Widget build(BuildContext context) {
+    List<CreateItemOptions> createOptions = [
+      CreateItemOptions(
+          title: "create note",
+          icon: NotesIcon.note,
+          description:
+              "create notes, attach images, add comments and powerful styling!",
+          mainColor: yoyo500,
+          subColor: yoyo100,
+          onTap: () {
+            Get.to(() => CreateNotesView(
+                  boardid: widget.boardid,
+                ));
+          }),
+      CreateItemOptions(
+        title: "create list",
+        icon: NotesIcon.lists,
+        description:
+            "create a list with a bunch of tasks or just some things you want to keep in mind!",
+        mainColor: orangeSunshine500,
+        subColor: orangeSunshine100,
+        onTap: () {},
+      )
+    ];
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: popBlack500,
@@ -125,7 +151,7 @@ class _AddItemsToBoardState extends State<AddItemsToBoard> {
                               controller: createOptionController,
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              itemCount: StaticData.createOptions.length,
+                              itemCount: createOptions.length,
                               itemExtent: 300,
                               itemBuilder: (context, index) {
                                 return Row(
@@ -134,8 +160,7 @@ class _AddItemsToBoardState extends State<AddItemsToBoard> {
                                       width: 20,
                                     ),
                                     CreateItemOptionsWidget(
-                                        createItemOption:
-                                            StaticData.createOptions[index]),
+                                        createItemOption: createOptions[index]),
                                     const SizedBox(
                                       width: 20,
                                     ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:isar/isar.dart';
-import 'package:notes/android/views/items/create_notes_view.dart';
-import 'package:notes/notes_icon_icons.dart';
-import 'package:notes/services/other/local_model.dart';
 import 'package:notes/theme/colors.dart';
+import 'package:tuple/tuple.dart';
 
 class StaticData {
   StaticData._();
@@ -110,25 +108,47 @@ class StaticData {
     },
   ];
 
-  static List<CreateItemOptions> createOptions = [
-    CreateItemOptions(
-        title: "create note",
-        icon: NotesIcon.note,
-        description:
-            "create notes, attach images, add comments and powerful styling!",
-        mainColor: yoyo500,
-        subColor: yoyo100,
-        onTap: () {
-          Get.to(() => const CreateNotesView());
-        }),
-    CreateItemOptions(
-      title: "create list",
-      icon: NotesIcon.lists,
-      description:
-          "create a list with a bunch of tasks or just some things you want to keep in mind!",
-      mainColor: orangeSunshine500,
-      subColor: orangeSunshine100,
-      onTap: () {},
-    )
-  ];
+  static DefaultStyles quillDefaultTextStyle = DefaultStyles(
+    h1: DefaultTextBlockStyle(
+      StaticData.t.textTheme.headlineLarge!,
+      const Tuple2(1, 1.5),
+      const Tuple2(1, 1.5),
+      const BoxDecoration(),
+    ),
+    h2: DefaultTextBlockStyle(
+      StaticData.t.textTheme.headlineMedium!,
+      const Tuple2(1, 1.5),
+      const Tuple2(1, 1.5),
+      const BoxDecoration(),
+    ),
+    h3: DefaultTextBlockStyle(
+      StaticData.t.textTheme.headlineSmall!,
+      const Tuple2(1, 1.5),
+      const Tuple2(1, 1.5),
+      const BoxDecoration(),
+    ),
+    paragraph: DefaultTextBlockStyle(
+      StaticData.t.textTheme.bodyMedium!.copyWith(
+        fontWeight: FontWeight.normal,
+      ),
+      const Tuple2(1, 1.5),
+      const Tuple2(1, 1.5),
+      const BoxDecoration(),
+    ),
+    bold: StaticData.t.textTheme.bodyMedium!.copyWith(
+      fontWeight: FontWeight.bold,
+    ),
+    underline: TextStyle(
+      decoration: TextDecoration.underline,
+      decorationColor: popWhite500,
+    ),
+    leading: DefaultTextBlockStyle(
+      StaticData.t.textTheme.bodyMedium!.copyWith(
+        fontWeight: FontWeight.normal,
+      ),
+      const Tuple2(1, 1.5),
+      const Tuple2(1, 1.5),
+      const BoxDecoration(),
+    ),
+  );
 }

@@ -41,12 +41,6 @@ const BoardsLocalSchema = CollectionSchema(
       id: 4,
       name: r'createdon',
       type: IsarType.string,
-    ),
-    r'notesLocal': PropertySchema(
-      id: 5,
-      name: r'notesLocal',
-      type: IsarType.objectList,
-      target: r'NotesLocal',
     )
   },
   estimateSize: _boardsLocalEstimateSize,
@@ -56,10 +50,7 @@ const BoardsLocalSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {
-    r'NotesLocal': NotesLocalSchema,
-    r'ImagesNoteLocal': ImagesNoteLocalSchema
-  },
+  embeddedSchemas: {},
   getId: _boardsLocalGetId,
   getLinks: _boardsLocalGetLinks,
   attach: _boardsLocalAttach,
@@ -90,20 +81,6 @@ int _boardsLocalEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  {
-    final list = object.notesLocal;
-    if (list != null) {
-      bytesCount += 3 + list.length * 3;
-      {
-        final offsets = allOffsets[NotesLocal]!;
-        for (var i = 0; i < list.length; i++) {
-          final value = list[i];
-          bytesCount +=
-              NotesLocalSchema.estimateSize(value, offsets, allOffsets);
-        }
-      }
-    }
-  }
   return bytesCount;
 }
 
@@ -118,12 +95,6 @@ void _boardsLocalSerialize(
   writer.writeLong(offsets[2], object.boardtextcolor);
   writer.writeString(offsets[3], object.createdby);
   writer.writeString(offsets[4], object.createdon);
-  writer.writeObjectList<NotesLocal>(
-    offsets[5],
-    allOffsets,
-    NotesLocalSchema.serialize,
-    object.notesLocal,
-  );
 }
 
 BoardsLocal _boardsLocalDeserialize(
@@ -139,12 +110,6 @@ BoardsLocal _boardsLocalDeserialize(
   object.createdby = reader.readStringOrNull(offsets[3]);
   object.createdon = reader.readStringOrNull(offsets[4]);
   object.id = id;
-  object.notesLocal = reader.readObjectList<NotesLocal>(
-    offsets[5],
-    NotesLocalSchema.deserialize,
-    allOffsets,
-    NotesLocal(),
-  );
   return object;
 }
 
@@ -165,13 +130,6 @@ P _boardsLocalDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readStringOrNull(offset)) as P;
-    case 5:
-      return (reader.readObjectList<NotesLocal>(
-        offset,
-        NotesLocalSchema.deserialize,
-        allOffsets,
-        NotesLocal(),
-      )) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -932,124 +890,10 @@ extension BoardsLocalQueryFilter
       ));
     });
   }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'notesLocal',
-      ));
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'notesLocal',
-      ));
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'notesLocal',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'notesLocal',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'notesLocal',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'notesLocal',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'notesLocal',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'notesLocal',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
-  }
 }
 
 extension BoardsLocalQueryObject
-    on QueryBuilder<BoardsLocal, BoardsLocal, QFilterCondition> {
-  QueryBuilder<BoardsLocal, BoardsLocal, QAfterFilterCondition>
-      notesLocalElement(FilterQuery<NotesLocal> q) {
-    return QueryBuilder.apply(this, (query) {
-      return query.object(q, r'notesLocal');
-    });
-  }
-}
+    on QueryBuilder<BoardsLocal, BoardsLocal, QFilterCondition> {}
 
 extension BoardsLocalQueryLinks
     on QueryBuilder<BoardsLocal, BoardsLocal, QFilterCondition> {}
@@ -1267,23 +1111,16 @@ extension BoardsLocalQueryProperty
       return query.addPropertyName(r'createdon');
     });
   }
-
-  QueryBuilder<BoardsLocal, List<NotesLocal>?, QQueryOperations>
-      notesLocalProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'notesLocal');
-    });
-  }
 }
-
-// **************************************************************************
-// IsarEmbeddedGenerator
-// **************************************************************************
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
-const NotesLocalSchema = Schema(
+extension GetNotesLocalCollection on Isar {
+  IsarCollection<NotesLocal> get notesLocals => this.collection();
+}
+
+const NotesLocalSchema = CollectionSchema(
   name: r'NotesLocal',
   id: 6655623578322762102,
   properties: {
@@ -1317,14 +1154,8 @@ const NotesLocalSchema = Schema(
       name: r'createdon',
       type: IsarType.string,
     ),
-    r'imagesNoteLocal': PropertySchema(
-      id: 6,
-      name: r'imagesNoteLocal',
-      type: IsarType.objectList,
-      target: r'ImagesNoteLocal',
-    ),
     r'title': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'title',
       type: IsarType.string,
     )
@@ -1333,6 +1164,14 @@ const NotesLocalSchema = Schema(
   serialize: _notesLocalSerialize,
   deserialize: _notesLocalDeserialize,
   deserializeProp: _notesLocalDeserializeProp,
+  idName: r'id',
+  indexes: {},
+  links: {},
+  embeddedSchemas: {},
+  getId: _notesLocalGetId,
+  getLinks: _notesLocalGetLinks,
+  attach: _notesLocalAttach,
+  version: '3.0.5',
 );
 
 int _notesLocalEstimateSize(
@@ -1366,20 +1205,6 @@ int _notesLocalEstimateSize(
     }
   }
   {
-    final list = object.imagesNoteLocal;
-    if (list != null) {
-      bytesCount += 3 + list.length * 3;
-      {
-        final offsets = allOffsets[ImagesNoteLocal]!;
-        for (var i = 0; i < list.length; i++) {
-          final value = list[i];
-          bytesCount +=
-              ImagesNoteLocalSchema.estimateSize(value, offsets, allOffsets);
-        }
-      }
-    }
-  }
-  {
     final value = object.title;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -1400,13 +1225,7 @@ void _notesLocalSerialize(
   writer.writeString(offsets[3], object.body);
   writer.writeString(offsets[4], object.createdby);
   writer.writeString(offsets[5], object.createdon);
-  writer.writeObjectList<ImagesNoteLocal>(
-    offsets[6],
-    allOffsets,
-    ImagesNoteLocalSchema.serialize,
-    object.imagesNoteLocal,
-  );
-  writer.writeString(offsets[7], object.title);
+  writer.writeString(offsets[6], object.title);
 }
 
 NotesLocal _notesLocalDeserialize(
@@ -1422,13 +1241,8 @@ NotesLocal _notesLocalDeserialize(
   object.body = reader.readStringOrNull(offsets[3]);
   object.createdby = reader.readStringOrNull(offsets[4]);
   object.createdon = reader.readStringOrNull(offsets[5]);
-  object.imagesNoteLocal = reader.readObjectList<ImagesNoteLocal>(
-    offsets[6],
-    ImagesNoteLocalSchema.deserialize,
-    allOffsets,
-    ImagesNoteLocal(),
-  );
-  object.title = reader.readStringOrNull(offsets[7]);
+  object.id = id;
+  object.title = reader.readStringOrNull(offsets[6]);
   return object;
 }
 
@@ -1452,16 +1266,98 @@ P _notesLocalDeserializeProp<P>(
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readObjectList<ImagesNoteLocal>(
-        offset,
-        ImagesNoteLocalSchema.deserialize,
-        allOffsets,
-        ImagesNoteLocal(),
-      )) as P;
-    case 7:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+Id _notesLocalGetId(NotesLocal object) {
+  return object.id;
+}
+
+List<IsarLinkBase<dynamic>> _notesLocalGetLinks(NotesLocal object) {
+  return [];
+}
+
+void _notesLocalAttach(IsarCollection<dynamic> col, Id id, NotesLocal object) {
+  object.id = id;
+}
+
+extension NotesLocalQueryWhereSort
+    on QueryBuilder<NotesLocal, NotesLocal, QWhere> {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterWhere> anyId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+}
+
+extension NotesLocalQueryWhere
+    on QueryBuilder<NotesLocal, NotesLocal, QWhereClause> {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterWhereClause> idEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: id,
+        upper: id,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterWhereClause> idNotEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            );
+      }
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterWhereClause> idGreaterThan(Id id,
+      {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: id, includeLower: include),
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterWhereClause> idLessThan(Id id,
+      {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: id, includeUpper: include),
+      );
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterWhereClause> idBetween(
+    Id lowerId,
+    Id upperId, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: lowerId,
+        includeLower: includeLower,
+        upper: upperId,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 }
 
@@ -2167,110 +2063,56 @@ extension NotesLocalQueryFilter
     });
   }
 
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalIsNull() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition> idEqualTo(
+      Id value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'imagesNoteLocal',
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
       ));
     });
   }
 
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalIsNotNull() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition> idGreaterThan(
+    Id value, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'imagesNoteLocal',
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
       ));
     });
   }
 
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'imagesNoteLocal',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'imagesNoteLocal',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'imagesNoteLocal',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalLengthLessThan(
-    int length, {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition> idLessThan(
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'imagesNoteLocal',
-        0,
-        true,
-        length,
-        include,
-      );
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
     });
   }
 
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'imagesNoteLocal',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalLengthBetween(
-    int lower,
-    int upper, {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition> idBetween(
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'imagesNoteLocal',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
     });
   }
 
@@ -2423,322 +2265,294 @@ extension NotesLocalQueryFilter
 }
 
 extension NotesLocalQueryObject
-    on QueryBuilder<NotesLocal, NotesLocal, QFilterCondition> {
-  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
-      imagesNoteLocalElement(FilterQuery<ImagesNoteLocal> q) {
+    on QueryBuilder<NotesLocal, NotesLocal, QFilterCondition> {}
+
+extension NotesLocalQueryLinks
+    on QueryBuilder<NotesLocal, NotesLocal, QFilterCondition> {}
+
+extension NotesLocalQuerySortBy
+    on QueryBuilder<NotesLocal, NotesLocal, QSortBy> {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBackedup() {
     return QueryBuilder.apply(this, (query) {
-      return query.object(q, r'imagesNoteLocal');
+      return query.addSortBy(r'backedup', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBackedupDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'backedup', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBoardid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBoardidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardid', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBoardname() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardname', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBoardnameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'boardname', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBody() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'body', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBodyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'body', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByCreatedby() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdby', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByCreatedbyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdby', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByCreatedon() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdon', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByCreatedonDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdon', Sort.desc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByTitle() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByTitleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.desc);
     });
   }
 }
 
-// coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
-
-const ImagesNoteLocalSchema = Schema(
-  name: r'ImagesNoteLocal',
-  id: -8622929843056344320,
-  properties: {
-    r'imagepath': PropertySchema(
-      id: 0,
-      name: r'imagepath',
-      type: IsarType.string,
-    ),
-    r'noteid': PropertySchema(
-      id: 1,
-      name: r'noteid',
-      type: IsarType.long,
-    )
-  },
-  estimateSize: _imagesNoteLocalEstimateSize,
-  serialize: _imagesNoteLocalSerialize,
-  deserialize: _imagesNoteLocalDeserialize,
-  deserializeProp: _imagesNoteLocalDeserializeProp,
-);
-
-int _imagesNoteLocalEstimateSize(
-  ImagesNoteLocal object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  {
-    final value = object.imagepath;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  return bytesCount;
-}
-
-void _imagesNoteLocalSerialize(
-  ImagesNoteLocal object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeString(offsets[0], object.imagepath);
-  writer.writeLong(offsets[1], object.noteid);
-}
-
-ImagesNoteLocal _imagesNoteLocalDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  final object = ImagesNoteLocal();
-  object.imagepath = reader.readStringOrNull(offsets[0]);
-  object.noteid = reader.readLongOrNull(offsets[1]);
-  return object;
-}
-
-P _imagesNoteLocalDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
-    case 0:
-      return (reader.readStringOrNull(offset)) as P;
-    case 1:
-      return (reader.readLongOrNull(offset)) as P;
-    default:
-      throw IsarError('Unknown property with id $propertyId');
-  }
-}
-
-extension ImagesNoteLocalQueryFilter
-    on QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QFilterCondition> {
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathIsNull() {
+extension NotesLocalQuerySortThenBy
+    on QueryBuilder<NotesLocal, NotesLocal, QSortThenBy> {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBackedup() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'imagepath',
-      ));
+      return query.addSortBy(r'backedup', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathIsNotNull() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBackedupDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'imagepath',
-      ));
+      return query.addSortBy(r'backedup', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBoardid() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imagepath',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'boardid', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBoardidDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'imagepath',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'boardid', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBoardname() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'imagepath',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'boardname', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBoardnameDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'imagepath',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'boardname', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBody() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'imagepath',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'body', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBodyDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'imagepath',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'body', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByCreatedby() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'imagepath',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'createdby', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByCreatedbyDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'imagepath',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addSortBy(r'createdby', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathIsEmpty() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByCreatedon() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imagepath',
-        value: '',
-      ));
+      return query.addSortBy(r'createdon', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      imagepathIsNotEmpty() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByCreatedonDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'imagepath',
-        value: '',
-      ));
+      return query.addSortBy(r'createdon', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      noteidIsNull() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'noteid',
-      ));
+      return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      noteidIsNotNull() {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'noteid',
-      ));
+      return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      noteidEqualTo(int? value) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'noteid',
-        value: value,
-      ));
+      return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      noteidGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'noteid',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      noteidLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'noteid',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QAfterFilterCondition>
-      noteidBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'noteid',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addSortBy(r'title', Sort.desc);
     });
   }
 }
 
-extension ImagesNoteLocalQueryObject
-    on QueryBuilder<ImagesNoteLocal, ImagesNoteLocal, QFilterCondition> {}
+extension NotesLocalQueryWhereDistinct
+    on QueryBuilder<NotesLocal, NotesLocal, QDistinct> {
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByBackedup() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'backedup');
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByBoardid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'boardid');
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByBoardname(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'boardname', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByBody(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'body', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByCreatedby(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createdby', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByCreatedon(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createdon', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByTitle(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
+    });
+  }
+}
+
+extension NotesLocalQueryProperty
+    on QueryBuilder<NotesLocal, NotesLocal, QQueryProperty> {
+  QueryBuilder<NotesLocal, int, QQueryOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<NotesLocal, bool?, QQueryOperations> backedupProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'backedup');
+    });
+  }
+
+  QueryBuilder<NotesLocal, int?, QQueryOperations> boardidProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'boardid');
+    });
+  }
+
+  QueryBuilder<NotesLocal, String?, QQueryOperations> boardnameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'boardname');
+    });
+  }
+
+  QueryBuilder<NotesLocal, String?, QQueryOperations> bodyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'body');
+    });
+  }
+
+  QueryBuilder<NotesLocal, String?, QQueryOperations> createdbyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createdby');
+    });
+  }
+
+  QueryBuilder<NotesLocal, String?, QQueryOperations> createdonProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createdon');
+    });
+  }
+
+  QueryBuilder<NotesLocal, String?, QQueryOperations> titleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'title');
+    });
+  }
+}

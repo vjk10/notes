@@ -8,6 +8,31 @@ ThemeData productiveTheme = ThemeData(
   primaryColor: popWhite500,
   scaffoldBackgroundColor: popBlack500,
   fontFamily: 'Gilroy',
+  dialogBackgroundColor: popWhite500,
+  dialogTheme: DialogTheme(
+    backgroundColor: popWhite500,
+    shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+  ),
+  checkboxTheme: CheckboxThemeData(
+    checkColor: MaterialStateProperty.all(popBlack500),
+    fillColor: MaterialStateProperty.all(popWhite500),
+    overlayColor: MaterialStateProperty.all(popWhite500),
+    side: BorderSide(
+      color: popWhite500,
+      width: 2,
+    ),
+    materialTapTargetSize: MaterialTapTargetSize.padded,
+  ),
+  buttonTheme: ButtonThemeData(
+    buttonColor: popBlack400,
+  ),
+  tooltipTheme: TooltipThemeData(
+    decoration: BoxDecoration(
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.zero,
+      color: popBlack400,
+    ),
+  ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(
       fontFamily: 'Gilroy',
@@ -96,7 +121,7 @@ ThemeData productiveTheme = ThemeData(
     onError: popWhite500,
     background: popBlack500,
     onBackground: popWhite500,
-    surface: popBlack400,
+    surface: popWhite500,
     onSurface: popBlack500,
     errorContainer: error.shade500,
     tertiary: success,
@@ -105,5 +130,9 @@ ThemeData productiveTheme = ThemeData(
     onTertiaryContainer: popWhite500,
     primaryContainer: warning,
     onPrimaryContainer: popWhite500,
+    secondaryContainer: popBlack400,
+    onSecondaryContainer: popWhite500,
+    surfaceVariant: popBlack400,
+    onSurfaceVariant: popWhite500,
   ).copyWith(background: popBlack500).copyWith(error: error),
 );

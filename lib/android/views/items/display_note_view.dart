@@ -8,30 +8,44 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/views/boards/display_board_view.dart';
-import 'package:notes/android/views/boards_view.dart';
 import 'package:notes/notes_icon_icons.dart';
 import 'package:notes/services/isar_db/boards_local_schema.dart';
 import 'package:notes/theme/colors.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../data/data.dart';
 
-class CreateNotesView extends StatefulWidget {
+class DisplayNoteView extends StatefulWidget {
   final int boardid;
-  const CreateNotesView({Key? key, required this.boardid}) : super(key: key);
+  final NotesLocal note;
+  const DisplayNoteView({Key? key, required this.boardid, required this.note})
+      : super(key: key);
 
   @override
-  State<CreateNotesView> createState() => _CreateNotesViewState();
+  State<DisplayNoteView> createState() => _DisplayNoteViewState();
 }
 
-class _CreateNotesViewState extends State<CreateNotesView> {
+class _DisplayNoteViewState extends State<DisplayNoteView> {
   TextEditingController titleController = TextEditingController();
-  final QuillController editorController = QuillController.basic();
+  late final QuillController editorController;
   ScrollController editorScrollController = ScrollController();
   FocusNode editorFocusNode = FocusNode();
+  late dynamic noteBody;
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      titleController.text = widget.note.title!;
+    });
+    getNoteBody();
     super.initState();
+  }
+
+  getNoteBody() {
+    noteBody = jsonDecode(widget.note.body!);
+    setState(() {
+      editorController = QuillController(
+          document: Document.fromJson(noteBody),
+          selection: const TextSelection.collapsed(offset: 0));
+    });
   }
 
   @override
@@ -58,47 +72,41 @@ class _CreateNotesViewState extends State<CreateNotesView> {
           ),
           actions: [
             TextButton.icon(
-              onPressed: titleController.text.isEmpty
-                  ? null
-                  : () async {
-                      HapticFeedback.heavyImpact();
-                      if (kDebugMode) {
-                        print(
-                            "BODY: ${editorController.document.toDelta().toJson()}");
-                      }
-                      if (titleController.text.isNotEmpty) {
-                        NotesLocal note = NotesLocal();
-                        note.title = titleController.text;
-                        note.createdby = StaticData.displayname;
-                        note.boardid = widget.boardid;
-                        note.backedup = false;
-                        note.createdon =
-                            DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY).format(
-                          DateTime.now(),
-                        );
+              onPressed: () async {
+                HapticFeedback.heavyImpact();
+                if (kDebugMode) {
+                  print(
+                      "BODY: ${editorController.document.toDelta().toJson()}");
+                }
+                if (titleController.text.isNotEmpty) {
+                  NotesLocal note = NotesLocal();
+                  note.id = widget.note.id;
+                  note.title = titleController.text;
+                  note.createdby = StaticData.displayname;
+                  note.boardid = widget.boardid;
+                  note.backedup = false;
+                  note.createdon =
+                      DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY).format(
+                    DateTime.now(),
+                  );
+                  note.body =
+                      jsonEncode(editorController.document.toDelta().toJson());
+                  var returnStatus =
+                      await BoardsLocalServices().addNote(widget.boardid, note);
 
-                        note.body = jsonEncode(
-                          editorController.document.toDelta().toJson(),
-                        );
-                        var returnStatus = await BoardsLocalServices()
-                            .addNote(widget.boardid, note);
-
-                        if (returnStatus == StaticData.successStatus) {
-                          Get.offAll(
-                              () => DisplayBoardView(boardid: widget.boardid));
-                        }
-                      }
-                    },
+                  if (returnStatus == StaticData.successStatus) {
+                    Get.offAll(() => DisplayBoardView(boardid: widget.boardid));
+                  }
+                }
+              },
               icon: Icon(
-                titleController.text.isEmpty
-                    ? Icons.disabled_by_default_sharp
-                    : Icons.save_sharp,
-                color: titleController.text.isEmpty ? grey : popWhite500,
+                Icons.save_sharp,
+                color: popWhite500,
               ),
               label: Text(
                 'save',
                 style: StaticData.t.textTheme.bodyLarge?.copyWith(
-                  color: titleController.text.isEmpty ? grey : popWhite500,
+                  color: popWhite500,
                 ),
               ),
             ),
@@ -123,7 +131,7 @@ class _CreateNotesViewState extends State<CreateNotesView> {
                         width: Get.width - 20,
                         height: 50,
                         child: TextFormField(
-                          autofocus: true,
+                          autofocus: false,
                           onChanged: (value) {
                             setState(() {});
                           },
@@ -168,6 +176,11 @@ class _CreateNotesViewState extends State<CreateNotesView> {
                   afterButtonPressed: () {
                     HapticFeedback.heavyImpact();
                   },
+                  color: popBlack500,
+                  iconTheme: QuillIconTheme(
+                    iconSelectedColor: poliPurple100,
+                    iconSelectedFillColor: poliPurple500,
+                  ),
                 ),
                 const SizedBox(
                   height: 20,

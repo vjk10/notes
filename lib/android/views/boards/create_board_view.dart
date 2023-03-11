@@ -397,7 +397,7 @@ class _CreateBoardViewState extends State<CreateBoardView> {
                               children: [
                                 Text(
                                   "create board",
-                                  style: StaticData.t.textTheme.bodyMedium
+                                  style: StaticData.t.textTheme.bodyLarge
                                       ?.copyWith(
                                     color: selectedTextColor,
                                   ),
@@ -406,7 +406,7 @@ class _CreateBoardViewState extends State<CreateBoardView> {
                                 Icon(
                                   NotesIcon.button_arrow_right,
                                   color: selectedTextColor,
-                                  size: 6,
+                                  size: 8,
                                 )
                               ],
                             ),

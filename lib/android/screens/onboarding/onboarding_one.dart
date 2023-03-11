@@ -96,6 +96,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
                             "let's begin",
                             style: StaticData.t.textTheme.bodyMedium?.copyWith(
                               color: popBlack600,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(width: 15),

@@ -8,6 +8,7 @@ import 'package:notes/android/widgets/notes_snackbar.dart';
 import 'package:notes/data/data.dart';
 import 'package:notes/services/firestore_db/google_sign_in.dart';
 import 'package:notes/services/other/auth_services.dart';
+import 'package:pattern_formatter/date_formatter.dart';
 
 import '../../../notes_icon_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -103,13 +104,17 @@ class _Onboarding3State extends State<Onboarding3> {
                         children: [
                           Text(
                             'setup your profile',
-                            style: StaticData.t.textTheme.headlineSmall
+                            style: StaticData.t.textTheme.headlineMedium
                                 ?.copyWith(fontFamily: 'Cirka'),
                           ),
                           const SizedBox(
                             width: 10,
                           ),
-                          SvgPicture.asset("assets/images/error.svg"),
+                          SvgPicture.asset(
+                            "assets/images/system error.svg",
+                            width: 52,
+                            height: 52,
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -140,6 +145,9 @@ class _Onboarding3State extends State<Onboarding3> {
                               controller: dobController,
                               keyboardType: TextInputType.datetime,
                               textInputAction: TextInputAction.next,
+                              inputFormatters: [
+                                DateInputFormatter(),
+                              ],
                               decoration: InputDecoration(
                                 hintText: 'DD/MM/YYYY',
                                 border: InputBorder.none,
@@ -255,6 +263,7 @@ class _Onboarding3State extends State<Onboarding3> {
                                         style: StaticData.t.textTheme.bodyMedium
                                             ?.copyWith(
                                           color: popBlack600,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       const SizedBox(width: 15),
