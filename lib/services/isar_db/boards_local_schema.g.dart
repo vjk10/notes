@@ -1144,18 +1144,23 @@ const NotesLocalSchema = CollectionSchema(
       name: r'body',
       type: IsarType.string,
     ),
-    r'createdby': PropertySchema(
+    r'bodyPlainText': PropertySchema(
       id: 4,
+      name: r'bodyPlainText',
+      type: IsarType.string,
+    ),
+    r'createdby': PropertySchema(
+      id: 5,
       name: r'createdby',
       type: IsarType.string,
     ),
     r'createdon': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'createdon',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'title',
       type: IsarType.string,
     )
@@ -1193,6 +1198,12 @@ int _notesLocalEstimateSize(
     }
   }
   {
+    final value = object.bodyPlainText;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.createdby;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -1223,9 +1234,10 @@ void _notesLocalSerialize(
   writer.writeLong(offsets[1], object.boardid);
   writer.writeString(offsets[2], object.boardname);
   writer.writeString(offsets[3], object.body);
-  writer.writeString(offsets[4], object.createdby);
-  writer.writeString(offsets[5], object.createdon);
-  writer.writeString(offsets[6], object.title);
+  writer.writeString(offsets[4], object.bodyPlainText);
+  writer.writeString(offsets[5], object.createdby);
+  writer.writeString(offsets[6], object.createdon);
+  writer.writeString(offsets[7], object.title);
 }
 
 NotesLocal _notesLocalDeserialize(
@@ -1239,10 +1251,11 @@ NotesLocal _notesLocalDeserialize(
   object.boardid = reader.readLongOrNull(offsets[1]);
   object.boardname = reader.readStringOrNull(offsets[2]);
   object.body = reader.readStringOrNull(offsets[3]);
-  object.createdby = reader.readStringOrNull(offsets[4]);
-  object.createdon = reader.readStringOrNull(offsets[5]);
+  object.bodyPlainText = reader.readStringOrNull(offsets[4]);
+  object.createdby = reader.readStringOrNull(offsets[5]);
+  object.createdon = reader.readStringOrNull(offsets[6]);
   object.id = id;
-  object.title = reader.readStringOrNull(offsets[6]);
+  object.title = reader.readStringOrNull(offsets[7]);
   return object;
 }
 
@@ -1266,6 +1279,8 @@ P _notesLocalDeserializeProp<P>(
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
+      return (reader.readStringOrNull(offset)) as P;
+    case 7:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1754,6 +1769,160 @@ extension NotesLocalQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'body',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'bodyPlainText',
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'bodyPlainText',
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bodyPlainText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'bodyPlainText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'bodyPlainText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'bodyPlainText',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'bodyPlainText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'bodyPlainText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'bodyPlainText',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'bodyPlainText',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bodyPlainText',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterFilterCondition>
+      bodyPlainTextIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'bodyPlainText',
         value: '',
       ));
     });
@@ -2320,6 +2489,18 @@ extension NotesLocalQuerySortBy
     });
   }
 
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBodyPlainText() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bodyPlainText', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByBodyPlainTextDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bodyPlainText', Sort.desc);
+    });
+  }
+
   QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> sortByCreatedby() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdby', Sort.asc);
@@ -2407,6 +2588,18 @@ extension NotesLocalQuerySortThenBy
     });
   }
 
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBodyPlainText() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bodyPlainText', Sort.asc);
+    });
+  }
+
+  QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByBodyPlainTextDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bodyPlainText', Sort.desc);
+    });
+  }
+
   QueryBuilder<NotesLocal, NotesLocal, QAfterSortBy> thenByCreatedby() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdby', Sort.asc);
@@ -2484,6 +2677,14 @@ extension NotesLocalQueryWhereDistinct
     });
   }
 
+  QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByBodyPlainText(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'bodyPlainText',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<NotesLocal, NotesLocal, QDistinct> distinctByCreatedby(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2535,6 +2736,12 @@ extension NotesLocalQueryProperty
   QueryBuilder<NotesLocal, String?, QQueryOperations> bodyProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'body');
+    });
+  }
+
+  QueryBuilder<NotesLocal, String?, QQueryOperations> bodyPlainTextProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'bodyPlainText');
     });
   }
 

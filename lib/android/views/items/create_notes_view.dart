@@ -6,13 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/views/boards/display_board_view.dart';
-import 'package:notes/android/views/boards_view.dart';
 import 'package:notes/notes_icon_icons.dart';
 import 'package:notes/services/isar_db/boards_local_schema.dart';
 import 'package:notes/theme/colors.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../../data/data.dart';
 
@@ -76,15 +73,16 @@ class _CreateNotesViewState extends State<CreateNotesView> {
                             DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY).format(
                           DateTime.now(),
                         );
-
                         note.body = jsonEncode(
                           editorController.document.toDelta().toJson(),
                         );
+                        note.bodyPlainText =
+                            editorController.document.toPlainText();
                         var returnStatus = await BoardsLocalServices()
                             .addNote(widget.boardid, note);
 
                         if (returnStatus == StaticData.successStatus) {
-                          Get.offAll(
+                          Get.off(
                               () => DisplayBoardView(boardid: widget.boardid));
                         }
                       }
@@ -185,22 +183,29 @@ class _CreateNotesViewState extends State<CreateNotesView> {
         body: Column(
           children: [
             Expanded(
-              child: SizedBox(
-                height: double.infinity,
-                width: Get.width,
-                child: QuillEditor(
-                  controller: editorController,
-                  scrollController: editorScrollController,
-                  focusNode: editorFocusNode,
-                  scrollable: true,
-                  padding: const EdgeInsets.all(20),
-                  autoFocus: false,
-                  expands: true,
-                  readOnly: false,
-                  textCapitalization: TextCapitalization.none,
-                  enableInteractiveSelection: true,
-                  placeholder: 'on a galaxy far far away...',
-                  customStyles: StaticData.quillDefaultTextStyle,
+              child: Theme(
+                data: ThemeData(
+                  colorScheme: StaticData.c.copyWith(
+                    surface: popWhite400, //Fix for Issue #79
+                  ),
+                ),
+                child: SizedBox(
+                  height: double.infinity,
+                  width: Get.width,
+                  child: QuillEditor(
+                    controller: editorController,
+                    scrollController: editorScrollController,
+                    focusNode: editorFocusNode,
+                    scrollable: true,
+                    padding: const EdgeInsets.all(20),
+                    autoFocus: false,
+                    expands: true,
+                    readOnly: false,
+                    textCapitalization: TextCapitalization.none,
+                    enableInteractiveSelection: true,
+                    placeholder: 'on a galaxy far far away...',
+                    customStyles: StaticData.quillDefaultTextStyle,
+                  ),
                 ),
               ),
             ),

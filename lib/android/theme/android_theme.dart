@@ -23,15 +23,22 @@ ThemeData productiveTheme = ThemeData(
     ),
     materialTapTargetSize: MaterialTapTargetSize.padded,
   ),
-  buttonTheme: ButtonThemeData(
-    buttonColor: popBlack400,
-  ),
-  tooltipTheme: TooltipThemeData(
-    decoration: BoxDecoration(
-      shape: BoxShape.rectangle,
-      borderRadius: BorderRadius.zero,
-      color: popBlack400,
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      textStyle: MaterialStateProperty.all(
+        TextStyle(
+          fontFamily: 'Cirka',
+          fontWeight: FontWeight.bold,
+          color: popBlack500,
+        ),
+      ),
+      foregroundColor: MaterialStateProperty.all(popBlack500),
     ),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: poliPurple500,
+    selectionColor: poliPurple500.withOpacity(0.5),
+    selectionHandleColor: popWhite500,
   ),
   textTheme: TextTheme(
     bodyLarge: TextStyle(
@@ -121,7 +128,7 @@ ThemeData productiveTheme = ThemeData(
     onError: popWhite500,
     background: popBlack500,
     onBackground: popWhite500,
-    surface: popWhite500,
+    surface: popBlack400,
     onSurface: popBlack500,
     errorContainer: error.shade500,
     tertiary: success,

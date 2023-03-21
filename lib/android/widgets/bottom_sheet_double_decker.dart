@@ -16,17 +16,13 @@ class _NotesBottomSheetState extends State<NotesBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.center,
       children: [
         Container(
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.zero,
-          ),
-          width: Get.width,
+          color: Colors.transparent,
+          width: Get.width - 30,
           height: Get.height / 2,
-          child: SvgPicture.asset("assets/images/bottom_sheet.svg"),
+          child:
+              SvgPicture.asset("assets/images/bottom_sheet_double_decker.svg"),
         ),
         widget.child,
       ],

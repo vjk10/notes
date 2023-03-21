@@ -111,7 +111,7 @@ class _Onboarding3State extends State<Onboarding3> {
                             width: 10,
                           ),
                           SvgPicture.asset(
-                            "assets/images/system error.svg",
+                            "assets/images/setip.svg",
                             width: 52,
                             height: 52,
                           ),

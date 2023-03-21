@@ -8,6 +8,7 @@ import 'package:isar/isar.dart';
 import 'package:neopop/neopop.dart';
 import 'package:notes/android/views/boards/add_items_to_board_view.dart';
 import 'package:notes/android/views/items/display_note_view.dart';
+import 'package:notes/android/widgets/bottom_sheet.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/data/data.dart';
 import 'package:notes/notes_icon_icons.dart';
@@ -36,7 +37,7 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
     super.initState();
   }
 
-  listSwitcher(bool value) {
+  listSwitcher(int value) {
     setState(() {
       listSwitch = !listSwitch;
     });
@@ -50,10 +51,7 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
           isLoading = false;
         });
       }).whenComplete(() {
-        // final noteslocal = boardsLocal.notesLocal!;
-        // if (noteslocal.isNotEmpty) {
         getBoardItems();
-        // }
       });
     } catch (e) {
       if (kDebugMode) {
@@ -143,6 +141,7 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
                             height: 35,
                             onChanged: (i) async {
                               setState(() => listSwitchValue = i);
+                              listSwitcher(i);
                               await Future.delayed(const Duration(seconds: 3));
                             },
                             loading: false,
@@ -217,49 +216,7 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
                                 horizontal: 10,
                               ),
                               itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: ListTile(
-                                    onTap: () {
-                                      Get.to(() => DisplayNoteView(
-                                          boardid: widget.boardid,
-                                          note: notes[index]));
-                                    },
-                                    onLongPress: () async {
-                                      await BoardsLocalServices().deleteNote(
-                                          widget.boardid, notes[index]);
-                                    },
-                                    tileColor:
-                                        Color(boardsLocal.boardtextcolor!),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                      horizontal: 10,
-                                    ),
-                                    title: Text(
-                                      notes[index].title.toString(),
-                                      style: StaticData.t.textTheme.bodyLarge
-                                          ?.copyWith(
-                                        color: Color(boardsLocal.boardcolor!),
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      "created by: ${notes[index].createdby.toString()}",
-                                      style: StaticData.t.textTheme.bodyMedium
-                                          ?.copyWith(
-                                        color: Color(boardsLocal.boardcolor!),
-                                      ),
-                                    ),
-                                    trailing: Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 20.0),
-                                      child: Icon(
-                                        NotesIcon.button_arrow_right,
-                                        size: 10,
-                                        color: Color(boardsLocal.boardcolor!),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                return showListItem(notes, index);
                               },
                             );
                           }
@@ -289,67 +246,6 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
                       }
                     },
                   )
-                // body: datafound
-                //     ? Column(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         mainAxisAlignment: MainAxisAlignment.start,
-                //         children: [
-                //           const SizedBox(
-                //             height: 20,
-                //           ),
-                //           ListView.builder(
-                //             shrinkWrap: true,
-                //             itemCount: notes.length,
-                //             padding: const EdgeInsets.symmetric(
-                //               vertical: 10,
-                //               horizontal: 10,
-                //             ),
-                //             itemBuilder: (context, index) {
-                //               return Padding(
-                //                 padding: const EdgeInsets.all(10.0),
-                //                 child: ListTile(
-                //                   onTap: () {
-                //                     Get.to(() => DisplayNoteView(
-                //                         boardid: widget.boardid,
-                //                         note: notes[index]));
-                //                   },
-                //                   onLongPress: () async {
-                //                     await BoardsLocalServices()
-                //                         .deleteNote(widget.boardid, notes[index]);
-                //                   },
-                //                   tileColor: Color(boardsLocal.boardtextcolor!),
-                //                   contentPadding: const EdgeInsets.symmetric(
-                //                     vertical: 10,
-                //                     horizontal: 10,
-                //                   ),
-                //                   title: Text(
-                //                     notes[index].title.toString(),
-                //                     style:
-                //                         StaticData.t.textTheme.bodyLarge?.copyWith(
-                //                       color: Color(boardsLocal.boardcolor!),
-                //                     ),
-                //                   ),
-                //                   subtitle: Text(
-                //                     "created by: ${notes[index].createdby.toString()}",
-                //                     style:
-                //                         StaticData.t.textTheme.bodyMedium?.copyWith(
-                //                       color: Color(boardsLocal.boardcolor!),
-                //                     ),
-                //                   ),
-                //                   trailing: Padding(
-                //                     padding: const EdgeInsets.only(right: 20.0),
-                //                     child: Icon(
-                //                       NotesIcon.button_arrow_right,
-                //                       size: 10,
-                //                       color: Color(boardsLocal.boardcolor!),
-                //                     ),
-                //                   ),
-                //                 ),
-                //               );
-                //             },
-                //           ),
-                //         ],
-                //       )
                 : Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -370,5 +266,90 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
                     //       ),
                   ),
           );
+  }
+
+  Padding showListItem(List<NotesLocal> notes, int index) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: ListTile(
+        onTap: () {
+          Get.to(() =>
+              DisplayNoteView(boardid: widget.boardid, note: notes[index]));
+        },
+        onLongPress: () async {
+          Get.bottomSheet(
+            const NotesBottomSheet(
+              child: Text("select your actions"),
+            ),
+            backgroundColor: Color(boardsLocal.boardtextcolor!).withOpacity(0),
+            barrierColor: Color(boardsLocal.boardtextcolor!).withOpacity(0.1),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          );
+        },
+        tileColor: Color(boardsLocal.boardtextcolor!),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 10,
+        ),
+        title: Text(
+          notes[index].title.toString(),
+          style: StaticData.t.textTheme.bodyLarge?.copyWith(
+            color: Color(boardsLocal.boardcolor!),
+          ),
+        ),
+        isThreeLine: true,
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    SizedBox(
+                      width: Get.width / 4,
+                      height: 50,
+                      child: Text(
+                        notes[index].bodyPlainText.toString(),
+                        maxLines: 3,
+                        style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                          color: Color(
+                            boardsLocal.boardcolor!,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "created by: ${notes[index].createdby.toString()}",
+              style: StaticData.t.textTheme.bodySmall?.copyWith(
+                fontFamily: 'Cirka',
+                color: Color(boardsLocal.boardcolor!).withOpacity(0.8),
+              ),
+            ),
+          ],
+        ),
+        trailing: Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: Icon(
+            NotesIcon.button_arrow_right,
+            size: 10,
+            color: Color(boardsLocal.boardcolor!),
+          ),
+        ),
+      ),
+    );
   }
 }

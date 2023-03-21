@@ -109,3 +109,6 @@ flutter:
     - family: NotesIcon
       fonts:
        - asset: assets/fonts/NotesIcon.ttf
+    - family: IBM Plex Mono
+      fonts:
+        - asset: assets/fonts/IBMPlexMono-Medium.ttf

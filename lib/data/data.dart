@@ -142,6 +142,24 @@ class StaticData {
       decoration: TextDecoration.underline,
       decorationColor: popWhite500,
     ),
+    code: DefaultTextBlockStyle(
+      TextStyle(color: orangeSunshine500, fontFamily: 'IBM Plex Mono'),
+      const Tuple2(1, 1.5),
+      const Tuple2(1, 1.5),
+      BoxDecoration(
+        color: popBlack400,
+        borderRadius: BorderRadius.zero,
+      ),
+    ),
+    inlineCode: InlineCodeStyle(
+      style: TextStyle(color: pakGreen500, fontFamily: 'IBM Plex Mono'),
+      backgroundColor: popBlack400,
+      radius: Radius.zero,
+    ),
+    strikeThrough: StaticData.t.textTheme.bodyMedium!.copyWith(
+      decoration: TextDecoration.lineThrough,
+      decorationColor: error,
+    ),
     leading: DefaultTextBlockStyle(
       StaticData.t.textTheme.bodyMedium!.copyWith(
         fontWeight: FontWeight.normal,

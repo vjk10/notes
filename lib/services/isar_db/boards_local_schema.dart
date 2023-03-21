@@ -21,6 +21,7 @@ class NotesLocal {
   Id id = Isar.autoIncrement;
   String? title;
   String? body;
+  String? bodyPlainText;
   String? createdby;
   String? createdon;
   bool? backedup;
