@@ -15,21 +15,20 @@ class _NotesBottomSheetState extends State<NotesBottomSheet> {
   TextEditingController saveAsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.hardEdge,
-      alignment: Alignment.center,
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.zero,
+    return SizedBox(
+      width: Get.width,
+      height: Get.height / 2,
+      child: Stack(
+        clipBehavior: Clip.hardEdge,
+        alignment: Alignment.center,
+        children: [
+          SvgPicture.asset(
+            "assets/images/bottom_sheet.svg",
+            width: Get.width,
           ),
-          width: Get.width,
-          height: Get.height / 2,
-          child: SvgPicture.asset("assets/images/bottom_sheet.svg"),
-        ),
-        widget.child,
-      ],
+          widget.child,
+        ],
+      ),
     );
   }
 }

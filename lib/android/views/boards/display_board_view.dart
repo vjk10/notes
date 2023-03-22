@@ -31,6 +31,8 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
   List<NotesLocal> notes = [];
   bool listSwitch = true;
   int listSwitchValue = 0;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     getBoard();
@@ -76,6 +78,7 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
             child: NotesLoadingAndroid(strokeWidth: 2),
           )
         : Scaffold(
+            key: scaffoldKey,
             extendBodyBehindAppBar: false,
             backgroundColor: Color(boardsLocal.boardcolor!),
             appBar: AppBar(
@@ -277,15 +280,94 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
               DisplayNoteView(boardid: widget.boardid, note: notes[index]));
         },
         onLongPress: () async {
-          Get.bottomSheet(
-            const NotesBottomSheet(
-              child: Text("select your actions"),
-            ),
-            backgroundColor: Color(boardsLocal.boardtextcolor!).withOpacity(0),
-            barrierColor: Color(boardsLocal.boardtextcolor!).withOpacity(0.1),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return NotesBottomSheet(
+                child: Center(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "select your action",
+                          style:
+                              StaticData.t.textTheme.headlineMedium?.copyWith(
+                            color: popBlack600,
+                            fontFamily: 'Cirka',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: NeoPopButton(
+                            depth: 0,
+                            onTapUp: () {
+                              HapticFeedback.heavyImpact();
+                            },
+                            color: Colors.black,
+                            child: Center(
+                              child: Text("delete",
+                                  style: StaticData.t.textTheme.bodyLarge),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: NeoPopButton(
+                            depth: 0,
+                            onTapUp: () {
+                              HapticFeedback.heavyImpact();
+                            },
+                            color: Colors.black,
+                            child: Center(
+                              child: Text("back up",
+                                  style: StaticData.t.textTheme.bodyLarge),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: NeoPopButton(
+                            depth: 0,
+                            onTapUp: () {
+                              HapticFeedback.heavyImpact();
+                            },
+                            color: Colors.black,
+                            child: Center(
+                              child: Text("download",
+                                  style: StaticData.t.textTheme.bodyLarge),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: NeoPopButton(
+                            depth: 0,
+                            onTapUp: () {
+                              HapticFeedback.heavyImpact();
+                            },
+                            color: Colors.black,
+                            child: Center(
+                              child: Text("share",
+                                  style: StaticData.t.textTheme.bodyLarge),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              );
+            },
+            backgroundColor: Colors.transparent,
+            barrierColor: Colors.black.withOpacity(0.5),
+            elevation: 0,
           );
         },
         tileColor: Color(boardsLocal.boardtextcolor!),
