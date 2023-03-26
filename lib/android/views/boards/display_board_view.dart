@@ -8,12 +8,14 @@ import 'package:isar/isar.dart';
 import 'package:neopop/neopop.dart';
 import 'package:notes/android/views/boards/add_items_to_board_view.dart';
 import 'package:notes/android/views/items/display_note_view.dart';
-import 'package:notes/android/widgets/bottom_sheet.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/data/data.dart';
 import 'package:notes/notes_icon_icons.dart';
 import 'package:notes/services/isar_db/boards_local_schema.dart';
 import 'package:notes/theme/colors.dart';
+
+import '../../widgets/bottom_sheet_double_decker.dart';
+import '../../widgets/utils.dart';
 
 class DisplayBoardView extends StatefulWidget {
   final int boardid;
@@ -283,86 +285,8 @@ class _DisplayBoardViewState extends State<DisplayBoardView> {
           showModalBottomSheet(
             context: context,
             builder: (context) {
-              return NotesBottomSheet(
-                child: Center(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "select your action",
-                          style:
-                              StaticData.t.textTheme.headlineMedium?.copyWith(
-                            color: popBlack600,
-                            fontFamily: 'Cirka',
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 100,
-                          height: 40,
-                          child: NeoPopButton(
-                            depth: 0,
-                            onTapUp: () {
-                              HapticFeedback.heavyImpact();
-                            },
-                            color: Colors.black,
-                            child: Center(
-                              child: Text("delete",
-                                  style: StaticData.t.textTheme.bodyLarge),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 100,
-                          height: 40,
-                          child: NeoPopButton(
-                            depth: 0,
-                            onTapUp: () {
-                              HapticFeedback.heavyImpact();
-                            },
-                            color: Colors.black,
-                            child: Center(
-                              child: Text("back up",
-                                  style: StaticData.t.textTheme.bodyLarge),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 100,
-                          height: 40,
-                          child: NeoPopButton(
-                            depth: 0,
-                            onTapUp: () {
-                              HapticFeedback.heavyImpact();
-                            },
-                            color: Colors.black,
-                            child: Center(
-                              child: Text("download",
-                                  style: StaticData.t.textTheme.bodyLarge),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 100,
-                          height: 40,
-                          child: NeoPopButton(
-                            depth: 0,
-                            onTapUp: () {
-                              HapticFeedback.heavyImpact();
-                            },
-                            color: Colors.black,
-                            child: Center(
-                              child: Text("share",
-                                  style: StaticData.t.textTheme.bodyLarge),
-                            ),
-                          ),
-                        ),
-                      ]),
-                ),
+              return NotesBottomSheetDouble(
+                child: Utils().notesOptionSheetChild(notes, index),
               );
             },
             backgroundColor: Colors.transparent,

@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class NotesBottomSheet extends StatefulWidget {
   final Widget child;
-  const NotesBottomSheet({Key? key, required this.child}) : super(key: key);
+  double? width = Get.width;
+  double? height = Get.height / 2;
+  NotesBottomSheet({Key? key, required this.child, this.width, this.height})
+      : super(key: key);
 
   @override
   State<NotesBottomSheet> createState() => _NotesBottomSheetState();
 }
 
 class _NotesBottomSheetState extends State<NotesBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+    HapticFeedback.heavyImpact();
+  }
+
   TextEditingController saveAsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Get.width,
-      height: Get.height / 2,
+      width: widget.width,
+      height: widget.height,
       child: Stack(
         clipBehavior: Clip.hardEdge,
         alignment: Alignment.center,
         children: [
           SvgPicture.asset(
             "assets/images/bottom_sheet.svg",
-            width: Get.width,
+            width: widget.width,
+            height: widget.height,
+            fit: BoxFit.contain,
           ),
           widget.child,
         ],

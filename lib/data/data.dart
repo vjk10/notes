@@ -168,5 +168,20 @@ class StaticData {
       const Tuple2(1, 1.5),
       const BoxDecoration(),
     ),
+    link: StaticData.t.textTheme.bodyMedium!.copyWith(
+      fontWeight: FontWeight.bold,
+      color: pakGreen500,
+      decoration: TextDecoration.underline,
+      decorationThickness: 4,
+      decorationColor: pakGreen500,
+    ),
+  );
+
+  static RegExp ytRegEx = RegExp(
+    r"((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$",
+  );
+
+  static RegExp spotifyRegEx = RegExp(
+    r"/^(?:spotify:|https:\/\/[a-z]+\.spotify\.com\/(track\/|user\/(.*)\/playlist\/))(.*)$/mg",
   );
 }
