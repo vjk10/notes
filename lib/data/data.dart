@@ -42,6 +42,7 @@ class StaticData {
   static const String errorStatus = "404";
   static const String warningStatus = "500";
   static const String successStatus = "200";
+  static const String successExistStatus = "202";
 
   static late Isar isarDb;
   static late String uid;

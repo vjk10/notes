@@ -7,6 +7,19 @@ import '../isar_db/onboarding_schema.dart';
 import '../isar_db/user_schema.dart';
 
 class AuthServices {
+  Future<String> onBoardingComplete() async {
+    Onboarding onboarding = Onboarding();
+    onboarding.id = 1;
+    onboarding.onboarding = "true";
+    String returnStatus = StaticData.errorStatus;
+    await StaticData.isarDb.writeTxn(() async {
+      await StaticData.isarDb.onboardings.put(onboarding).whenComplete(() {
+        returnStatus = StaticData.successStatus;
+      });
+    });
+    return returnStatus;
+  }
+
   Future<String> authChanges() async {
     late String change = StaticData.warningStatus;
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
@@ -17,16 +30,25 @@ class AuthServices {
         change = StaticData.errorStatus;
         StaticData.cameSignedIn = false;
         await StaticData.isarDb.userLocals.get(1).then((value) {
-          StaticData.cameSignedIn = false;
-          StaticData.uid = value!.id.toString();
-          StaticData.displayname = value.displayname.toString();
-          StaticData.email = value.email.toString();
-          StaticData.phonenumber = value.phonenumber.toString();
-          StaticData.dob = value.dob;
-          StaticData.photourl = '';
-          if (kDebugMode) {
-            print("VALUE FROM LOCAL: $value");
+          try {
+            StaticData.cameSignedIn = false;
+            StaticData.uid = value!.id.toString();
+            StaticData.displayname = value.displayname.toString();
+            StaticData.email = value.email.toString();
+            StaticData.phonenumber = value.phonenumber.toString();
+            StaticData.dob = value.dob;
+            StaticData.photourl = '';
+            if (kDebugMode) {
+              print("VALUE FROM LOCAL: $value");
+            }
+          } catch (e) {
+            if (kDebugMode) {
+              print("Message: ${e.toString()}");
+            }
+            change = StaticData.errorStatus;
           }
+        }).onError((error, stackTrace) {
+          change = StaticData.errorStatus;
         });
       } else {
         if (kDebugMode) {
@@ -66,19 +88,23 @@ class AuthServices {
     await UserModelCollectionReference()
         .doc(uid)
         .set(userModel)
-        .whenComplete(() {
-      returnStatus = StaticData.successStatus;
+        .whenComplete(() async {
+      returnStatus = await onBoardingComplete();
     });
     return returnStatus;
+  }
+
+  Future<UserModelDocumentSnapshot> getFirebaseUser(String uid) async {
+    UserModelDocumentSnapshot userModel =
+        await UserModelCollectionReference().doc(uid).get();
+    return userModel;
   }
 
   Future<String> createLocalUser(String displayname, String dob,
       String phonenumber, String email, String username) async {
     late String returnStatus;
     StaticData.cameSignedIn = false;
-    Onboarding onboarding = Onboarding();
-    onboarding.id = 1;
-    onboarding.onboarding = "true";
+
     UserLocal userLocal = UserLocal(
         displayname: displayname,
         dob: dob,
@@ -87,9 +113,10 @@ class AuthServices {
         username: username);
     await StaticData.isarDb.writeTxn(() async {
       await StaticData.isarDb.userLocals.put(userLocal).whenComplete(() async {
-        await StaticData.isarDb.onboardings.put(onboarding).whenComplete(() {
-          returnStatus = StaticData.successStatus;
-        });
+        // await StaticData.isarDb.onboardings.put(onboarding).whenComplete(() {
+        //   returnStatus = StaticData.successStatus;
+        // });
+        returnStatus = await onBoardingComplete();
       });
     });
     return returnStatus;

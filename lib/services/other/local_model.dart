@@ -17,3 +17,10 @@ class CreateItemOptions {
     required this.onTap,
   });
 }
+
+class ReturnValue {
+  final int status;
+  final Object error;
+
+  ReturnValue(this.status, this.error);
+}

@@ -14,8 +14,17 @@ import 'package:notes/theme/colors.dart';
 import '../../../data/data.dart';
 
 class CreateNotesView extends StatefulWidget {
-  final int boardid;
-  const CreateNotesView({Key? key, required this.boardid}) : super(key: key);
+  int? boardid;
+  String? boardidFb;
+  final Color boardColor;
+  final Color boardTextColor;
+  CreateNotesView(
+      {Key? key,
+      this.boardid,
+      this.boardidFb,
+      required this.boardColor,
+      required this.boardTextColor})
+      : super(key: key);
 
   @override
   State<CreateNotesView> createState() => _CreateNotesViewState();
@@ -78,12 +87,15 @@ class _CreateNotesViewState extends State<CreateNotesView> {
                         );
                         note.bodyPlainText =
                             editorController.document.toPlainText();
-                        var returnStatus = await BoardsLocalServices()
-                            .addNote(widget.boardid, note);
+                        if (StaticData.cameSignedIn == true) {
+                        } else {
+                          var returnStatus = await BoardsLocalServices()
+                              .addNote(widget.boardid!, note);
 
-                        if (returnStatus == StaticData.successStatus) {
-                          Get.off(
-                              () => DisplayBoardView(boardid: widget.boardid));
+                          if (returnStatus == StaticData.successStatus) {
+                            Get.off(() =>
+                                DisplayBoardView(boardid: widget.boardid));
+                          }
                         }
                       }
                     },
@@ -166,6 +178,11 @@ class _CreateNotesViewState extends State<CreateNotesView> {
                   afterButtonPressed: () {
                     HapticFeedback.heavyImpact();
                   },
+                  color: popBlack500,
+                  iconTheme: QuillIconTheme(
+                    iconSelectedColor: widget.boardTextColor,
+                    iconSelectedFillColor: widget.boardColor,
+                  ),
                 ),
                 const SizedBox(
                   height: 20,

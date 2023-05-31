@@ -259,17 +259,19 @@ class _MainScreenState extends State<MainScreen>
           actions: [
             Container(
               decoration: BoxDecoration(
-                color: yoyo500.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
+                  color: yoyo500.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: yoyo500)),
               child: IconButton(
                 color: yoyo500,
                 onPressed: () {
-                  Get.to(() => const CreateBoardView());
+                  Get.to(
+                    () => const CreateBoardView(),
+                  );
                 },
                 icon: Icon(
                   Icons.add,
-                  color: popWhite500,
+                  color: yoyo500,
                 ),
               ),
             ),

@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       return GetMaterialApp(
         defaultTransition: Transition.circularReveal,
         transitionDuration: const Duration(milliseconds: 800),
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: kDebugMode,
         theme: productiveTheme,
         darkTheme: productiveTheme,
@@ -53,11 +53,12 @@ class MyApp extends StatelessWidget {
       );
     }
     return GetMaterialApp(
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        debugShowCheckedModeBanner: kDebugMode,
-        title: 'Notes',
-        home: const UnderConstruction());
+      theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      debugShowCheckedModeBanner: kDebugMode,
+      title: 'Notes',
+      home: const UnderConstruction(),
+    );
   }
 }

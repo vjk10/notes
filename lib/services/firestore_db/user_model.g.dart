@@ -113,6 +113,11 @@ abstract class UserModelDocumentReference
     return _$UserModelCollectionReference(reference.firestore);
   }
 
+  late final BoardsModelCollectionReference boards =
+      _$BoardsModelCollectionReference(
+    reference,
+  );
+
   @override
   Stream<UserModelDocumentSnapshot> snapshots();
 
@@ -173,6 +178,11 @@ class _$UserModelDocumentReference
   UserModelCollectionReference get parent {
     return _$UserModelCollectionReference(reference.firestore);
   }
+
+  late final BoardsModelCollectionReference boards =
+      _$BoardsModelCollectionReference(
+    reference,
+  );
 
   @override
   Stream<UserModelDocumentSnapshot> snapshots() {
@@ -1514,6 +1524,1393 @@ class UserModelQueryDocumentSnapshot
   }
 }
 
+/// A collection reference object can be used for adding documents,
+/// getting document references, and querying for documents
+/// (using the methods inherited from Query).
+abstract class BoardsModelCollectionReference
+    implements
+        BoardsModelQuery,
+        FirestoreCollectionReference<BoardsModel, BoardsModelQuerySnapshot> {
+  factory BoardsModelCollectionReference(
+    DocumentReference<UserModel> parent,
+  ) = _$BoardsModelCollectionReference;
+
+  static BoardsModel fromFirestore(
+    DocumentSnapshot<Map<String, Object?>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    return _$BoardsModelFromJson(snapshot.data()!);
+  }
+
+  static Map<String, Object?> toFirestore(
+    BoardsModel value,
+    SetOptions? options,
+  ) {
+    return _$BoardsModelToJson(value);
+  }
+
+  @override
+  CollectionReference<BoardsModel> get reference;
+
+  /// A reference to the containing [UserModelDocumentReference] if this is a subcollection.
+  UserModelDocumentReference get parent;
+
+  @override
+  BoardsModelDocumentReference doc([String? id]);
+
+  /// Add a new document to this collection with the specified data,
+  /// assigning it a document ID automatically.
+  Future<BoardsModelDocumentReference> add(BoardsModel value);
+}
+
+class _$BoardsModelCollectionReference extends _$BoardsModelQuery
+    implements BoardsModelCollectionReference {
+  factory _$BoardsModelCollectionReference(
+    DocumentReference<UserModel> parent,
+  ) {
+    return _$BoardsModelCollectionReference._(
+      UserModelDocumentReference(parent),
+      parent.collection('boards').withConverter(
+            fromFirestore: BoardsModelCollectionReference.fromFirestore,
+            toFirestore: BoardsModelCollectionReference.toFirestore,
+          ),
+    );
+  }
+
+  _$BoardsModelCollectionReference._(
+    this.parent,
+    CollectionReference<BoardsModel> reference,
+  ) : super(reference, $referenceWithoutCursor: reference);
+
+  @override
+  final UserModelDocumentReference parent;
+
+  String get path => reference.path;
+
+  @override
+  CollectionReference<BoardsModel> get reference =>
+      super.reference as CollectionReference<BoardsModel>;
+
+  @override
+  BoardsModelDocumentReference doc([String? id]) {
+    assert(
+      id == null || id.split('/').length == 1,
+      'The document ID cannot be from a different collection',
+    );
+    return BoardsModelDocumentReference(
+      reference.doc(id),
+    );
+  }
+
+  @override
+  Future<BoardsModelDocumentReference> add(BoardsModel value) {
+    return reference
+        .add(value)
+        .then((ref) => BoardsModelDocumentReference(ref));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$BoardsModelCollectionReference &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+abstract class BoardsModelDocumentReference extends FirestoreDocumentReference<
+    BoardsModel, BoardsModelDocumentSnapshot> {
+  factory BoardsModelDocumentReference(
+          DocumentReference<BoardsModel> reference) =
+      _$BoardsModelDocumentReference;
+
+  DocumentReference<BoardsModel> get reference;
+
+  /// A reference to the [BoardsModelCollectionReference] containing this document.
+  BoardsModelCollectionReference get parent {
+    return _$BoardsModelCollectionReference(
+      reference.parent.parent!.withConverter<UserModel>(
+        fromFirestore: UserModelCollectionReference.fromFirestore,
+        toFirestore: UserModelCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<BoardsModelDocumentSnapshot> snapshots();
+
+  @override
+  Future<BoardsModelDocumentSnapshot> get([GetOptions? options]);
+
+  @override
+  Future<void> delete();
+
+  /// Updates data on the document. Data will be merged with any existing
+  /// document data.
+  ///
+  /// If no document exists yet, the update will fail.
+  Future<void> update({
+    String boardname,
+    FieldValue boardnameFieldValue,
+    String createdby,
+    FieldValue createdbyFieldValue,
+    String createdon,
+    FieldValue createdonFieldValue,
+    int boardcolor,
+    FieldValue boardcolorFieldValue,
+    int boardtextcolor,
+    FieldValue boardtextcolorFieldValue,
+  });
+
+  /// Updates fields in the current document using the transaction API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void transactionUpdate(
+    Transaction transaction, {
+    String boardname,
+    FieldValue boardnameFieldValue,
+    String createdby,
+    FieldValue createdbyFieldValue,
+    String createdon,
+    FieldValue createdonFieldValue,
+    int boardcolor,
+    FieldValue boardcolorFieldValue,
+    int boardtextcolor,
+    FieldValue boardtextcolorFieldValue,
+  });
+}
+
+class _$BoardsModelDocumentReference
+    extends FirestoreDocumentReference<BoardsModel, BoardsModelDocumentSnapshot>
+    implements BoardsModelDocumentReference {
+  _$BoardsModelDocumentReference(this.reference);
+
+  @override
+  final DocumentReference<BoardsModel> reference;
+
+  /// A reference to the [BoardsModelCollectionReference] containing this document.
+  BoardsModelCollectionReference get parent {
+    return _$BoardsModelCollectionReference(
+      reference.parent.parent!.withConverter<UserModel>(
+        fromFirestore: UserModelCollectionReference.fromFirestore,
+        toFirestore: UserModelCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<BoardsModelDocumentSnapshot> snapshots() {
+    return reference.snapshots().map(BoardsModelDocumentSnapshot._);
+  }
+
+  @override
+  Future<BoardsModelDocumentSnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(BoardsModelDocumentSnapshot._);
+  }
+
+  @override
+  Future<BoardsModelDocumentSnapshot> transactionGet(Transaction transaction) {
+    return transaction.get(reference).then(BoardsModelDocumentSnapshot._);
+  }
+
+  Future<void> update({
+    Object? boardname = _sentinel,
+    FieldValue? boardnameFieldValue,
+    Object? createdby = _sentinel,
+    FieldValue? createdbyFieldValue,
+    Object? createdon = _sentinel,
+    FieldValue? createdonFieldValue,
+    Object? boardcolor = _sentinel,
+    FieldValue? boardcolorFieldValue,
+    Object? boardtextcolor = _sentinel,
+    FieldValue? boardtextcolorFieldValue,
+  }) async {
+    assert(
+      boardname == _sentinel || boardnameFieldValue == null,
+      "Cannot specify both boardname and boardnameFieldValue",
+    );
+    assert(
+      createdby == _sentinel || createdbyFieldValue == null,
+      "Cannot specify both createdby and createdbyFieldValue",
+    );
+    assert(
+      createdon == _sentinel || createdonFieldValue == null,
+      "Cannot specify both createdon and createdonFieldValue",
+    );
+    assert(
+      boardcolor == _sentinel || boardcolorFieldValue == null,
+      "Cannot specify both boardcolor and boardcolorFieldValue",
+    );
+    assert(
+      boardtextcolor == _sentinel || boardtextcolorFieldValue == null,
+      "Cannot specify both boardtextcolor and boardtextcolorFieldValue",
+    );
+    final json = {
+      if (boardname != _sentinel)
+        _$BoardsModelFieldMap['boardname']!: boardname as String,
+      if (boardnameFieldValue != null)
+        _$BoardsModelFieldMap['boardname']!: boardnameFieldValue,
+      if (createdby != _sentinel)
+        _$BoardsModelFieldMap['createdby']!: createdby as String,
+      if (createdbyFieldValue != null)
+        _$BoardsModelFieldMap['createdby']!: createdbyFieldValue,
+      if (createdon != _sentinel)
+        _$BoardsModelFieldMap['createdon']!: createdon as String,
+      if (createdonFieldValue != null)
+        _$BoardsModelFieldMap['createdon']!: createdonFieldValue,
+      if (boardcolor != _sentinel)
+        _$BoardsModelFieldMap['boardcolor']!: boardcolor as int,
+      if (boardcolorFieldValue != null)
+        _$BoardsModelFieldMap['boardcolor']!: boardcolorFieldValue,
+      if (boardtextcolor != _sentinel)
+        _$BoardsModelFieldMap['boardtextcolor']!: boardtextcolor as int,
+      if (boardtextcolorFieldValue != null)
+        _$BoardsModelFieldMap['boardtextcolor']!: boardtextcolorFieldValue,
+    };
+
+    return reference.update(json);
+  }
+
+  void transactionUpdate(
+    Transaction transaction, {
+    Object? boardname = _sentinel,
+    FieldValue? boardnameFieldValue,
+    Object? createdby = _sentinel,
+    FieldValue? createdbyFieldValue,
+    Object? createdon = _sentinel,
+    FieldValue? createdonFieldValue,
+    Object? boardcolor = _sentinel,
+    FieldValue? boardcolorFieldValue,
+    Object? boardtextcolor = _sentinel,
+    FieldValue? boardtextcolorFieldValue,
+  }) {
+    assert(
+      boardname == _sentinel || boardnameFieldValue == null,
+      "Cannot specify both boardname and boardnameFieldValue",
+    );
+    assert(
+      createdby == _sentinel || createdbyFieldValue == null,
+      "Cannot specify both createdby and createdbyFieldValue",
+    );
+    assert(
+      createdon == _sentinel || createdonFieldValue == null,
+      "Cannot specify both createdon and createdonFieldValue",
+    );
+    assert(
+      boardcolor == _sentinel || boardcolorFieldValue == null,
+      "Cannot specify both boardcolor and boardcolorFieldValue",
+    );
+    assert(
+      boardtextcolor == _sentinel || boardtextcolorFieldValue == null,
+      "Cannot specify both boardtextcolor and boardtextcolorFieldValue",
+    );
+    final json = {
+      if (boardname != _sentinel)
+        _$BoardsModelFieldMap['boardname']!: boardname as String,
+      if (boardnameFieldValue != null)
+        _$BoardsModelFieldMap['boardname']!: boardnameFieldValue,
+      if (createdby != _sentinel)
+        _$BoardsModelFieldMap['createdby']!: createdby as String,
+      if (createdbyFieldValue != null)
+        _$BoardsModelFieldMap['createdby']!: createdbyFieldValue,
+      if (createdon != _sentinel)
+        _$BoardsModelFieldMap['createdon']!: createdon as String,
+      if (createdonFieldValue != null)
+        _$BoardsModelFieldMap['createdon']!: createdonFieldValue,
+      if (boardcolor != _sentinel)
+        _$BoardsModelFieldMap['boardcolor']!: boardcolor as int,
+      if (boardcolorFieldValue != null)
+        _$BoardsModelFieldMap['boardcolor']!: boardcolorFieldValue,
+      if (boardtextcolor != _sentinel)
+        _$BoardsModelFieldMap['boardtextcolor']!: boardtextcolor as int,
+      if (boardtextcolorFieldValue != null)
+        _$BoardsModelFieldMap['boardtextcolor']!: boardtextcolorFieldValue,
+    };
+
+    transaction.update(reference, json);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is BoardsModelDocumentReference &&
+        other.runtimeType == runtimeType &&
+        other.parent == parent &&
+        other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, parent, id);
+}
+
+abstract class BoardsModelQuery
+    implements QueryReference<BoardsModel, BoardsModelQuerySnapshot> {
+  @override
+  BoardsModelQuery limit(int limit);
+
+  @override
+  BoardsModelQuery limitToLast(int limit);
+
+  /// Perform an order query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of order queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.orderByFieldPath(
+  ///   FieldPath.fromString('title'),
+  ///   startAt: 'title',
+  /// );
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.orderByTitle(startAt: 'title');
+  /// ```
+  BoardsModelQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt,
+    Object? startAfter,
+    Object? endAt,
+    Object? endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+
+  /// Perform a where query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of where queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.whereFieldPath(FieldPath.fromString('title'), isEqualTo: 'title');
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.whereTitle(isEqualTo: 'title');
+  /// ```
+  BoardsModelQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  });
+
+  BoardsModelQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  BoardsModelQuery whereBoardname({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  BoardsModelQuery whereCreatedby({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  BoardsModelQuery whereCreatedon({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  BoardsModelQuery whereBoardcolor({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  });
+  BoardsModelQuery whereBoardtextcolor({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  });
+
+  BoardsModelQuery orderByDocumentId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+
+  BoardsModelQuery orderByBoardname({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+
+  BoardsModelQuery orderByCreatedby({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+
+  BoardsModelQuery orderByCreatedon({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+
+  BoardsModelQuery orderByBoardcolor({
+    bool descending = false,
+    int startAt,
+    int startAfter,
+    int endAt,
+    int endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+
+  BoardsModelQuery orderByBoardtextcolor({
+    bool descending = false,
+    int startAt,
+    int startAfter,
+    int endAt,
+    int endBefore,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  });
+}
+
+class _$BoardsModelQuery
+    extends QueryReference<BoardsModel, BoardsModelQuerySnapshot>
+    implements BoardsModelQuery {
+  _$BoardsModelQuery(
+    this._collection, {
+    required Query<BoardsModel> $referenceWithoutCursor,
+    $QueryCursor $queryCursor = const $QueryCursor(),
+  }) : super(
+          $referenceWithoutCursor: $referenceWithoutCursor,
+          $queryCursor: $queryCursor,
+        );
+
+  final CollectionReference<Object?> _collection;
+
+  @override
+  Stream<BoardsModelQuerySnapshot> snapshots([SnapshotOptions? options]) {
+    return reference
+        .snapshots()
+        .map(BoardsModelQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  Future<BoardsModelQuerySnapshot> get([GetOptions? options]) {
+    return reference
+        .get(options)
+        .then(BoardsModelQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  BoardsModelQuery limit(int limit) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limit(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  BoardsModelQuery limitToLast(int limit) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limitToLast(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query =
+        $referenceWithoutCursor.orderBy(fieldPath, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        fieldPath,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        FieldPath.documentId,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereBoardname({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BoardsModelFieldMap['boardname']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereCreatedby({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BoardsModelFieldMap['createdby']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereCreatedon({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BoardsModelFieldMap['createdon']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereBoardcolor({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BoardsModelFieldMap['boardcolor']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery whereBoardtextcolor({
+    int? isEqualTo,
+    int? isNotEqualTo,
+    int? isLessThan,
+    int? isLessThanOrEqualTo,
+    int? isGreaterThan,
+    int? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<int>? whereIn,
+    List<int>? whereNotIn,
+  }) {
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$BoardsModelFieldMap['boardtextcolor']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByDocumentId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByBoardname({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BoardsModelFieldMap['boardname']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByCreatedby({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BoardsModelFieldMap['createdby']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByCreatedon({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BoardsModelFieldMap['createdon']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByBoardcolor({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$BoardsModelFieldMap['boardcolor']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  BoardsModelQuery orderByBoardtextcolor({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    BoardsModelDocumentSnapshot? startAtDocument,
+    BoardsModelDocumentSnapshot? endAtDocument,
+    BoardsModelDocumentSnapshot? endBeforeDocument,
+    BoardsModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$BoardsModelFieldMap['boardtextcolor']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$BoardsModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$BoardsModelQuery &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+class BoardsModelDocumentSnapshot
+    extends FirestoreDocumentSnapshot<BoardsModel> {
+  BoardsModelDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final DocumentSnapshot<BoardsModel> snapshot;
+
+  @override
+  BoardsModelDocumentReference get reference {
+    return BoardsModelDocumentReference(
+      snapshot.reference,
+    );
+  }
+
+  @override
+  final BoardsModel? data;
+}
+
+class BoardsModelQuerySnapshot extends FirestoreQuerySnapshot<BoardsModel,
+    BoardsModelQueryDocumentSnapshot> {
+  BoardsModelQuerySnapshot._(
+    this.snapshot,
+    this.docs,
+    this.docChanges,
+  );
+
+  factory BoardsModelQuerySnapshot._fromQuerySnapshot(
+    QuerySnapshot<BoardsModel> snapshot,
+  ) {
+    final docs = snapshot.docs.map(BoardsModelQueryDocumentSnapshot._).toList();
+
+    final docChanges = snapshot.docChanges.map((change) {
+      return _decodeDocumentChange(
+        change,
+        BoardsModelDocumentSnapshot._,
+      );
+    }).toList();
+
+    return BoardsModelQuerySnapshot._(
+      snapshot,
+      docs,
+      docChanges,
+    );
+  }
+
+  static FirestoreDocumentChange<BoardsModelDocumentSnapshot>
+      _decodeDocumentChange<T>(
+    DocumentChange<T> docChange,
+    BoardsModelDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
+  ) {
+    return FirestoreDocumentChange<BoardsModelDocumentSnapshot>(
+      type: docChange.type,
+      oldIndex: docChange.oldIndex,
+      newIndex: docChange.newIndex,
+      doc: decodeDoc(docChange.doc),
+    );
+  }
+
+  final QuerySnapshot<BoardsModel> snapshot;
+
+  @override
+  final List<BoardsModelQueryDocumentSnapshot> docs;
+
+  @override
+  final List<FirestoreDocumentChange<BoardsModelDocumentSnapshot>> docChanges;
+}
+
+class BoardsModelQueryDocumentSnapshot
+    extends FirestoreQueryDocumentSnapshot<BoardsModel>
+    implements BoardsModelDocumentSnapshot {
+  BoardsModelQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final QueryDocumentSnapshot<BoardsModel> snapshot;
+
+  @override
+  final BoardsModel data;
+
+  @override
+  BoardsModelDocumentReference get reference {
+    return BoardsModelDocumentReference(snapshot.reference);
+  }
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -1559,4 +2956,43 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'phonenumber': instance.phonenumber,
       'email': instance.email,
       'username': instance.username,
+    };
+
+BoardsModel _$BoardsModelFromJson(Map<String, dynamic> json) => BoardsModel(
+      boardname: json['boardname'] as String,
+      createdby: json['createdby'] as String,
+      createdon: json['createdon'] as String,
+      boardcolor: json['boardcolor'] as int,
+      boardtextcolor: json['boardtextcolor'] as int,
+    );
+
+const _$BoardsModelFieldMap = <String, String>{
+  'boardname': 'boardname',
+  'createdby': 'createdby',
+  'createdon': 'createdon',
+  'boardcolor': 'boardcolor',
+  'boardtextcolor': 'boardtextcolor',
+};
+
+// ignore: unused_element
+abstract class _$BoardsModelPerFieldToJson {
+  // ignore: unused_element
+  static Object? boardname(String instance) => instance;
+  // ignore: unused_element
+  static Object? createdby(String instance) => instance;
+  // ignore: unused_element
+  static Object? createdon(String instance) => instance;
+  // ignore: unused_element
+  static Object? boardcolor(int instance) => instance;
+  // ignore: unused_element
+  static Object? boardtextcolor(int instance) => instance;
+}
+
+Map<String, dynamic> _$BoardsModelToJson(BoardsModel instance) =>
+    <String, dynamic>{
+      'boardname': instance.boardname,
+      'createdby': instance.createdby,
+      'createdon': instance.createdon,
+      'boardcolor': instance.boardcolor,
+      'boardtextcolor': instance.boardtextcolor,
     };

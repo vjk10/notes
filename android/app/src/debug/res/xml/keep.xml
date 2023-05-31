@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_outline_add_task_24,@drawable/ic_outline_note_add_24,@drawable/ic_outline_request_page_24"
+    />

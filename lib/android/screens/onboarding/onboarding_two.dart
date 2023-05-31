@@ -86,7 +86,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                         height: 48,
                         child: NeoPopButton(
                           animationDuration: const Duration(milliseconds: 250),
-                          color: popWhite500,
+                          color: googleBlue,
                           onTapDown: () => HapticFeedback.vibrate(),
                           onTapUp: () async {
                             var status = await signInWithGoogle(context);
@@ -103,22 +103,28 @@ class _OnBoarding2State extends State<OnBoarding2> {
                             }
                           },
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Container(
+                                  color: popWhite500,
+                                  height: 45,
+                                  width: 45,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SvgPicture.asset(
+                                        "assets/images/Google Logo.svg"),
+                                  )),
+                              const SizedBox(width: 15),
                               Text(
                                 "sign in with google",
                                 style:
                                     StaticData.t.textTheme.bodyMedium?.copyWith(
-                                  color: popBlack600,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(width: 15),
-                              Icon(
-                                NotesIcon.button_arrow_right,
-                                color: popBlack500,
-                                size: 6,
-                              )
                             ],
                           ),
                         ),
@@ -131,10 +137,15 @@ class _OnBoarding2State extends State<OnBoarding2> {
                       width: 112,
                       height: 48,
                       child: NeoPopButton(
-                        buttonPosition: Position.center,
+                        buttonPosition: Position.bottomRight,
                         animationDuration: const Duration(milliseconds: 250),
-                        color: Colors.transparent,
-                        border: Border.all(color: popWhite500, width: 1),
+                        color: popBlack300,
+                        rightShadowColor: pakGreen600,
+                        bottomShadowColor: pakGreen400,
+                        border: Border.all(
+                          color: pakGreen500,
+                          width: 1,
+                        ),
                         onTapUp: () => HapticFeedback.vibrate(),
                         onTapDown: () {
                           Get.to(() => const Onboarding3(
@@ -149,6 +160,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                               style:
                                   StaticData.t.textTheme.bodyMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
+                                color: popWhite500,
                               ),
                             ),
                           ],

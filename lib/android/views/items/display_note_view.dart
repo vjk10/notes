@@ -21,8 +21,15 @@ import '../../widgets/utils.dart';
 
 class DisplayNoteView extends StatefulWidget {
   final int boardid;
+  final Color boardColor;
+  final Color boardTextColor;
   final NotesLocal note;
-  const DisplayNoteView({Key? key, required this.boardid, required this.note})
+  const DisplayNoteView(
+      {Key? key,
+      required this.boardid,
+      required this.note,
+      required this.boardColor,
+      required this.boardTextColor})
       : super(key: key);
 
   @override
@@ -190,8 +197,8 @@ class _DisplayNoteViewState extends State<DisplayNoteView> {
                   },
                   color: popBlack500,
                   iconTheme: QuillIconTheme(
-                    iconSelectedColor: poliPurple100,
-                    iconSelectedFillColor: poliPurple500,
+                    iconSelectedColor: widget.boardTextColor,
+                    iconSelectedFillColor: widget.boardColor,
                   ),
                 ),
                 const SizedBox(

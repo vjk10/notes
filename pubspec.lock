@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: b003c3098049a51720352d219b0bb5f219b60fbfb68e7a4748139a06a5676515
+      sha256: c372bb384f273f0c2a8aaaa226dad84dc27c8519a691b888725dec59518ad53a
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.4.1"
   async:
     dependency: transitive
     description:
@@ -297,6 +297,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  cred_progress_bar:
+    dependency: "direct main"
+    description:
+      name: cred_progress_bar
+      sha256: ce1a20c652e6de9a3c596254e42217a545c6c78bac81857281f1f0bd7d998e43
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   crypto:
     dependency: transitive
     description:
@@ -864,6 +872,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  icons_launcher:
+    dependency: "direct main"
+    description:
+      name: icons_launcher
+      sha256: f8ccfb80b56856b6eac586980bdd9c14f5ec24fb87127514055445ceb9424f4c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  image:
+    dependency: transitive
+    description:
+      name: image
+      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.17"
   in_app_review:
     dependency: "direct main"
     description:
@@ -1056,6 +1080,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  outlined_text:
+    dependency: "direct main"
+    description:
+      name: outlined_text
+      sha256: "3f06c738b6962b85c084870d3dda4d7f29ebb028ac90ecac71f8e3293a287336"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   package_config:
     dependency: transitive
     description:
@@ -1344,6 +1376,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.0"
+  rive:
+    dependency: "direct main"
+    description:
+      name: rive
+      sha256: "22e3755b75f4ea4492d2fecf4fc2acf1c8d0073df39781d290a20cbfe74c3760"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.1"
   rxdart:
     dependency: transitive
     description:
@@ -1352,6 +1392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
+  salomon_bottom_bar:
+    dependency: "direct main"
+    description:
+      name: salomon_bottom_bar
+      sha256: e20abf2e449749432223a8b4e6647c212eef6c2b638e0ed8cc92eff9529c2b48
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.2"
   scrollable:
     dependency: "direct main"
     description:

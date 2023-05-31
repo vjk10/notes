@@ -45,7 +45,6 @@ Future<String> signInWithGoogle(BuildContext context) async {
       return StaticData.warningStatus;
     }
   }
-
   return StaticData.successStatus;
 }
 

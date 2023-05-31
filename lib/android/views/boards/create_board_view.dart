@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cred_progress_bar/cred_progress_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +11,10 @@ import 'package:neopop/widgets/buttons/neopop_button/neopop_button.dart';
 import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/android/widgets/notes_snackbar.dart';
 import 'package:notes/notes_icon_icons.dart';
+import 'package:notes/services/firestore_db/boards_services.dart';
+import 'package:notes/services/firestore_db/user_model.dart';
 import 'package:notes/services/isar_db/boards_local_schema.dart';
+import 'package:notes/services/other/local_model.dart';
 import 'package:notes/theme/colors.dart';
 import 'package:scrollable/exports.dart';
 
@@ -257,6 +263,7 @@ class _CreateBoardViewState extends State<CreateBoardView> {
                         hapticEffectDuringScroll: HapticType.selection,
                         child: GridView.builder(
                           controller: boardscolorScrollController,
+                          physics: const BouncingScrollPhysics(),
                           dragStartBehavior: DragStartBehavior.down,
                           shrinkWrap: true,
                           itemCount: StaticData.boardcolors.length,
@@ -349,6 +356,20 @@ class _CreateBoardViewState extends State<CreateBoardView> {
                       ),
                     ),
                     const SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: CredProgressBar(
+                        controller: boardscolorScrollController,
+                        barWidth: 120,
+                        thumbWidth: 12,
+                        barHeight: 14,
+                        barColor: Colors.amber,
+                        thumbColor: Colors.purple.shade300,
+                      ),
+                    ),
+                    const SizedBox(
                       height: 40,
                     ),
                     Padding(
@@ -370,25 +391,52 @@ class _CreateBoardViewState extends State<CreateBoardView> {
                                 NotesSnackBar().errorSnackBar(
                                     "Fill all required fields to create the board!");
                               } else {
-                                String returnStatus =
-                                    await BoardsLocalServices().addBoard(
-                                  boardnamecontroller.text,
-                                  createdbycontroller.text,
-                                  DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY)
-                                      .format(
-                                    DateTime.now(),
-                                  ),
-                                  selectedColorValue,
-                                  selectedTextColorValue,
-                                );
-                                if (kDebugMode) {
-                                  print("BOARD ADD STATUS: $returnStatus");
-                                }
-                                if (returnStatus == StaticData.successStatus) {
-                                  NotesSnackBar().successSnackBar(
-                                      "${boardnamecontroller.text}, successfully created!");
-                                  Get.offAll(
-                                      () => const MainScreen(selectedIndex: 0));
+                                if (StaticData.cameSignedIn == true) {
+                                  BoardsModel boardsModel = BoardsModel(
+                                      boardname: boardnamecontroller.text,
+                                      createdby: createdbycontroller.text,
+                                      createdon: DateFormat(
+                                              DateFormat.YEAR_ABBR_MONTH_DAY)
+                                          .format(
+                                        DateTime.now(),
+                                      ),
+                                      boardcolor: selectedColorValue,
+                                      boardtextcolor: selectedTextColorValue);
+                                  ReturnValue returnValue =
+                                      await BoardsOnlineService().addBoard(
+                                          StaticData.uid, boardsModel);
+                                  if (returnValue.status ==
+                                      HttpStatus.accepted) {
+                                    NotesSnackBar().successSnackBar(
+                                        "${boardnamecontroller.text}, successfully created!");
+                                    Get.offAll(() =>
+                                        const MainScreen(selectedIndex: 0));
+                                  } else {
+                                    NotesSnackBar().errorSnackBar(
+                                        "Failed to create board!");
+                                  }
+                                } else {
+                                  String returnStatus =
+                                      await BoardsLocalServices().addBoard(
+                                    boardnamecontroller.text,
+                                    createdbycontroller.text,
+                                    DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY)
+                                        .format(
+                                      DateTime.now(),
+                                    ),
+                                    selectedColorValue,
+                                    selectedTextColorValue,
+                                  );
+                                  if (kDebugMode) {
+                                    print("BOARD ADD STATUS: $returnStatus");
+                                  }
+                                  if (returnStatus ==
+                                      StaticData.successStatus) {
+                                    NotesSnackBar().successSnackBar(
+                                        "${boardnamecontroller.text}, successfully created!");
+                                    Get.offAll(() =>
+                                        const MainScreen(selectedIndex: 0));
+                                  }
                                 }
                               }
                             },

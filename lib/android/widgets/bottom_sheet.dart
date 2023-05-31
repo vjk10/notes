@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class NotesBottomSheet extends StatefulWidget {
   final Widget child;
   double? width = Get.width;
-  double? height = Get.height / 2;
+  double? height = Get.height;
   NotesBottomSheet({Key? key, required this.child, this.width, this.height})
       : super(key: key);
 
@@ -31,7 +31,7 @@ class _NotesBottomSheetState extends State<NotesBottomSheet> {
       height: widget.height,
       child: Stack(
         clipBehavior: Clip.hardEdge,
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         children: [
           SvgPicture.asset(
             "assets/images/bottom_sheet.svg",

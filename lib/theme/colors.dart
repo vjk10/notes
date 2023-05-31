@@ -13,6 +13,15 @@ Map<int, Color> color = {
   900: const Color.fromRGBO(136, 14, 79, 1),
 };
 
+//---------------//
+// SKETCH-COLORS //
+//---------------//
+MaterialColor lime = MaterialColor(0xFFCFFF47, color);
+MaterialColor lightPink = MaterialColor(0xFFD4B4FE, color);
+MaterialColor lightYellow = MaterialColor(0xFFFFDBA1, color);
+MaterialColor lightBlack = MaterialColor(0xFF141414, color);
+MaterialColor lightWhite = MaterialColor(0xFFF5F5F5, color);
+
 //-------------//
 // BASE-COLORS //
 //-------------//
@@ -36,6 +45,9 @@ MaterialColor error = MaterialColor(0xFFEE4D37, color);
 MaterialColor warning = MaterialColor(0xFFF08D32, color);
 MaterialColor info = MaterialColor(0xFF144CC7, color);
 MaterialColor success = MaterialColor(0xFF06C270, color);
+MaterialColor googleBlue = MaterialColor(0xFF4285F4, color);
+Color barColor = Colors.amber;
+Color thumbColor = Colors.purple.shade300;
 
 //-------------------//
 // BACKGROUND-COLORS //
@@ -142,7 +154,7 @@ MaterialColor green = MaterialColor(0xFF7CDC4F, color);
 MaterialColor pink = MaterialColor(0xFFf08080, color);
 MaterialColor paleGreen = MaterialColor(0xFFabc4ab, color);
 MaterialColor ash = MaterialColor(0xFF202020, color);
-MaterialColor lightBlack = MaterialColor(0xFF272636, color);
+// MaterialColor lightBlack = MaterialColor(0xFF272636, color);
 MaterialColor kindaRedBackground = MaterialColor(0xFF311717, color);
 MaterialColor kindaRedSurface = MaterialColor(0xFF421F1F, color);
 MaterialColor darkYellowBackground = MaterialColor(0xFF261C00, color);

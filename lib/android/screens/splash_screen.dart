@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes/android/screens/main_screen.dart';
@@ -32,10 +33,22 @@ class _SplashScreenState extends State<SplashScreen> {
       onboarded = value?.onboarding;
     });
     if (onboarded == "true") {
-      await AuthServices().authChanges().whenComplete(() {
-        setState(() {});
-        Get.offAll(() => const MainScreen(selectedIndex: 0));
-      });
+      // await AuthServices().authChanges().then((value) {
+      //   if (kDebugMode) {
+      //     print("Return Value: $value");
+      //   }
+      //   Get.offAll(
+      //     () => const MainScreen(selectedIndex: 0),
+      //   );
+      // });
+      var returnStatus = await AuthServices().authChanges();
+      if (returnStatus == StaticData.successStatus) {
+        Get.offAll(
+          () => const MainScreen(selectedIndex: 0),
+        );
+      } else {
+        startOnboarding();
+      }
     } else {
       startOnboarding();
     }

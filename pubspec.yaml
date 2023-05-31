@@ -28,6 +28,11 @@ dependencies:
   auto_size_text: ^3.0.0
   link_preview_generator: ^1.2.0
   line_icons: ^2.0.1
+  cred_progress_bar: ^0.0.2
+  salomon_bottom_bar: ^3.3.2
+  icons_launcher: ^2.1.0
+  rive: ^0.9.1
+  outlined_text: ^1.0.1
   #################NOTES#################
   container_tab_indicator: ^0.3.0
   path_provider: ^2.0.9
@@ -98,6 +103,16 @@ flutter:
     - assets/fonts/
 
   fonts:
+
+    - family: AbrilFatface
+      fonts:
+       - asset: assets/fonts/AbrilFatface-Regular.ttf
+
+    - family: PassionOne
+      fonts:
+       - asset: assets/fonts/PassionOne-Black.ttf
+       - asset: assets/fonts/PassionOne-Bold.ttf
+       - asset: assets/fonts/PassionOne-Regular.ttf
     - family: Gilroy
       fonts:
        - asset: assets/fonts/Gilroy-ExtraBold.otf
