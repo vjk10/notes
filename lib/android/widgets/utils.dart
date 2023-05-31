@@ -4,11 +4,8 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 
 import '../../data/data.dart';
-import '../../notes_icon_icons.dart';
 import '../../services/isar_db/boards_local_schema.dart';
 import '../../theme/colors.dart';
-import '../views/items/display_note_view.dart';
-import 'bottom_sheet.dart';
 
 class Utils {
   IconData getOpenIcon(String url) {
@@ -82,204 +79,205 @@ class Utils {
   Center notesOptionSheetChildBottom(List<NotesLocal> notes, int index) {
     return Center(
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const SizedBox(
-              height: 15,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          const SizedBox(
+            height: 15,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 50.0,
+              vertical: 25.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50.0,
-                vertical: 25.0,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    LineIcons.scroll,
-                    color: popBlack500,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  SizedBox(
-                    width: Get.width / 1.8,
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'rename this note',
-                          style: StaticData.t.textTheme.bodyLarge?.copyWith(
-                            color: popBlack500,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  LineIcons.scroll,
+                  color: popBlack500,
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                SizedBox(
+                  width: Get.width / 1.8,
+                  height: 37,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'rename this note',
+                        style: StaticData.t.textTheme.bodyLarge?.copyWith(
+                          color: popBlack500,
+                          fontFamily: 'Cirka',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          'change the title of the note',
+                          style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                            color: popBlack100,
                             fontFamily: 'Cirka',
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        SizedBox(
-                          child: Text(
-                            'change the title of the note',
-                            style: StaticData.t.textTheme.bodyMedium?.copyWith(
-                              color: popBlack100,
-                              fontFamily: 'Cirka',
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50.0,
-                vertical: 25.0,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    LineIcons.trash,
-                    color: popBlack500,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  SizedBox(
-                    width: Get.width / 1.8,
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'delete this note',
-                          style: StaticData.t.textTheme.bodyLarge?.copyWith(
-                            color: popBlack500,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 50.0,
+              vertical: 25.0,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  LineIcons.trash,
+                  color: popBlack500,
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                SizedBox(
+                  width: Get.width / 1.8,
+                  height: 37,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'delete this note',
+                        style: StaticData.t.textTheme.bodyLarge?.copyWith(
+                          color: popBlack500,
+                          fontFamily: 'Cirka',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          'this deletes only the local copy',
+                          style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                            color: popBlack100,
                             fontFamily: 'Cirka',
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        SizedBox(
-                          child: Text(
-                            'this deletes only the local copy',
-                            style: StaticData.t.textTheme.bodyMedium?.copyWith(
-                              color: popBlack100,
-                              fontFamily: 'Cirka',
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50.0,
-                vertical: 25.0,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    LineIcons.fileDownload,
-                    color: popBlack500,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  SizedBox(
-                    width: Get.width / 1.8,
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'download this note',
-                          style: StaticData.t.textTheme.bodyLarge?.copyWith(
-                            color: popBlack500,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 50.0,
+              vertical: 25.0,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  LineIcons.fileDownload,
+                  color: popBlack500,
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                SizedBox(
+                  width: Get.width / 1.8,
+                  height: 37,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'download this note',
+                        style: StaticData.t.textTheme.bodyLarge?.copyWith(
+                          color: popBlack500,
+                          fontFamily: 'Cirka',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          'download note as plain text',
+                          style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                            color: popBlack100,
                             fontFamily: 'Cirka',
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        SizedBox(
-                          child: Text(
-                            'download note as plain text',
-                            style: StaticData.t.textTheme.bodyMedium?.copyWith(
-                              color: popBlack100,
-                              fontFamily: 'Cirka',
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 50.0,
-                vertical: 25.0,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    LineIcons.fileUpload,
-                    color: popBlack500,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  SizedBox(
-                    width: Get.width / 1.8,
-                    height: 37,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'backup this note',
-                          style: StaticData.t.textTheme.bodyLarge?.copyWith(
-                            color: popBlack500,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 50.0,
+              vertical: 25.0,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  LineIcons.fileUpload,
+                  color: popBlack500,
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                SizedBox(
+                  width: Get.width / 1.8,
+                  height: 37,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'backup this note',
+                        style: StaticData.t.textTheme.bodyLarge?.copyWith(
+                          color: popBlack500,
+                          fontFamily: 'Cirka',
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          'back up note to your Google account',
+                          style: StaticData.t.textTheme.bodyMedium?.copyWith(
+                            color: popBlack100,
                             fontFamily: 'Cirka',
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        SizedBox(
-                          child: Text(
-                            'back up note to your Google account',
-                            style: StaticData.t.textTheme.bodyMedium?.copyWith(
-                              color: popBlack100,
-                              fontFamily: 'Cirka',
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-          ]),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
     );
   }
 
@@ -527,101 +525,101 @@ class Utils {
     );
   }
 
-  Container showListItem(List<NotesLocal> notes, int index,
-      BoardsLocal boardsLocal, BuildContext context) {
-    return Container(
-      width: Get.width - 30,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        // border: Border.all(
-        //   color: Color(boardsLocal.boardtextcolor!),
-        //   width: 2,
-        // ),
-        color: Color(boardsLocal.boardcolor!).withBlue(255),
-      ),
-      child: ListTile(
-        onTap: () {
-          Get.to(() => DisplayNoteView(
-                boardid: boardsLocal.id,
-                note: notes[index],
-                boardColor: Color(boardsLocal.boardcolor!),
-                boardTextColor: Color(boardsLocal.boardtextcolor!),
-              ));
-        },
-        onLongPress: () async {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return NotesBottomSheet(
-                // childTop: Utils().notesOptionSheetTop(notes, index),
-                child: Utils().notesOptionSheetChildBottom(notes, index),
-              );
-            },
-            backgroundColor: Colors.transparent,
-            barrierColor: Colors.black.withOpacity(0.5),
-            elevation: 0,
-          );
-        },
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 10,
-        ),
-        title: Text(
-          notes[index].title.toString(),
-          style: StaticData.t.textTheme.bodyLarge?.copyWith(
-            color: Color(boardsLocal.boardtextcolor!),
-          ),
-        ),
-        isThreeLine: true,
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Column(
-                  children: [
-                    SizedBox(
-                      width: Get.width / 4,
-                      child: Text(
-                        notes[index].bodyPlainText.toString(),
-                        maxLines: 3,
-                        style: StaticData.t.textTheme.bodyMedium?.copyWith(
-                          color: Color(
-                            boardsLocal.boardtextcolor!,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "created by: ${notes[index].createdby.toString()}",
-              style: StaticData.t.textTheme.bodySmall?.copyWith(
-                fontFamily: 'AbrilFatFace',
-                color: Color(boardsLocal.boardtextcolor!),
-              ),
-            ),
-          ],
-        ),
-        trailing: Padding(
-          padding: const EdgeInsets.only(right: 20.0),
-          child: Icon(
-            NotesIcon.button_arrow_right,
-            size: 10,
-            color: Color(boardsLocal.boardcolor!),
-          ),
-        ),
-      ),
-    );
-  }
+//   Container showListItem(List<NotesLocal> notes, int index,
+//       BoardsLocal boardsLocal, BuildContext context) {
+//     return Container(
+//       width: Get.width - 30,
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(20),
+//         // border: Border.all(
+//         //   color: Color(boardsLocal.boardtextcolor!),
+//         //   width: 2,
+//         // ),
+//         color: Color(boardsLocal.boardcolor!).withBlue(255),
+//       ),
+//       child: ListTile(
+//         onTap: () {
+//           Get.to(() => DisplayNoteView(
+//                 boardid: boardsLocal.id,
+//                 notesLocal: notes[index],
+//                 boardColor: Color(boardsLocal.boardcolor!),
+//                 boardTextColor: Color(boardsLocal.boardtextcolor!),
+//               ));
+//         },
+//         onLongPress: () async {
+//           showModalBottomSheet(
+//             context: context,
+//             builder: (context) {
+//               return NotesBottomSheet(
+//                 // childTop: Utils().notesOptionSheetTop(notes, index),
+//                 child: Utils().notesOptionSheetChildBottom(notes, index),
+//               );
+//             },
+//             backgroundColor: Colors.transparent,
+//             barrierColor: Colors.black.withOpacity(0.5),
+//             elevation: 0,
+//           );
+//         },
+//         contentPadding: const EdgeInsets.symmetric(
+//           vertical: 10,
+//           horizontal: 10,
+//         ),
+//         title: Text(
+//           notes[index].title.toString(),
+//           style: StaticData.t.textTheme.bodyLarge?.copyWith(
+//             color: Color(boardsLocal.boardtextcolor!),
+//           ),
+//         ),
+//         isThreeLine: true,
+//         subtitle: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//           children: [
+//             Column(
+//               children: [
+//                 const SizedBox(
+//                   height: 20,
+//                 ),
+//                 Column(
+//                   children: [
+//                     SizedBox(
+//                       width: Get.width / 4,
+//                       child: Text(
+//                         notes[index].bodyPlainText.toString(),
+//                         maxLines: 3,
+//                         style: StaticData.t.textTheme.bodyMedium?.copyWith(
+//                           color: Color(
+//                             boardsLocal.boardtextcolor!,
+//                           ),
+//                           overflow: TextOverflow.ellipsis,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//             const SizedBox(
+//               height: 20,
+//             ),
+//             Text(
+//               "created by: ${notes[index].createdby.toString()}",
+//               style: StaticData.t.textTheme.bodySmall?.copyWith(
+//                 fontFamily: 'AbrilFatFace',
+//                 color: Color(boardsLocal.boardtextcolor!),
+//               ),
+//             ),
+//           ],
+//         ),
+//         trailing: Padding(
+//           padding: const EdgeInsets.only(right: 20.0),
+//           child: Icon(
+//             NotesIcon.button_arrow_right,
+//             size: 10,
+//             color: Color(boardsLocal.boardcolor!),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
 }

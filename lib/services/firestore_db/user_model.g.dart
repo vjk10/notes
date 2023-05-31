@@ -1638,6 +1638,11 @@ abstract class BoardsModelDocumentReference extends FirestoreDocumentReference<
     );
   }
 
+  late final NotesModelCollectionReference notes =
+      _$NotesModelCollectionReference(
+    reference,
+  );
+
   @override
   Stream<BoardsModelDocumentSnapshot> snapshots();
 
@@ -1699,6 +1704,11 @@ class _$BoardsModelDocumentReference
       ),
     );
   }
+
+  late final NotesModelCollectionReference notes =
+      _$NotesModelCollectionReference(
+    reference,
+  );
 
   @override
   Stream<BoardsModelDocumentSnapshot> snapshots() {
@@ -2911,6 +2921,1827 @@ class BoardsModelQueryDocumentSnapshot
   }
 }
 
+/// A collection reference object can be used for adding documents,
+/// getting document references, and querying for documents
+/// (using the methods inherited from Query).
+abstract class NotesModelCollectionReference
+    implements
+        NotesModelQuery,
+        FirestoreCollectionReference<NotesModel, NotesModelQuerySnapshot> {
+  factory NotesModelCollectionReference(
+    DocumentReference<BoardsModel> parent,
+  ) = _$NotesModelCollectionReference;
+
+  static NotesModel fromFirestore(
+    DocumentSnapshot<Map<String, Object?>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    return _$NotesModelFromJson(snapshot.data()!);
+  }
+
+  static Map<String, Object?> toFirestore(
+    NotesModel value,
+    SetOptions? options,
+  ) {
+    return _$NotesModelToJson(value);
+  }
+
+  @override
+  CollectionReference<NotesModel> get reference;
+
+  /// A reference to the containing [BoardsModelDocumentReference] if this is a subcollection.
+  BoardsModelDocumentReference get parent;
+
+  @override
+  NotesModelDocumentReference doc([String? id]);
+
+  /// Add a new document to this collection with the specified data,
+  /// assigning it a document ID automatically.
+  Future<NotesModelDocumentReference> add(NotesModel value);
+}
+
+class _$NotesModelCollectionReference extends _$NotesModelQuery
+    implements NotesModelCollectionReference {
+  factory _$NotesModelCollectionReference(
+    DocumentReference<BoardsModel> parent,
+  ) {
+    return _$NotesModelCollectionReference._(
+      BoardsModelDocumentReference(parent),
+      parent.collection('notes').withConverter(
+            fromFirestore: NotesModelCollectionReference.fromFirestore,
+            toFirestore: NotesModelCollectionReference.toFirestore,
+          ),
+    );
+  }
+
+  _$NotesModelCollectionReference._(
+    this.parent,
+    CollectionReference<NotesModel> reference,
+  ) : super(reference, $referenceWithoutCursor: reference);
+
+  @override
+  final BoardsModelDocumentReference parent;
+
+  String get path => reference.path;
+
+  @override
+  CollectionReference<NotesModel> get reference =>
+      super.reference as CollectionReference<NotesModel>;
+
+  @override
+  NotesModelDocumentReference doc([String? id]) {
+    assert(
+      id == null || id.split('/').length == 1,
+      'The document ID cannot be from a different collection',
+    );
+    return NotesModelDocumentReference(
+      reference.doc(id),
+    );
+  }
+
+  @override
+  Future<NotesModelDocumentReference> add(NotesModel value) {
+    return reference.add(value).then((ref) => NotesModelDocumentReference(ref));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$NotesModelCollectionReference &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+abstract class NotesModelDocumentReference
+    extends FirestoreDocumentReference<NotesModel, NotesModelDocumentSnapshot> {
+  factory NotesModelDocumentReference(DocumentReference<NotesModel> reference) =
+      _$NotesModelDocumentReference;
+
+  DocumentReference<NotesModel> get reference;
+
+  /// A reference to the [NotesModelCollectionReference] containing this document.
+  NotesModelCollectionReference get parent {
+    return _$NotesModelCollectionReference(
+      reference.parent.parent!.withConverter<BoardsModel>(
+        fromFirestore: BoardsModelCollectionReference.fromFirestore,
+        toFirestore: BoardsModelCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<NotesModelDocumentSnapshot> snapshots();
+
+  @override
+  Future<NotesModelDocumentSnapshot> get([GetOptions? options]);
+
+  @override
+  Future<void> delete();
+
+  /// Updates data on the document. Data will be merged with any existing
+  /// document data.
+  ///
+  /// If no document exists yet, the update will fail.
+  Future<void> update({
+    String? title,
+    FieldValue titleFieldValue,
+    String? body,
+    FieldValue bodyFieldValue,
+    String? bodyPlainText,
+    FieldValue bodyPlainTextFieldValue,
+    String createdby,
+    FieldValue createdbyFieldValue,
+    String createdon,
+    FieldValue createdonFieldValue,
+    bool backedup,
+    FieldValue backedupFieldValue,
+    String boardid,
+    FieldValue boardidFieldValue,
+    String boardname,
+    FieldValue boardnameFieldValue,
+  });
+
+  /// Updates fields in the current document using the transaction API.
+  ///
+  /// The update will fail if applied to a document that does not exist.
+  void transactionUpdate(
+    Transaction transaction, {
+    String? title,
+    FieldValue titleFieldValue,
+    String? body,
+    FieldValue bodyFieldValue,
+    String? bodyPlainText,
+    FieldValue bodyPlainTextFieldValue,
+    String createdby,
+    FieldValue createdbyFieldValue,
+    String createdon,
+    FieldValue createdonFieldValue,
+    bool backedup,
+    FieldValue backedupFieldValue,
+    String boardid,
+    FieldValue boardidFieldValue,
+    String boardname,
+    FieldValue boardnameFieldValue,
+  });
+}
+
+class _$NotesModelDocumentReference
+    extends FirestoreDocumentReference<NotesModel, NotesModelDocumentSnapshot>
+    implements NotesModelDocumentReference {
+  _$NotesModelDocumentReference(this.reference);
+
+  @override
+  final DocumentReference<NotesModel> reference;
+
+  /// A reference to the [NotesModelCollectionReference] containing this document.
+  NotesModelCollectionReference get parent {
+    return _$NotesModelCollectionReference(
+      reference.parent.parent!.withConverter<BoardsModel>(
+        fromFirestore: BoardsModelCollectionReference.fromFirestore,
+        toFirestore: BoardsModelCollectionReference.toFirestore,
+      ),
+    );
+  }
+
+  @override
+  Stream<NotesModelDocumentSnapshot> snapshots() {
+    return reference.snapshots().map(NotesModelDocumentSnapshot._);
+  }
+
+  @override
+  Future<NotesModelDocumentSnapshot> get([GetOptions? options]) {
+    return reference.get(options).then(NotesModelDocumentSnapshot._);
+  }
+
+  @override
+  Future<NotesModelDocumentSnapshot> transactionGet(Transaction transaction) {
+    return transaction.get(reference).then(NotesModelDocumentSnapshot._);
+  }
+
+  Future<void> update({
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
+    Object? body = _sentinel,
+    FieldValue? bodyFieldValue,
+    Object? bodyPlainText = _sentinel,
+    FieldValue? bodyPlainTextFieldValue,
+    Object? createdby = _sentinel,
+    FieldValue? createdbyFieldValue,
+    Object? createdon = _sentinel,
+    FieldValue? createdonFieldValue,
+    Object? backedup = _sentinel,
+    FieldValue? backedupFieldValue,
+    Object? boardid = _sentinel,
+    FieldValue? boardidFieldValue,
+    Object? boardname = _sentinel,
+    FieldValue? boardnameFieldValue,
+  }) async {
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
+    assert(
+      body == _sentinel || bodyFieldValue == null,
+      "Cannot specify both body and bodyFieldValue",
+    );
+    assert(
+      bodyPlainText == _sentinel || bodyPlainTextFieldValue == null,
+      "Cannot specify both bodyPlainText and bodyPlainTextFieldValue",
+    );
+    assert(
+      createdby == _sentinel || createdbyFieldValue == null,
+      "Cannot specify both createdby and createdbyFieldValue",
+    );
+    assert(
+      createdon == _sentinel || createdonFieldValue == null,
+      "Cannot specify both createdon and createdonFieldValue",
+    );
+    assert(
+      backedup == _sentinel || backedupFieldValue == null,
+      "Cannot specify both backedup and backedupFieldValue",
+    );
+    assert(
+      boardid == _sentinel || boardidFieldValue == null,
+      "Cannot specify both boardid and boardidFieldValue",
+    );
+    assert(
+      boardname == _sentinel || boardnameFieldValue == null,
+      "Cannot specify both boardname and boardnameFieldValue",
+    );
+    final json = {
+      if (title != _sentinel) _$NotesModelFieldMap['title']!: title as String?,
+      if (titleFieldValue != null)
+        _$NotesModelFieldMap['title']!: titleFieldValue,
+      if (body != _sentinel) _$NotesModelFieldMap['body']!: body as String?,
+      if (bodyFieldValue != null) _$NotesModelFieldMap['body']!: bodyFieldValue,
+      if (bodyPlainText != _sentinel)
+        _$NotesModelFieldMap['bodyPlainText']!: bodyPlainText as String?,
+      if (bodyPlainTextFieldValue != null)
+        _$NotesModelFieldMap['bodyPlainText']!: bodyPlainTextFieldValue,
+      if (createdby != _sentinel)
+        _$NotesModelFieldMap['createdby']!: createdby as String,
+      if (createdbyFieldValue != null)
+        _$NotesModelFieldMap['createdby']!: createdbyFieldValue,
+      if (createdon != _sentinel)
+        _$NotesModelFieldMap['createdon']!: createdon as String,
+      if (createdonFieldValue != null)
+        _$NotesModelFieldMap['createdon']!: createdonFieldValue,
+      if (backedup != _sentinel)
+        _$NotesModelFieldMap['backedup']!: backedup as bool,
+      if (backedupFieldValue != null)
+        _$NotesModelFieldMap['backedup']!: backedupFieldValue,
+      if (boardid != _sentinel)
+        _$NotesModelFieldMap['boardid']!: boardid as String,
+      if (boardidFieldValue != null)
+        _$NotesModelFieldMap['boardid']!: boardidFieldValue,
+      if (boardname != _sentinel)
+        _$NotesModelFieldMap['boardname']!: boardname as String,
+      if (boardnameFieldValue != null)
+        _$NotesModelFieldMap['boardname']!: boardnameFieldValue,
+    };
+
+    return reference.update(json);
+  }
+
+  void transactionUpdate(
+    Transaction transaction, {
+    Object? title = _sentinel,
+    FieldValue? titleFieldValue,
+    Object? body = _sentinel,
+    FieldValue? bodyFieldValue,
+    Object? bodyPlainText = _sentinel,
+    FieldValue? bodyPlainTextFieldValue,
+    Object? createdby = _sentinel,
+    FieldValue? createdbyFieldValue,
+    Object? createdon = _sentinel,
+    FieldValue? createdonFieldValue,
+    Object? backedup = _sentinel,
+    FieldValue? backedupFieldValue,
+    Object? boardid = _sentinel,
+    FieldValue? boardidFieldValue,
+    Object? boardname = _sentinel,
+    FieldValue? boardnameFieldValue,
+  }) {
+    assert(
+      title == _sentinel || titleFieldValue == null,
+      "Cannot specify both title and titleFieldValue",
+    );
+    assert(
+      body == _sentinel || bodyFieldValue == null,
+      "Cannot specify both body and bodyFieldValue",
+    );
+    assert(
+      bodyPlainText == _sentinel || bodyPlainTextFieldValue == null,
+      "Cannot specify both bodyPlainText and bodyPlainTextFieldValue",
+    );
+    assert(
+      createdby == _sentinel || createdbyFieldValue == null,
+      "Cannot specify both createdby and createdbyFieldValue",
+    );
+    assert(
+      createdon == _sentinel || createdonFieldValue == null,
+      "Cannot specify both createdon and createdonFieldValue",
+    );
+    assert(
+      backedup == _sentinel || backedupFieldValue == null,
+      "Cannot specify both backedup and backedupFieldValue",
+    );
+    assert(
+      boardid == _sentinel || boardidFieldValue == null,
+      "Cannot specify both boardid and boardidFieldValue",
+    );
+    assert(
+      boardname == _sentinel || boardnameFieldValue == null,
+      "Cannot specify both boardname and boardnameFieldValue",
+    );
+    final json = {
+      if (title != _sentinel) _$NotesModelFieldMap['title']!: title as String?,
+      if (titleFieldValue != null)
+        _$NotesModelFieldMap['title']!: titleFieldValue,
+      if (body != _sentinel) _$NotesModelFieldMap['body']!: body as String?,
+      if (bodyFieldValue != null) _$NotesModelFieldMap['body']!: bodyFieldValue,
+      if (bodyPlainText != _sentinel)
+        _$NotesModelFieldMap['bodyPlainText']!: bodyPlainText as String?,
+      if (bodyPlainTextFieldValue != null)
+        _$NotesModelFieldMap['bodyPlainText']!: bodyPlainTextFieldValue,
+      if (createdby != _sentinel)
+        _$NotesModelFieldMap['createdby']!: createdby as String,
+      if (createdbyFieldValue != null)
+        _$NotesModelFieldMap['createdby']!: createdbyFieldValue,
+      if (createdon != _sentinel)
+        _$NotesModelFieldMap['createdon']!: createdon as String,
+      if (createdonFieldValue != null)
+        _$NotesModelFieldMap['createdon']!: createdonFieldValue,
+      if (backedup != _sentinel)
+        _$NotesModelFieldMap['backedup']!: backedup as bool,
+      if (backedupFieldValue != null)
+        _$NotesModelFieldMap['backedup']!: backedupFieldValue,
+      if (boardid != _sentinel)
+        _$NotesModelFieldMap['boardid']!: boardid as String,
+      if (boardidFieldValue != null)
+        _$NotesModelFieldMap['boardid']!: boardidFieldValue,
+      if (boardname != _sentinel)
+        _$NotesModelFieldMap['boardname']!: boardname as String,
+      if (boardnameFieldValue != null)
+        _$NotesModelFieldMap['boardname']!: boardnameFieldValue,
+    };
+
+    transaction.update(reference, json);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is NotesModelDocumentReference &&
+        other.runtimeType == runtimeType &&
+        other.parent == parent &&
+        other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, parent, id);
+}
+
+abstract class NotesModelQuery
+    implements QueryReference<NotesModel, NotesModelQuerySnapshot> {
+  @override
+  NotesModelQuery limit(int limit);
+
+  @override
+  NotesModelQuery limitToLast(int limit);
+
+  /// Perform an order query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of order queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.orderByFieldPath(
+  ///   FieldPath.fromString('title'),
+  ///   startAt: 'title',
+  /// );
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.orderByTitle(startAt: 'title');
+  /// ```
+  NotesModelQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt,
+    Object? startAfter,
+    Object? endAt,
+    Object? endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  /// Perform a where query based on a [FieldPath].
+  ///
+  /// This method is considered unsafe as it does check that the field path
+  /// maps to a valid property or that parameters such as [isEqualTo] receive
+  /// a value of the correct type.
+  ///
+  /// If possible, instead use the more explicit variant of where queries:
+  ///
+  /// **AVOID**:
+  /// ```dart
+  /// collection.whereFieldPath(FieldPath.fromString('title'), isEqualTo: 'title');
+  /// ```
+  ///
+  /// **PREFER**:
+  /// ```dart
+  /// collection.whereTitle(isEqualTo: 'title');
+  /// ```
+  NotesModelQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  });
+
+  NotesModelQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  NotesModelQuery whereTitle({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  NotesModelQuery whereBody({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  NotesModelQuery whereBodyPlainText({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  });
+  NotesModelQuery whereCreatedby({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  NotesModelQuery whereCreatedon({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  NotesModelQuery whereBackedup({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  });
+  NotesModelQuery whereBoardid({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+  NotesModelQuery whereBoardname({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  });
+
+  NotesModelQuery orderByDocumentId({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByTitle({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByBody({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByBodyPlainText({
+    bool descending = false,
+    String? startAt,
+    String? startAfter,
+    String? endAt,
+    String? endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByCreatedby({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByCreatedon({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByBackedup({
+    bool descending = false,
+    bool startAt,
+    bool startAfter,
+    bool endAt,
+    bool endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByBoardid({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+
+  NotesModelQuery orderByBoardname({
+    bool descending = false,
+    String startAt,
+    String startAfter,
+    String endAt,
+    String endBefore,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  });
+}
+
+class _$NotesModelQuery
+    extends QueryReference<NotesModel, NotesModelQuerySnapshot>
+    implements NotesModelQuery {
+  _$NotesModelQuery(
+    this._collection, {
+    required Query<NotesModel> $referenceWithoutCursor,
+    $QueryCursor $queryCursor = const $QueryCursor(),
+  }) : super(
+          $referenceWithoutCursor: $referenceWithoutCursor,
+          $queryCursor: $queryCursor,
+        );
+
+  final CollectionReference<Object?> _collection;
+
+  @override
+  Stream<NotesModelQuerySnapshot> snapshots([SnapshotOptions? options]) {
+    return reference
+        .snapshots()
+        .map(NotesModelQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  Future<NotesModelQuerySnapshot> get([GetOptions? options]) {
+    return reference
+        .get(options)
+        .then(NotesModelQuerySnapshot._fromQuerySnapshot);
+  }
+
+  @override
+  NotesModelQuery limit(int limit) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limit(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  @override
+  NotesModelQuery limitToLast(int limit) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.limitToLast(limit),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByFieldPath(
+    FieldPath fieldPath, {
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query =
+        $referenceWithoutCursor.orderBy(fieldPath, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery whereFieldPath(
+    FieldPath fieldPath, {
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        fieldPath,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        arrayContains: arrayContains,
+        arrayContainsAny: arrayContainsAny,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+        isNull: isNull,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereDocumentId({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        FieldPath.documentId,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereTitle({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['title']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereBody({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['body']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereBodyPlainText({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String?>? whereIn,
+    List<String?>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['bodyPlainText']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereCreatedby({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['createdby']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereCreatedon({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['createdon']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereBackedup({
+    bool? isEqualTo,
+    bool? isNotEqualTo,
+    bool? isLessThan,
+    bool? isLessThanOrEqualTo,
+    bool? isGreaterThan,
+    bool? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<bool>? whereIn,
+    List<bool>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['backedup']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereBoardid({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['boardid']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery whereBoardname({
+    String? isEqualTo,
+    String? isNotEqualTo,
+    String? isLessThan,
+    String? isLessThanOrEqualTo,
+    String? isGreaterThan,
+    String? isGreaterThanOrEqualTo,
+    bool? isNull,
+    List<String>? whereIn,
+    List<String>? whereNotIn,
+  }) {
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: $referenceWithoutCursor.where(
+        _$NotesModelFieldMap['boardname']!,
+        isEqualTo: isEqualTo,
+        isNotEqualTo: isNotEqualTo,
+        isLessThan: isLessThan,
+        isLessThanOrEqualTo: isLessThanOrEqualTo,
+        isGreaterThan: isGreaterThan,
+        isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+        isNull: isNull,
+        whereIn: whereIn,
+        whereNotIn: whereNotIn,
+      ),
+      $queryCursor: $queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByDocumentId({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(FieldPath.documentId,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByTitle({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$NotesModelFieldMap['title']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByBody({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(_$NotesModelFieldMap['body']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByBodyPlainText({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor.orderBy(
+        _$NotesModelFieldMap['bodyPlainText']!,
+        descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByCreatedby({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$NotesModelFieldMap['createdby']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByCreatedon({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$NotesModelFieldMap['createdon']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByBackedup({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$NotesModelFieldMap['backedup']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByBoardid({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$NotesModelFieldMap['boardid']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  NotesModelQuery orderByBoardname({
+    bool descending = false,
+    Object? startAt = _sentinel,
+    Object? startAfter = _sentinel,
+    Object? endAt = _sentinel,
+    Object? endBefore = _sentinel,
+    NotesModelDocumentSnapshot? startAtDocument,
+    NotesModelDocumentSnapshot? endAtDocument,
+    NotesModelDocumentSnapshot? endBeforeDocument,
+    NotesModelDocumentSnapshot? startAfterDocument,
+  }) {
+    final query = $referenceWithoutCursor
+        .orderBy(_$NotesModelFieldMap['boardname']!, descending: descending);
+    var queryCursor = $queryCursor;
+
+    if (startAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAt: const [],
+        startAtDocumentSnapshot: startAtDocument.snapshot,
+      );
+    }
+    if (startAfterDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: const [],
+        startAfterDocumentSnapshot: startAfterDocument.snapshot,
+      );
+    }
+    if (endAtDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endAt: const [],
+        endAtDocumentSnapshot: endAtDocument.snapshot,
+      );
+    }
+    if (endBeforeDocument != null) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: const [],
+        endBeforeDocumentSnapshot: endBeforeDocument.snapshot,
+      );
+    }
+
+    if (startAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAt: [...queryCursor.startAt, startAt],
+        startAtDocumentSnapshot: null,
+      );
+    }
+    if (startAfter != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        startAfter: [...queryCursor.startAfter, startAfter],
+        startAfterDocumentSnapshot: null,
+      );
+    }
+    if (endAt != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endAt: [...queryCursor.endAt, endAt],
+        endAtDocumentSnapshot: null,
+      );
+    }
+    if (endBefore != _sentinel) {
+      queryCursor = queryCursor.copyWith(
+        endBefore: [...queryCursor.endBefore, endBefore],
+        endBeforeDocumentSnapshot: null,
+      );
+    }
+
+    return _$NotesModelQuery(
+      _collection,
+      $referenceWithoutCursor: query,
+      $queryCursor: queryCursor,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is _$NotesModelQuery &&
+        other.runtimeType == runtimeType &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, reference);
+}
+
+class NotesModelDocumentSnapshot extends FirestoreDocumentSnapshot<NotesModel> {
+  NotesModelDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final DocumentSnapshot<NotesModel> snapshot;
+
+  @override
+  NotesModelDocumentReference get reference {
+    return NotesModelDocumentReference(
+      snapshot.reference,
+    );
+  }
+
+  @override
+  final NotesModel? data;
+}
+
+class NotesModelQuerySnapshot extends FirestoreQuerySnapshot<NotesModel,
+    NotesModelQueryDocumentSnapshot> {
+  NotesModelQuerySnapshot._(
+    this.snapshot,
+    this.docs,
+    this.docChanges,
+  );
+
+  factory NotesModelQuerySnapshot._fromQuerySnapshot(
+    QuerySnapshot<NotesModel> snapshot,
+  ) {
+    final docs = snapshot.docs.map(NotesModelQueryDocumentSnapshot._).toList();
+
+    final docChanges = snapshot.docChanges.map((change) {
+      return _decodeDocumentChange(
+        change,
+        NotesModelDocumentSnapshot._,
+      );
+    }).toList();
+
+    return NotesModelQuerySnapshot._(
+      snapshot,
+      docs,
+      docChanges,
+    );
+  }
+
+  static FirestoreDocumentChange<NotesModelDocumentSnapshot>
+      _decodeDocumentChange<T>(
+    DocumentChange<T> docChange,
+    NotesModelDocumentSnapshot Function(DocumentSnapshot<T> doc) decodeDoc,
+  ) {
+    return FirestoreDocumentChange<NotesModelDocumentSnapshot>(
+      type: docChange.type,
+      oldIndex: docChange.oldIndex,
+      newIndex: docChange.newIndex,
+      doc: decodeDoc(docChange.doc),
+    );
+  }
+
+  final QuerySnapshot<NotesModel> snapshot;
+
+  @override
+  final List<NotesModelQueryDocumentSnapshot> docs;
+
+  @override
+  final List<FirestoreDocumentChange<NotesModelDocumentSnapshot>> docChanges;
+}
+
+class NotesModelQueryDocumentSnapshot
+    extends FirestoreQueryDocumentSnapshot<NotesModel>
+    implements NotesModelDocumentSnapshot {
+  NotesModelQueryDocumentSnapshot._(this.snapshot) : data = snapshot.data();
+
+  @override
+  final QueryDocumentSnapshot<NotesModel> snapshot;
+
+  @override
+  final NotesModel data;
+
+  @override
+  NotesModelDocumentReference get reference {
+    return NotesModelDocumentReference(snapshot.reference);
+  }
+}
+
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
@@ -2995,4 +4826,58 @@ Map<String, dynamic> _$BoardsModelToJson(BoardsModel instance) =>
       'createdon': instance.createdon,
       'boardcolor': instance.boardcolor,
       'boardtextcolor': instance.boardtextcolor,
+    };
+
+NotesModel _$NotesModelFromJson(Map<String, dynamic> json) => NotesModel(
+      title: json['title'] as String?,
+      body: json['body'] as String?,
+      bodyPlainText: json['bodyPlainText'] as String?,
+      createdby: json['createdby'] as String,
+      createdon: json['createdon'] as String,
+      backedup: json['backedup'] as bool,
+      boardid: json['boardid'] as String,
+      boardname: json['boardname'] as String,
+    );
+
+const _$NotesModelFieldMap = <String, String>{
+  'title': 'title',
+  'body': 'body',
+  'bodyPlainText': 'bodyPlainText',
+  'createdby': 'createdby',
+  'createdon': 'createdon',
+  'backedup': 'backedup',
+  'boardid': 'boardid',
+  'boardname': 'boardname',
+};
+
+// ignore: unused_element
+abstract class _$NotesModelPerFieldToJson {
+  // ignore: unused_element
+  static Object? title(String? instance) => instance;
+  // ignore: unused_element
+  static Object? body(String? instance) => instance;
+  // ignore: unused_element
+  static Object? bodyPlainText(String? instance) => instance;
+  // ignore: unused_element
+  static Object? createdby(String instance) => instance;
+  // ignore: unused_element
+  static Object? createdon(String instance) => instance;
+  // ignore: unused_element
+  static Object? backedup(bool instance) => instance;
+  // ignore: unused_element
+  static Object? boardid(String instance) => instance;
+  // ignore: unused_element
+  static Object? boardname(String instance) => instance;
+}
+
+Map<String, dynamic> _$NotesModelToJson(NotesModel instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'body': instance.body,
+      'bodyPlainText': instance.bodyPlainText,
+      'createdby': instance.createdby,
+      'createdon': instance.createdon,
+      'backedup': instance.backedup,
+      'boardid': instance.boardid,
+      'boardname': instance.boardname,
     };

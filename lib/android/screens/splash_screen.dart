@@ -1,8 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:notes/android/screens/main_screen.dart';
-import 'package:notes/android/screens/onboarding/onboarding_one.dart';
 import 'package:notes/data/data.dart';
 import 'package:notes/android/widgets/notes_loading.dart';
 import 'package:notes/services/other/auth_services.dart';
@@ -33,36 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
       onboarded = value?.onboarding;
     });
     if (onboarded == "true") {
-      // await AuthServices().authChanges().then((value) {
-      //   if (kDebugMode) {
-      //     print("Return Value: $value");
-      //   }
-      //   Get.offAll(
-      //     () => const MainScreen(selectedIndex: 0),
-      //   );
-      // });
-      var returnStatus = await AuthServices().authChanges();
-      if (returnStatus == StaticData.successStatus) {
-        Get.offAll(
-          () => const MainScreen(selectedIndex: 0),
-        );
-      } else {
-        startOnboarding();
-      }
+      await AuthServices().authChanges(true);
     } else {
-      startOnboarding();
+      if (kDebugMode) {
+        print("Trigger 2");
+      }
+      AuthServices().startOnboarding();
     }
-  }
-
-  startOnboarding() async {
-    final Onboarding onboarding = Onboarding();
-    onboarding.id = 1;
-    onboarding.onboarding = "false";
-    await StaticData.isarDb.writeTxn(() async {
-      await StaticData.isarDb.onboardings.put(onboarding); // insert & update
-    }).whenComplete(() {
-      Get.to(() => const OnBoarding1());
-    });
   }
 
   getAppInfo() async {

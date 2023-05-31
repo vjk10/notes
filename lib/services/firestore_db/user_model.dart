@@ -13,6 +13,7 @@ part 'user_model.g.dart';
 )
 @Collection<UserModel>('users')
 @Collection<BoardsModel>('users/*/boards')
+@Collection<NotesModel>('users/*/boards/*/notes')
 class UserModel {
   UserModel({
     required this.id,
@@ -51,4 +52,33 @@ class BoardsModel {
   final String createdon;
   final int boardcolor;
   final int boardtextcolor;
+}
+
+@JsonSerializable(
+  explicitToJson: true,
+  createFieldMap: true,
+  createToJson: true,
+  createPerFieldToJson: true,
+  createFactory: true,
+)
+class NotesModel {
+  String? title;
+  String? body;
+  String? bodyPlainText;
+  final String createdby;
+  final String createdon;
+  final bool backedup;
+  final String boardid;
+  final String boardname;
+
+  NotesModel({
+    this.title,
+    this.body,
+    this.bodyPlainText,
+    required this.createdby,
+    required this.createdon,
+    required this.backedup,
+    required this.boardid,
+    required this.boardname,
+  });
 }

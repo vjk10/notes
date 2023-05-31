@@ -91,7 +91,7 @@ class _OnBoarding2State extends State<OnBoarding2> {
                           onTapUp: () async {
                             var status = await signInWithGoogle(context);
                             setState(() {
-                              AuthServices().authChanges();
+                              AuthServices().authChanges(false);
                             });
                             if (kDebugMode) {
                               print(status.toString());

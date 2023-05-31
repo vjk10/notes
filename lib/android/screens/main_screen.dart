@@ -74,7 +74,9 @@ class _MainScreenState extends State<MainScreen>
       initialIndex: widget.selectedIndex,
     );
     selectedIndex = widget.selectedIndex;
-    checkAuthState();
+    if (StaticData.uid.isEmpty) {
+      checkAuthState();
+    }
     selectedIndex = widget.selectedIndex;
     getCounts();
     if (kDebugMode) {
@@ -85,7 +87,7 @@ class _MainScreenState extends State<MainScreen>
   }
 
   checkAuthState() async {
-    await AuthServices().authChanges().whenComplete(() {
+    await AuthServices().authChanges(false).whenComplete(() {
       setState(() {});
     });
   }

@@ -20,7 +20,7 @@ class CreateItemOptions {
 
 class ReturnValue {
   final int status;
-  final Object error;
+  final Object message;
 
-  ReturnValue(this.status, this.error);
+  ReturnValue(this.status, this.message);
 }

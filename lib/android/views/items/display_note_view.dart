@@ -13,24 +13,31 @@ import 'package:neopop/neopop.dart';
 import 'package:notes/android/views/boards/display_board_view.dart';
 import 'package:notes/android/widgets/bottom_sheet.dart';
 import 'package:notes/notes_icon_icons.dart';
+import 'package:notes/services/firestore_db/user_model.dart';
 import 'package:notes/services/isar_db/boards_local_schema.dart';
 import 'package:notes/theme/colors.dart';
+import 'package:rive/rive.dart';
 
 import '../../../data/data.dart';
 import '../../widgets/utils.dart';
 
+// ignore: must_be_immutable
 class DisplayNoteView extends StatefulWidget {
   final int boardid;
   final Color boardColor;
   final Color boardTextColor;
-  final NotesLocal note;
-  const DisplayNoteView(
-      {Key? key,
-      required this.boardid,
-      required this.note,
-      required this.boardColor,
-      required this.boardTextColor})
-      : super(key: key);
+  final NotesLocal notesLocal;
+  final NotesModel notesModel;
+  String? notesID;
+  DisplayNoteView({
+    Key? key,
+    required this.boardid,
+    required this.notesLocal,
+    required this.boardColor,
+    required this.boardTextColor,
+    required this.notesModel,
+    this.notesID,
+  }) : super(key: key);
 
   @override
   State<DisplayNoteView> createState() => _DisplayNoteViewState();
@@ -42,21 +49,86 @@ class _DisplayNoteViewState extends State<DisplayNoteView> {
   ScrollController editorScrollController = ScrollController();
   FocusNode editorFocusNode = FocusNode();
   late dynamic noteBody;
+
+  /// Tracks if the animation is playing by whether controller is running.
+  bool get isPlaying => cloudSaveController?.isActive ?? false;
+
+  Artboard? cloudSaveArtboard;
+  StateMachineController? cloudSaveController;
+  SMIInput<bool>? isSaving;
+  late int prevChangedIndex;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      titleController.text = widget.note.title!;
+      if (StaticData.cameSignedIn == true) {
+        try {
+          titleController.text = widget.notesModel.title!;
+        } catch (e) {
+          titleController.clear();
+        }
+      } else {
+        titleController.text = widget.notesLocal.title!;
+      }
     });
+    // Load the animation file from the bundle, note that you could also
+    // download this. The RiveFile just expects a list of bytes.
+    rootBundle.load('assets/lottie/cloud_save.riv').then(
+      (data) async {
+        // Load the RiveFile from the binary data.
+        final file = RiveFile.import(data);
+
+        // The artboard is the root of the animation and gets drawn in the
+        // Rive widget.
+        final artboard = file.mainArtboard;
+        var controller =
+            StateMachineController.fromArtboard(artboard, 'State Machine 1');
+        if (controller != null) {
+          artboard.addController(controller);
+          isSaving = controller.findInput('Saving');
+        }
+        setState(() => cloudSaveArtboard = artboard);
+      },
+    );
     getNoteBody();
     super.initState();
   }
 
   getNoteBody() {
-    noteBody = jsonDecode(widget.note.body!);
+    if (StaticData.cameSignedIn == true) {
+      noteBody = jsonDecode(widget.notesModel.body!);
+    } else {
+      noteBody = jsonDecode(widget.notesLocal.body!);
+    }
     setState(() {
       editorController = QuillController(
           document: Document.fromJson(noteBody),
           selection: const TextSelection.collapsed(offset: 0));
+    });
+    addListener();
+  }
+
+  addListener() {
+    editorController.document.changes.listen((event) {
+      if (isSaving?.value == false) {
+        isSaving?.value = true;
+      }
+      widget.notesModel.body = jsonEncode(
+        editorController.document.toDelta().toJson(),
+      );
+      widget.notesModel.bodyPlainText = editorController.document.toPlainText();
+      UserModelCollectionReference()
+          .doc(StaticData.uid)
+          .boards
+          .doc(widget.notesModel.boardid)
+          .notes
+          .doc(widget.notesID)
+          .set(widget.notesModel)
+          .whenComplete(() {
+        Future.delayed(const Duration(seconds: 2), () {
+          isSaving?.value = false;
+        });
+      });
     });
   }
 
@@ -83,48 +155,62 @@ class _DisplayNoteViewState extends State<DisplayNoteView> {
             },
           ),
           actions: [
-            TextButton.icon(
-              onPressed: () async {
-                HapticFeedback.heavyImpact();
-                if (kDebugMode) {
-                  print(
-                      "BODY: ${editorController.document.toDelta().toJson()}");
-                }
-                if (titleController.text.isNotEmpty) {
-                  NotesLocal note = NotesLocal();
-                  note.id = widget.note.id;
-                  note.title = titleController.text;
-                  note.createdby = StaticData.displayname;
-                  note.boardid = widget.boardid;
-                  note.backedup = false;
-                  note.createdon =
-                      DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY).format(
-                    DateTime.now(),
-                  );
-                  note.body =
-                      jsonEncode(editorController.document.toDelta().toJson());
-                  note.bodyPlainText = editorController.document.toPlainText();
-                  var returnStatus =
-                      await BoardsLocalServices().addNote(widget.boardid, note);
+            StaticData.cameSignedIn
+                ? SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: cloudSaveArtboard == null
+                        ? const SizedBox(
+                            width: 10,
+                          )
+                        : Rive(
+                            artboard: cloudSaveArtboard!,
+                          ),
+                  )
+                : TextButton.icon(
+                    onPressed: () async {
+                      HapticFeedback.heavyImpact();
+                      if (kDebugMode) {
+                        print(
+                            "BODY: ${editorController.document.toDelta().toJson()}");
+                      }
+                      if (titleController.text.isNotEmpty &&
+                          StaticData.cameSignedIn == false) {
+                        NotesLocal note = NotesLocal();
+                        note.id = widget.notesLocal.id;
+                        note.title = titleController.text;
+                        note.createdby = StaticData.displayname;
+                        note.boardid = widget.boardid;
+                        note.backedup = false;
+                        note.createdon =
+                            DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY).format(
+                          DateTime.now(),
+                        );
+                        note.body = jsonEncode(
+                            editorController.document.toDelta().toJson());
+                        note.bodyPlainText =
+                            editorController.document.toPlainText();
+                        var returnStatus = await BoardsLocalServices()
+                            .addNote(widget.boardid, note);
 
-                  if (returnStatus == StaticData.successStatus) {
-                    Get.off(
-                      () => DisplayBoardView(boardid: widget.boardid),
-                    );
-                  }
-                }
-              },
-              icon: Icon(
-                Icons.save_sharp,
-                color: popWhite500,
-              ),
-              label: Text(
-                'save',
-                style: StaticData.t.textTheme.bodyLarge?.copyWith(
-                  color: popWhite500,
-                ),
-              ),
-            ),
+                        if (returnStatus == StaticData.successStatus) {
+                          Get.off(
+                            () => DisplayBoardView(boardid: widget.boardid),
+                          );
+                        }
+                      } else {}
+                    },
+                    icon: Icon(
+                      Icons.save_sharp,
+                      color: popWhite500,
+                    ),
+                    label: Text(
+                      'save',
+                      style: StaticData.t.textTheme.bodyLarge?.copyWith(
+                        color: popWhite500,
+                      ),
+                    ),
+                  ),
             const SizedBox(
               width: 10,
             ),
@@ -147,8 +233,20 @@ class _DisplayNoteViewState extends State<DisplayNoteView> {
                         height: 50,
                         child: TextFormField(
                           autofocus: false,
-                          onChanged: (value) {
-                            setState(() {});
+                          onEditingComplete: () {
+                            isSaving?.value = true;
+                            widget.notesModel.title =
+                                titleController.text.toString();
+                            UserModelCollectionReference()
+                                .doc(StaticData.uid)
+                                .boards
+                                .doc(widget.notesModel.boardid)
+                                .notes
+                                .doc(widget.notesID)
+                                .set(widget.notesModel)
+                                .whenComplete(() {
+                              isSaving?.value = false;
+                            });
                           },
                           controller: titleController,
                           style: StaticData.t.textTheme.headlineMedium

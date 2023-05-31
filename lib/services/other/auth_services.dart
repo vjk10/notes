@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:notes/android/screens/main_screen.dart';
 import 'package:notes/data/data.dart';
 
+import '../../android/screens/onboarding/onboarding_one.dart';
 import '../firestore_db/user_model.dart';
 import '../isar_db/onboarding_schema.dart';
 import '../isar_db/user_schema.dart';
@@ -20,14 +23,23 @@ class AuthServices {
     return returnStatus;
   }
 
-  Future<String> authChanges() async {
-    late String change = StaticData.warningStatus;
+  startOnboarding() async {
+    final Onboarding onboarding = Onboarding();
+    onboarding.id = 1;
+    onboarding.onboarding = "false";
+    await StaticData.isarDb.writeTxn(() async {
+      await StaticData.isarDb.onboardings.put(onboarding); // insert & update
+    }).whenComplete(() {
+      Get.offAll(() => const OnBoarding1());
+    });
+  }
+
+  authChanges(bool navigate) async {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         if (kDebugMode) {
           print('User is currently signed out!');
         }
-        change = StaticData.errorStatus;
         StaticData.cameSignedIn = false;
         await StaticData.isarDb.userLocals.get(1).then((value) {
           try {
@@ -45,30 +57,30 @@ class AuthServices {
             if (kDebugMode) {
               print("Message: ${e.toString()}");
             }
-            change = StaticData.errorStatus;
           }
         }).onError((error, stackTrace) {
-          change = StaticData.errorStatus;
+          startOnboarding();
         });
       } else {
         if (kDebugMode) {
           print('User is signed in!');
           print('USERID: ${user.uid}');
         }
-        change = StaticData.successStatus;
         StaticData.cameSignedIn = true;
         StaticData.uid = user.uid;
         StaticData.displayname = user.displayName.toString();
         StaticData.email = user.email.toString();
         StaticData.phonenumber = user.email.toString();
         StaticData.photourl = user.photoURL!;
-        UserModelCollectionReference().doc(user.uid).get().then((value) {
+        await UserModelCollectionReference().doc(user.uid).get().then((value) {
           StaticData.dob = value.data!.dob.toString();
           StaticData.phonenumber = value.data!.phonenumber;
+          if (navigate) {
+            Get.offAll(() => const MainScreen(selectedIndex: 0));
+          }
         });
       }
     });
-    return change;
   }
 
   Future<String> createFirebaseUser(String uid, String displayname, String dob,

@@ -11,18 +11,21 @@ import '../../../data/data.dart';
 import '../../../services/other/local_model.dart';
 import '../items/create_notes_view.dart';
 
+// ignore: must_be_immutable
 class AddItemsToBoard extends StatefulWidget {
   int? boardid;
   String? boardidFb;
   final Color boardColor;
   final Color boardTextColor;
+  final String boardname;
 
   AddItemsToBoard(
       {Key? key,
       this.boardid,
       this.boardidFb,
       required this.boardColor,
-      required this.boardTextColor})
+      required this.boardTextColor,
+      required this.boardname})
       : super(key: key);
 
   @override
@@ -57,9 +60,12 @@ class _AddItemsToBoardState extends State<AddItemsToBoard> {
           subColor: yoyo100,
           onTap: () {
             Get.to(() => CreateNotesView(
-                  boardid: widget.boardid,
+                  boardid: StaticData.cameSignedIn ? 0 : widget.boardid!,
+                  boardidFb:
+                      StaticData.cameSignedIn ? widget.boardidFb! : "invalid",
                   boardColor: widget.boardColor,
                   boardTextColor: widget.boardTextColor,
+                  boardname: widget.boardname,
                 ));
           }),
       // CreateItemOptions(
